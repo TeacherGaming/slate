@@ -3,6 +3,8 @@ title: API Reference
 
 language_tabs:
   - shell
+  - http
+  - C#
   - ruby
   - python
   - javascript
@@ -19,13 +21,23 @@ search: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+TeacherGaming Desk, our learning platform, aims to demystify the processes behind game-based learning. It aims to provide educators with an easily understandable way of tracking and assessing the learning that happens in-game.
+ 
+In more technical terms, the analytics part of TeacherGaming Desk is a web-based platform that collects analytics information (events) sent by games and processes it to reveal what the students (users, players) have learned while playing the game. The SDK for integrating the analytics is called TGA SDK for short.
+ 
+This document is written for game developers that are going to integrate TeacherGaming Desk analytics into their games. It describes on a general level how to do the integration. Integration can be done either by using a ready-made SDK for your platform, or by manually using the HTTP API. More detailed information is available in the specific documents for the different SDKs and the HTTP API documentation.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+# Student Login
 
-This example API documentation page was created with [Slate](https://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
+## Student ID and Class ID
 
-# Authentication
+Students are identified in TGA by their class and student ids. These are used instead of real names or similar in order to prevent outsiders (anyone except their teachers or parents etc.) from identifying individual students in the system. The class id is a system-wide unique generated alphanumeric identifier that identifies a group of students (usually a class). The student id is an alphanumeric identifier that is unique within a class, and is manually set either by a teacher in the web interface or by the student on first login if automatic generation of students has been allowed for that class.
+ 
+TeacherGaming Desk analytics (TGA) requires the game to send a class id and a student id for each student playing the game to assign data to the right student. This means that students need to login before data can be sent, except for anonymous event data.
+ 
+Logging in can be done through the TeacherGaming app (Android only at the moment) or in the game. If users authenticate in the game you will need to add a UI where the student can type in a class id and a student id.
+ 
+You should not save the class and student id’s in your game. The student should need to login separately every time the app is started, either through the TG App or in the game UI.
 
 > To authorize, use this code:
 
@@ -65,75 +77,82 @@ Kittn expects for the API key to be included in all API requests to the server i
 You must replace <code>meowmeowmeow</code> with your personal API key.
 </aside>
 
-# Kittens
+# API
 
-## Get All Kittens
+## Login Student
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
+```http
+https://analyticsdata.teachergaming.com/api/validate
 ```
 
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+```C#
+// Create new Auth object and start authentication
+TGASDK.TGA.TGAAuth tgaAuth = new TGASDK.TGA.TGAAuth(this, TGASDK.TGA.TGAAuth.AuthUser(classID, studentID));
+ 
+// Wait for auth result
+yield return tgaAuth.authResult;
+ 
+if (tgaAuth.authResult.Equals("true"))
+{
+      // Authentication succeeded (classid & studentid we’re correct)
+}
+else
+{
+// Authentication failed (classid & studentid we’re not correct)
+}
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+{
+  "success": 1,
+  "message": "Student with this ID exists in this class.",
+  "responseCreatedAt": "2017-06-13T07:08:47.763Z",
+  "debug": {
+      "sent": "2017-03-15T12:05:35.722Z",
+      "container": "zo5jajsD99beDQyt7-pv0n"
   },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+  "login_message": "Logged into class <classid> with studentid <studentid>",
+  "login_message_html": "Logged into class <b>classid</b> with studentid <b>studentid</b>",
+  "subscription": {
+      "subscription_expired": false,
+      "subscription_expired_message": "Your subscription has expired."
+  },
+  "student": {
+      "studentid": "<studentid>",
+      "studentid_unique": "<HashedUniqueStudentID>",
+      "created_account": false,
+      "teacher_creatubbles_linked": true
   }
-]
+  "class": {
+      "classid": "<classid>",
+      "classid_unique": "<HashedUniqueClassID>",
+      "allow_student_signup": true
+  },
+  "game_name": "<game’s name>"
+}
 ```
 
-This endpoint retrieves all kittens.
+Login user to our system. Class ID is unique throughout the whole system and student ID is unique throughout the class the user is in. Student ID can be thought as an username and class ID as a password.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET https://analyticsdata.teachergaming.com/api/validate`
 
 ### Query Parameters
 
 Parameter | Default | Description
 --------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+classid |  | TGA Class ID
+studentid |  | TGA studentid
+apikey | | Your game's API key
 
 <aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 </aside>
 
-## Get a Specific Kitten
+## Playing Game
 
 ```ruby
 require 'kittn'
@@ -173,17 +192,18 @@ let max = api.kittens.get(2);
 }
 ```
 
-This endpoint retrieves a specific kitten.
+Inform TGA that the user is currently logged in and playing. Send once every minute.
 
 <aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET https://analyticsdata.teachergaming.com/api/playing_game`
 
 ### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
+Parameter | Default | Description
+--------- | ------- | -----------
+classid |  | TGA Class ID
+studentid |  | TGA studentid
+apikey | | Your game's API key
