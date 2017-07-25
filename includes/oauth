@@ -1,0 +1,111 @@
+<h1 id="oauth">oAuth</h1>
+
+<p>Desk works as oAuth 2 identity provider server. To gain access to these features, please contact us to get your <code class="prettyprint">client_id</code> and <code class="prettyprint">client_secret</code> generated for you.</p>
+
+<p>In a nutshell:</p>
+
+<ol>
+<li>Request your <code class="prettyprint">client_id</code> and <code class="prettyprint">client_secret</code> from TeacherGaming</li>
+<li>Redirect user to login URL as mentioned in section <a href="#authorization">Authorization</a></li>
+<li>User gets redirected to your specified URL, you will get code as parameter. Call our <a href="#token">Token</a> endpoint to exchange that code for token</li>
+<li>Verify that token is correct and user is correct by calling our <a href="#user-profile">Profile</a> endpoint.</li>
+</ol>
+
+<h2 id="authorization">Authorization</h2>
+
+<p>We currently support authorization code flow. You will need to redirect the user to our request URL and pass the additional parameters.</p>
+
+<blockquote>
+<p><span style="color: green">Example Succesfull Output</span></p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yourAccessToken"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Token created"</span><span class="p">,</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p><span style="color: red">Example Failed Output</span></p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Code not found"</span><span class="p">,</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="request">Request</h3>
+
+<p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/oauth/authorize</code></p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>client_id</td>
+<td></td>
+<td>Your <code class="prettyprint">client_id</code>.</td>
+</tr>
+<tr>
+<td>redirect_uri</td>
+<td></td>
+<td>URL where client gets redirected after succesfull login. These are whitelisted by Teachergaming.</td>
+</tr>
+<tr>
+<td>student_login</td>
+<td></td>
+<td>Set to true to login as a student. Leave as empty if doing teacher login.</td>
+</tr>
+<tr>
+<td>response_type</td>
+<td></td>
+<td>only <code class="prettyprint">code</code> allowed for now.</td>
+</tr>
+</tbody></table>
+
+<p>After succesfull login, user will be redirected back to your redirect_uri with code in GET query parameter. Use this code to fetch the token for the user as explained in section <a href="#token">Token</a>.</p>
+
+<h2 id="token">Token</h2>
+
+<p>This can be used to exchange oauth code with token.</p>
+
+<h3 id="request">Request</h3>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>client_id</td>
+<td></td>
+<td>Your <code class="prettyprint">client_id</code>.</td>
+</tr>
+<tr>
+<td>client_secret</td>
+<td></td>
+<td>Your <code class="prettyprint">client_secret</code>.</td>
+</tr>
+<tr>
+<td>student_login</td>
+<td></td>
+<td>Set to true to login as a student. Leave as empty if doing teacher login.</td>
+</tr>
+<tr>
+<td>code</td>
+<td></td>
+<td>Code you got from us in the <a href="#Authorization">Authorization</a> section.</td>
+</tr>
+</tbody></table>
+
+<h2 id="revoking-token">Revoking Token</h2>
+
+<h2 id="user-profile">User Profile</h2>

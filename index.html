@@ -248,15 +248,129 @@
 
 <p><img src="images/general/tga_login_1.png" title="Login Example 1" alt="Login Example 1" /></p>
 
-          <h1 id="http-api">HTTP API</h1>
+          <h1 id="oauth">oAuth</h1>
 
-<h2 id="general">General</h2>
+<p>Desk works as oAuth 2 identity provider server. To gain access to these features, please contact us to get your <code class="prettyprint">client_id</code> and <code class="prettyprint">client_secret</code> generated for you.</p>
+
+<p>In a nutshell:</p>
+
+<ol>
+<li>Request your <code class="prettyprint">client_id</code> and <code class="prettyprint">client_secret</code> from TeacherGaming</li>
+<li>Redirect user to login URL as mentioned in section <a href="#authorization">Authorization</a></li>
+<li>User gets redirected to your specified URL, you will get code as parameter. Call our <a href="#token">Token</a> endpoint to exchange that code for token</li>
+<li>Verify that token is correct and user is correct by calling our <a href="#user-profile">Profile</a> endpoint.</li>
+</ol>
+
+<h2 id="authorization">Authorization</h2>
+
+<p>We currently support authorization code flow. You will need to redirect the user to our request URL and pass the additional parameters.</p>
+
+<blockquote>
+<p><span style="color: green">Example Succesfull Output</span></p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yourAccessToken"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Token created"</span><span class="p">,</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p><span style="color: red">Example Failed Output</span></p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Code not found"</span><span class="p">,</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="request">Request</h3>
+
+<p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/oauth/authorize</code></p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>client_id</td>
+<td></td>
+<td>Your <code class="prettyprint">client_id</code>.</td>
+</tr>
+<tr>
+<td>redirect_uri</td>
+<td></td>
+<td>URL where client gets redirected after succesfull login. These are whitelisted by Teachergaming.</td>
+</tr>
+<tr>
+<td>student_login</td>
+<td></td>
+<td>Set to true to login as a student. Leave as empty if doing teacher login.</td>
+</tr>
+<tr>
+<td>response_type</td>
+<td></td>
+<td>only <code class="prettyprint">code</code> allowed for now.</td>
+</tr>
+</tbody></table>
+
+<p>After succesfull login, user will be redirected back to your redirect_uri with code in GET query parameter. Use this code to fetch the token for the user as explained in section <a href="#token">Token</a>.</p>
+
+<h2 id="token">Token</h2>
+
+<p>This can be used to exchange oauth code with token.</p>
+
+<h3 id="request">Request</h3>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>client_id</td>
+<td></td>
+<td>Your <code class="prettyprint">client_id</code>.</td>
+</tr>
+<tr>
+<td>client_secret</td>
+<td></td>
+<td>Your <code class="prettyprint">client_secret</code>.</td>
+</tr>
+<tr>
+<td>student_login</td>
+<td></td>
+<td>Set to true to login as a student. Leave as empty if doing teacher login.</td>
+</tr>
+<tr>
+<td>code</td>
+<td></td>
+<td>Code you got from us in the <a href="#Authorization">Authorization</a> section.</td>
+</tr>
+</tbody></table>
+
+<h2 id="revoking-token">Revoking Token</h2>
+
+<h2 id="user-profile">User Profile</h2>
+
+          <h1 id="game-sdk-integrations">Game SDK Integrations</h1>
+
+          <h2 id="http-api">HTTP API</h2>
+
+<h3 id="general">General</h3>
 
 <p>Our HTTP API can be used if our system does not yet support your programming language / game engine.</p>
 
 <p>Basically, just send data to our REST API through standard HTTPS calls. All data passed needs to be inside the GET query string. Note that for compatibility with special characters, you are always required to URL encode all data sent to our API.</p>
 
-<h2 id="in-game-flow">In-game Flow</h2>
+<h3 id="in-game-flow">In-game Flow</h3>
 
 <ol>
 <li>User login
@@ -281,7 +395,7 @@
 </ul></li>
 </ol>
 
-<h2 id="login-student">Login Student</h2>
+<h3 id="login-student">Login Student</h3>
 
 <blockquote>
 <p>Example Output</p>
@@ -316,11 +430,11 @@
 </span></code></pre>
 <p>Login user to our system. Class ID is unique throughout the whole system and student ID is unique throughout the class the user is in. Student ID can be thought as an username and class ID as a password.</p>
 
-<h3 id="http-request">HTTP Request</h3>
+<h4 id="http-request">HTTP Request</h4>
 
 <p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/validate</code></p>
 
-<h3 id="query-parameters">Query Parameters</h3>
+<h4 id="query-parameters">Query Parameters</h4>
 
 <table><thead>
 <tr>
@@ -350,7 +464,7 @@
 Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 </aside>
 
-<h2 id="playing-game">Playing Game</h2>
+<h3 id="playing-game">Playing Game</h3>
 <pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
 
 <span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
@@ -381,11 +495,11 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 
 <aside class="warning">Inside HTML code blocks like this one, you can&rsquo;t use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
 
-<h3 id="http-request">HTTP Request</h3>
+<h4 id="http-request">HTTP Request</h4>
 
 <p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/playing_game</code></p>
 
-<h3 id="url-parameters">URL Parameters</h3>
+<h4 id="url-parameters">URL Parameters</h4>
 
 <table><thead>
 <tr>
