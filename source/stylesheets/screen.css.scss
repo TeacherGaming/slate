@@ -396,7 +396,7 @@ html, body {
   }
 
   h4, h5, h6 {
-    font-size: 10px;
+    font-size: 13px;
   }
 
   hr {
@@ -624,4 +624,14 @@ html, body {
 
 .highlight, .highlight .w {
   background-color: $code-bg;
+}
+
+.tocify-subheader {
+  .tocify-subheader {
+    .tocify-item>a {
+      // Styling here for a level 2 nesting. For example -> 
+      padding-left: $nav-padding + $nav-indent * 2;
+      font-size: 12px;
+    }
+  }
 }

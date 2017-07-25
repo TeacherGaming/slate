@@ -1,12 +1,12 @@
-# HTTP API
+## HTTP API
 
-## General
+### General
 
 Our HTTP API can be used if our system does not yet support your programming language / game engine.
 
 Basically, just send data to our REST API through standard HTTPS calls. All data passed needs to be inside the GET query string. Note that for compatibility with special characters, you are always required to URL encode all data sent to our API.
 
-## In-game Flow
+### In-game Flow
 
 1. User login
   * Successful login needs to be done before any data can be sent to TGA (except anonymous event data)
@@ -17,7 +17,7 @@ Basically, just send data to our REST API through standard HTTPS calls. All data
 4.  Send event data
   * Events and the data in them have been set up on the TGA website by TeacherGaming. This is the data that is needed to track student progress.
 
-## Login Student
+### Login Student
 
 > Example Output
 
@@ -53,11 +53,11 @@ Basically, just send data to our REST API through standard HTTPS calls. All data
 
 Login user to our system. Class ID is unique throughout the whole system and student ID is unique throughout the class the user is in. Student ID can be thought as an username and class ID as a password.
 
-### HTTP Request
+#### HTTP Request
 
 `GET https://analyticsdata.teachergaming.com/api/validate`
 
-### Query Parameters
+#### Query Parameters
 
 Parameter | Default | Description
 --------- | ------- | -----------
@@ -69,7 +69,7 @@ apikey | | Your game's API key
 Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 </aside>
 
-## Playing Game
+### Playing Game
 
 ```ruby
 require 'kittn'
@@ -113,11 +113,11 @@ Inform TGA that the user is currently logged in and playing. Send once every min
 
 <aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
 
-### HTTP Request
+#### HTTP Request
 
 `GET https://analyticsdata.teachergaming.com/api/playing_game`
 
-### URL Parameters
+#### URL Parameters
 
 Parameter | Required | Description
 --------- | ------- | -----------
