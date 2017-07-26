@@ -1,7 +1,5 @@
 ## HTTP API
 
-### General
-
 Our HTTP API can be used if our system does not yet support your programming language / game engine.
 
 Basically, just send data to our REST API through standard HTTPS calls. All data passed needs to be inside the GET query string. Note that for compatibility with special characters, you are always required to URL encode all data sent to our API.
@@ -65,7 +63,7 @@ classid |  | TGA Class ID
 studentid |  | TGA studentid
 apikey | | Your game's API key
 
-<aside class="success">
+<aside class="info">
 Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 </aside>
 
