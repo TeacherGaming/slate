@@ -265,23 +265,6 @@
 
 <p>We currently support authorization code flow. You will need to redirect the user to our request URL and pass the additional parameters.</p>
 
-<blockquote>
-<p><span style="color: green">Example Succesfull Output</span></p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yourAccessToken"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Token created"</span><span class="p">,</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<blockquote>
-<p><span style="color: red">Example Failed Output</span></p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Code not found"</span><span class="p">,</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
 <h3 id="request">Request</h3>
 
 <p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/oauth/authorize</code></p>
@@ -308,7 +291,7 @@
 <tr>
 <td>student_login</td>
 <td></td>
-<td>Set to true to login as a student. Leave as empty if doing teacher login.</td>
+<td>Set to true to login as a student. Do not include this parameter if doing teacher login.</td>
 </tr>
 <tr>
 <td>response_type</td>
@@ -321,12 +304,33 @@
 
 <h2 id="token">Token</h2>
 
-<p>This can be used to exchange oauth code with token.</p>
+<p>This endpoint can be used to exchange oauth code with token.</p>
 
 <h3 id="request">Request</h3>
 
+<p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/oauth/token</code></p>
+
 <h3 id="query-parameters">Query Parameters</h3>
 
+<blockquote>
+<p><span style="color: green">Example Success Output</span></p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Token created succesfully."</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-07-26T09:47:48.733Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;YourToken&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;ServiceName&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p><span style="color: red">Example Failed Output</span></p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Code not found."</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -347,7 +351,7 @@
 <tr>
 <td>student_login</td>
 <td></td>
-<td>Set to true to login as a student. Leave as empty if doing teacher login.</td>
+<td>Set to true if student. Do not include this parameter if teacher.</td>
 </tr>
 <tr>
 <td>code</td>
@@ -356,15 +360,123 @@
 </tr>
 </tbody></table>
 
-<h2 id="revoking-token">Revoking Token</h2>
-
 <h2 id="user-profile">User Profile</h2>
+
+<p>This endpoint returns information about the user. Requires valid token. This method is useful for verifying that the user information like email address is correct after getting token for a user.</p>
+
+<h3 id="request">Request</h3>
+
+<p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/oauth/profile</code></p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<blockquote>
+<p><span style="color: green">Example Success Output</span></p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Profile information fetched succesfully."</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-07-26T09:51:01.858Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"isStudent"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;userEmail&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p><span style="color: red">Example Failed Output</span></p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Token not found."</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>client_id</td>
+<td></td>
+<td>Your <code class="prettyprint">client_id</code>.</td>
+</tr>
+<tr>
+<td>client_secret</td>
+<td></td>
+<td>Your <code class="prettyprint">client_secret</code>.</td>
+</tr>
+<tr>
+<td>student_login</td>
+<td></td>
+<td>Set to true if student. Do not include this parameter if teacher.</td>
+</tr>
+<tr>
+<td>token</td>
+<td></td>
+<td>Your token.</td>
+</tr>
+</tbody></table>
+
+<h2 id="revoke-token">Revoke Token</h2>
+
+<p>This endpoint can be used to revoke a token.</p>
+
+<h3 id="request">Request</h3>
+
+<p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/oauth/revoke</code></p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<blockquote>
+<p><span style="color: green">Example Success Output</span></p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Token revoked succesfully."</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-07-26T10:03:45.218Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p><span style="color: red">Example Failed Output</span></p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Token not found."</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>client_id</td>
+<td></td>
+<td>Your <code class="prettyprint">client_id</code>.</td>
+</tr>
+<tr>
+<td>client_secret</td>
+<td></td>
+<td>Your <code class="prettyprint">client_secret</code>.</td>
+</tr>
+<tr>
+<td>student_login</td>
+<td></td>
+<td>Set to true if student. Do not include this parameter if teacher.</td>
+</tr>
+<tr>
+<td>token</td>
+<td></td>
+<td>Your token.</td>
+</tr>
+</tbody></table>
 
           <h1 id="game-sdk-integrations">Game SDK Integrations</h1>
 
           <h2 id="http-api">HTTP API</h2>
-
-<h3 id="general">General</h3>
 
 <p>Our HTTP API can be used if our system does not yet support your programming language / game engine.</p>
 
@@ -460,7 +572,7 @@
 </tr>
 </tbody></table>
 
-<aside class="success">
+<aside class="info">
 Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 </aside>
 

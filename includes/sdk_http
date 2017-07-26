@@ -1,7 +1,5 @@
 <h2 id="http-api">HTTP API</h2>
 
-<h3 id="general">General</h3>
-
 <p>Our HTTP API can be used if our system does not yet support your programming language / game engine.</p>
 
 <p>Basically, just send data to our REST API through standard HTTPS calls. All data passed needs to be inside the GET query string. Note that for compatibility with special characters, you are always required to URL encode all data sent to our API.</p>
@@ -96,7 +94,7 @@
 </tr>
 </tbody></table>
 
-<aside class="success">
+<aside class="info">
 Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 </aside>
 
