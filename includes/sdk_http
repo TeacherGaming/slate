@@ -1,10 +1,10 @@
-<h2 id="http-api">HTTP API</h2>
+<h1 id="http-api">HTTP API</h1>
 
 <p>Our HTTP API can be used if our system does not yet support your programming language / game engine.</p>
 
 <p>Basically, just send data to our REST API through standard HTTPS calls. All data passed needs to be inside the GET query string. Note that for compatibility with special characters, you are always required to URL encode all data sent to our API.</p>
 
-<h3 id="in-game-flow">In-game Flow</h3>
+<h2 id="in-game-flow">In-game Flow</h2>
 
 <ol>
 <li>User login
@@ -29,7 +29,7 @@
 </ul></li>
 </ol>
 
-<h3 id="login-student">Login Student</h3>
+<h2 id="login-student">Login Student</h2>
 
 <blockquote>
 <p>Example Output</p>
@@ -64,11 +64,11 @@
 </span></code></pre>
 <p>Login user to our system. Class ID is unique throughout the whole system and student ID is unique throughout the class the user is in. Student ID can be thought as an username and class ID as a password.</p>
 
-<h4 id="http-request">HTTP Request</h4>
+<h3 id="http-request">HTTP Request</h3>
 
 <p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/validate</code></p>
 
-<h4 id="query-parameters">Query Parameters</h4>
+<h3 id="query-parameters">Query Parameters</h3>
 
 <table><thead>
 <tr>
@@ -98,7 +98,7 @@
 Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 </aside>
 
-<h3 id="playing-game">Playing Game</h3>
+<h2 id="playing-game">Playing Game</h2>
 <pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
 
 <span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
@@ -129,11 +129,11 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 
 <aside class="warning">Inside HTML code blocks like this one, you can&rsquo;t use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
 
-<h4 id="http-request">HTTP Request</h4>
+<h3 id="http-request">HTTP Request</h3>
 
 <p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/playing_game</code></p>
 
-<h4 id="url-parameters">URL Parameters</h4>
+<h3 id="url-parameters">URL Parameters</h3>
 
 <table><thead>
 <tr>
