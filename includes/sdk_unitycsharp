@@ -42,17 +42,42 @@
 <span class="c1">// Login status delegate &amp; event (in TGASDK.TGA)</span>
 <span class="k">public</span> <span class="k">delegate</span> <span class="k">void</span> <span class="nf">LoginStatusListener</span><span class="p">(</span><span class="kt">bool</span> <span class="n">isLoggedIn</span><span class="p">);</span>
 <span class="k">public</span> <span class="k">static</span> <span class="k">event</span> <span class="n">LoginStatusListener</span> <span class="n">OnLoginStatusChanged</span><span class="p">;</span>
-</code></pre><pre class="highlight xml tab-xml"><code><span class="c">&lt;!-- AndroidManifest.xml --&gt;</span>
-<span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">"com.teachergaming.tga.TGAAndroidUriSchemeActivity"</span>
-        <span class="na">android:label=</span><span class="s">"@string/app_name"</span>
-        <span class="na">android:launchMode=</span><span class="s">"singleTop"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;intent-filter&gt;</span>
-      <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">"android.intent.action.VIEW"</span> <span class="nt">/&gt;</span>
-      <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">"android.intent.category.DEFAULT"</span> <span class="nt">/&gt;</span>
-      <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">"android.intent.category.BROWSABLE"</span> <span class="nt">/&gt;</span>
-      <span class="nt">&lt;data</span> <span class="na">android:scheme=</span><span class="s">"&lt;your bundle identifier&gt;"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/intent-filter&gt;</span>
-<span class="nt">&lt;/activity&gt;</span>
+</code></pre><pre class="highlight xml tab-xml"><code><span class="c">&lt;!-- Assets/Plugins/Android/AndroidManifest.xml --&gt;</span>
+<span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;manifest</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span> <span class="na">package=</span><span class="s">"com.unity3d.player"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;application</span> <span class="na">android:icon=</span><span class="s">"@drawable/app_icon"</span> <span class="na">android:label=</span><span class="s">"@string/app_name"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">"com.unity3d.player.UnityPlayerActivity"</span>
+              <span class="na">android:label=</span><span class="s">"@string/app_name"</span>
+              <span class="na">android:configChanges=</span><span class="s">"fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;intent-filter&gt;</span>
+            <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">"android.intent.action.MAIN"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">"android.intent.category.LAUNCHER"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/intent-filter&gt;</span>
+    <span class="nt">&lt;/activity&gt;</span>
+
+    <span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">"com.teachergaming.tga.TGAAndroidUriSchemeActivity"</span>
+            <span class="na">android:label=</span><span class="s">"@string/app_name"</span>
+            <span class="na">android:launchMode=</span><span class="s">"singleTop"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;intent-filter&gt;</span>
+            <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">"android.intent.action.VIEW"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">"android.intent.category.DEFAULT"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">"android.intent.category.BROWSABLE"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;data</span> <span class="na">android:scheme=</span><span class="s">"YOUR.BUNDLEIDENTIFIER.HERE"</span> <span class="nt">/&gt;</span> <span class="c">&lt;!-- REPLACE WITH YOUR GAME'S ANDROID APP BUNDLE IDENTIFIER --&gt;</span>
+        <span class="nt">&lt;/intent-filter&gt;</span>
+    <span class="nt">&lt;/activity&gt;</span>
+
+    <span class="nt">&lt;receiver</span>
+        <span class="na">android:name=</span><span class="s">"com.teachergaming.tgareceiver.TGABroadcastReceiver"</span>
+        <span class="na">android:enabled=</span><span class="s">"true"</span>
+        <span class="na">android:exported=</span><span class="s">"true"</span> <span class="nt">&gt;</span>
+        <span class="nt">&lt;intent-filter&gt;</span>
+            <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">"com.teachergaming.com.TGAbroadcast"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/intent-filter&gt;</span>
+    <span class="nt">&lt;/receiver&gt;</span>
+
+  <span class="nt">&lt;/application&gt;</span>
+<span class="nt">&lt;/manifest&gt;</span> 
 </code></pre><pre class="highlight plaintext"><code>You can test automatic login using the following URI format
 &lt;your bundle identifier&gt;://?classid=&lt;class id&gt;&amp;studentid=&lt;student id&gt;&amp;command=&lt;login/logout&gt;
 </code></pre>
@@ -60,9 +85,9 @@
 
 <p>You can use the TGASDK.TGA.LoggedInExternally() to check if the user logged in using the TG App.</p>
 
-<p>Note for Android! In future versions of TG App we are moving to use URI schemes to forward the login parameters to games on Android, like we already do on iOS. For this to work you need to add the com.teachergaming.tga.TGAAndroidUriSchemeActivity activity to your AndroidManifest.xml file in Assets/Plugins/Android. (see https://docs.unity3d.com/Manual/android-manifest.html)</p>
+<p>Note for Android! In future versions of TG App we are moving to use URI schemes to forward the login parameters to games on Android, like we already do on iOS. For this to work you need to specify your app&rsquo;s bundle id for the com.teachergaming.tga.TGAAndroidUriSchemeActivity activity in the AndroidManifest.xml file in Assets/Plugins/Android.</p>
 
-<p>On Android and iOS you should test the uri scheme login by creating a .html file with links according to the URI schem and opening it in your device browser and clicking on the links.</p>
+<p>On Android and iOS you can test the uri scheme login by creating a .html file with links according to the URI scheme and opening it in your device browser and clicking on the links.</p>
 
 <p>On desktop platforms you should test the automatic login by giving the uri as a command line parameter when starting your game. See https://docs.google.com/document/d/1nEJ5EGwO6JxTTmJGixvxEcBb0VhpMN7sEfOjGHY4JkI/edit#heading=h.1u1ow8hobpr for details.</p>
 
@@ -86,7 +111,9 @@ A login dialog will be created that looks like this (without the blue background
 
 <h3 id="handling-subscription-required">Handling subscription required</h3>
 
-<p>You can define the compile time symbol TGA_SUBSCRIPTION_REQUIRED to make the login menu require a subscription. If the symbol is defined you cannot close the login menu. Pressing X in the top-right corner will quit the application by calling Application.Quit(). You can also supply your own function for quitting as a parameter for TGASDK.TGA.CreateLoginPanel() for example if you need to bypass your Monobehaviour.OnApplicationQuit handler that calls Application.CancelQuit.</p>
+<p>You can define the compile time symbol TGA_SUBSCRIPTION_REQUIRED to make the login menu require a subscription. If the symbol is defined you cannot login if you don&rsquo;t have an active subscription and you cannot close the login menu without logging in. Pressing X in the top-right corner will quit the application by calling Application.Quit(). You can also supply your own function for quitting as a parameter for TGASDK.TGA.CreateLoginPanel() for example if you need to bypass your Monobehaviour.OnApplicationQuit handler that calls Application.CancelQuit.</p>
+
+<p>When TGA_SUBSCRIPTION_REQUIRED is defined you should show the login window when the game app is started (main menu or equivalent).</p>
 
 <h3 id="custom-login-menu">Custom login menu</h3>
 <pre class="highlight csharp tab-csharp"><code><span class="c1">// Custom login menu</span>
@@ -169,33 +196,30 @@ To send the event, call TGASDK.Event.<EventName>.Send() without parameters.</p>
 <p>You can keep the state update calls in your game and don’t need to check if user is logged in to TGA, we will automatically check inside the function calls if player is currently authenticated to TGA and send the state update only if so.</p>
 
 <h3 id="state-examples">State examples</h3>
-
-<p>Default state for logged-in student</p>
-
-<p><img src="/images/integrations/unitycsharp/image5.png" title="Default state for logged in student" alt="Default state for logged in student" /></p>
-
-<p>Student is in main menu</p>
 <pre class="highlight csharp tab-csharp"><code><span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">UpdateUserState</span><span class="p">(</span><span class="s">"In Main Menu"</span><span class="p">);</span>
-</code></pre>
-<p><img src="/images/integrations/unitycsharp/image4.png" title="Student is in main menu" alt="Student is in main menu" /></p>
-
-<p>Student is in settings menu</p>
-<pre class="highlight csharp tab-csharp"><code><span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">UpdateUserState</span><span class="p">(</span><span class="s">"In Settings Menu"</span><span class="p">);</span>
-</code></pre>
-<p><img src="/images/integrations/unitycsharp/image2.png" title="Student is in settings menu" alt="Student is in settings menu" /></p>
-
-<p>Student is playing singleplayer game, Tutorial Level 4 has been passed for detailed state</p>
-<pre class="highlight csharp tab-csharp"><code><span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">UpdateUserState</span><span class="p">(</span><span class="s">"Playing Singleplayer Game"</span><span class="p">,</span> <span class="s">"Tutorial Level 4"</span><span class="p">);</span>
-</code></pre>
-<p><img src="/images/integrations/unitycsharp/image1.png" title="Student is playing singleplayer game, Tutorial Level 4" alt="Student is playing singleplayer game, Tutorial Level 4" /></p>
-
-<p>Student is playing multiplayer game, Round number is being passed to detailed state when round changes</p>
-<pre class="highlight csharp tab-csharp"><code><span class="c1">// When game begun</span>
+</code></pre><pre class="highlight csharp tab-csharp"><code><span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">UpdateUserState</span><span class="p">(</span><span class="s">"In Settings Menu"</span><span class="p">);</span>
+</code></pre><pre class="highlight csharp tab-csharp"><code><span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">UpdateUserState</span><span class="p">(</span><span class="s">"Playing Singleplayer Game"</span><span class="p">,</span> <span class="s">"Tutorial Level 4"</span><span class="p">);</span>
+</code></pre><pre class="highlight csharp tab-csharp"><code><span class="c1">// When game begun</span>
 <span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">UpdateUserState</span><span class="p">(</span><span class="s">"Playing Multiplayer Game"</span><span class="p">);</span>
 <span class="c1">// When round changed</span>
 <span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">UpdateUserStateDetailedOnly</span><span class="p">(</span><span class="s">"Round 2"</span><span class="p">);</span>
 </code></pre>
-<p><img src="/images/integrations/unitycsharp/image3.png" title="Student is playing multiplayer game, Round number is being passed to detailed state" alt="Student is playing multiplayer game, Round number is being passed to detailed state" /></p>
+<table>
+<tr>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image5.png"/> </td>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image4.png"/> </td>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image2.png"/> </td>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image1.png"/> </td>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image3.png"/> </td>
+</tr>
+<tr>
+    <td><small>Default state for logged-in student </small></td>
+    <td><small>Student is in main menu </small></td>
+    <td><small>Student is in settings menu</small></td>
+    <td><small>Student is playing singleplayer game, Tutorial Level 4 has been passed for detailed state</small></td>
+    <td><small>Student is playing multiplayer game, Round number is being passed to detailed state when round changes</small></td>
+</tr>
+</table>
 
 <h2 id="creatubbles">Creatubbles</h2>
 
