@@ -32,17 +32,42 @@ public delegate void LoginStatusListener(bool isLoggedIn);
 public static event LoginStatusListener OnLoginStatusChanged;
 ```
 ```xml
-<!-- AndroidManifest.xml -->
-<activity android:name="com.teachergaming.tga.TGAAndroidUriSchemeActivity"
-        android:label="@string/app_name"
-        android:launchMode="singleTop">
-	<intent-filter>
-	  <action android:name="android.intent.action.VIEW" />
-	  <category android:name="android.intent.category.DEFAULT" />
-	  <category android:name="android.intent.category.BROWSABLE" />
-	  <data android:scheme="<your bundle identifier>" />
-	</intent-filter>
-</activity>
+<!-- Assets/Plugins/Android/AndroidManifest.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.unity3d.player">
+  <application android:icon="@drawable/app_icon" android:label="@string/app_name">
+	
+	<activity android:name="com.unity3d.player.UnityPlayerActivity"
+			  android:label="@string/app_name"
+			  android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen">
+        <intent-filter>
+			<action android:name="android.intent.action.MAIN" />
+			<category android:name="android.intent.category.LAUNCHER" />
+		</intent-filter>
+	</activity>
+	
+	<activity android:name="com.teachergaming.tga.TGAAndroidUriSchemeActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
+	    <intent-filter>
+	    	<action android:name="android.intent.action.VIEW" />
+	    	<category android:name="android.intent.category.DEFAULT" />
+	    	<category android:name="android.intent.category.BROWSABLE" />
+	    	<data android:scheme="YOUR.BUNDLEIDENTIFIER.HERE" /> <!-- REPLACE WITH YOUR GAME'S ANDROID APP BUNDLE IDENTIFIER -->
+	    </intent-filter>
+    </activity>
+
+	<receiver
+	    android:name="com.teachergaming.tgareceiver.TGABroadcastReceiver"
+	    android:enabled="true"
+	    android:exported="true" >
+	    <intent-filter>
+	        <action android:name="com.teachergaming.com.TGAbroadcast" />
+	    </intent-filter>
+	</receiver>
+
+  </application>
+</manifest> 
 ```
 ```url
 You can test automatic login using the following URI format
@@ -52,11 +77,9 @@ Logging in via TG APP is automatically handled by the SDK. You can listen to the
 
 You can use the TGASDK.TGA.LoggedInExternally() to check if the user logged in using the TG App.
 
+Note for Android! In future versions of TG App we are moving to use URI schemes to forward the login parameters to games on Android, like we already do on iOS. For this to work you need to specify your app's bundle id for the com.teachergaming.tga.TGAAndroidUriSchemeActivity activity in the AndroidManifest.xml file in Assets/Plugins/Android.
 
-Note for Android! In future versions of TG App we are moving to use URI schemes to forward the login parameters to games on Android, like we already do on iOS. For this to work you need to add the com.teachergaming.tga.TGAAndroidUriSchemeActivity activity to your AndroidManifest.xml file in Assets/Plugins/Android. (see https://docs.unity3d.com/Manual/android-manifest.html)
-
-
-On Android and iOS you should test the uri scheme login by creating a .html file with links according to the URI schem and opening it in your device browser and clicking on the links.
+On Android and iOS you can test the uri scheme login by creating a .html file with links according to the URI scheme and opening it in your device browser and clicking on the links.
 
 On desktop platforms you should test the automatic login by giving the uri as a command line parameter when starting your game. See https://docs.google.com/document/d/1nEJ5EGwO6JxTTmJGixvxEcBb0VhpMN7sEfOjGHY4JkI/edit#heading=h.1u1ow8hobpr for details.
 
@@ -81,7 +104,9 @@ This dialog will inform user if the login failed or succeeded. As with login via
 
 
 ###Handling subscription required
-You can define the compile time symbol TGA_SUBSCRIPTION_REQUIRED to make the login menu require a subscription. If the symbol is defined you cannot close the login menu. Pressing X in the top-right corner will quit the application by calling Application.Quit(). You can also supply your own function for quitting as a parameter for TGASDK.TGA.CreateLoginPanel() for example if you need to bypass your Monobehaviour.OnApplicationQuit handler that calls Application.CancelQuit.
+You can define the compile time symbol TGA_SUBSCRIPTION_REQUIRED to make the login menu require a subscription. If the symbol is defined you cannot login if you don't have an active subscription and you cannot close the login menu without logging in. Pressing X in the top-right corner will quit the application by calling Application.Quit(). You can also supply your own function for quitting as a parameter for TGASDK.TGA.CreateLoginPanel() for example if you need to bypass your Monobehaviour.OnApplicationQuit handler that calls Application.CancelQuit.
+
+When TGA_SUBSCRIPTION_REQUIRED is defined you should show the login window when the game app is started (main menu or equivalent).
  
 ###Custom login menu
 ```csharp
@@ -155,41 +180,37 @@ Updating state can be done using one of three function calls
 You can keep the state update calls in your game and don’t need to check if user is logged in to TGA, we will automatically check inside the function calls if player is currently authenticated to TGA and send the state update only if so.
 
 ###State examples
-
-Default state for logged-in student
-
-![Default state for logged in student](images/integrations/unitycsharp/image5.png "Default state for logged in student")
-
-Student is in main menu
-
 ```csharp
 TGASDK.TGA.UpdateUserState("In Main Menu");
 ```
-![Student is in main menu](images/integrations/unitycsharp/image4.png "Student is in main menu")
-
-Student is in settings menu
-
 ```csharp
 TGASDK.TGA.UpdateUserState("In Settings Menu");
 ```
-![Student is in settings menu](images/integrations/unitycsharp/image2.png "Student is in settings menu")
-
-Student is playing singleplayer game, Tutorial Level 4 has been passed for detailed state
-
 ```csharp
 TGASDK.TGA.UpdateUserState("Playing Singleplayer Game", "Tutorial Level 4");
 ```
-![Student is playing singleplayer game, Tutorial Level 4](images/integrations/unitycsharp/image1.png "Student is playing singleplayer game, Tutorial Level 4")
-
-Student is playing multiplayer game, Round number is being passed to detailed state when round changes
-
 ```csharp
 // When game begun
 TGASDK.TGA.UpdateUserState("Playing Multiplayer Game");
 // When round changed
 TGASDK.TGA.UpdateUserStateDetailedOnly("Round 2");
 ```
-![Student is playing multiplayer game, Round number is being passed to detailed state](images/integrations/unitycsharp/image3.png "Student is playing multiplayer game, Round number is being passed to detailed state")
+<table>
+<tr>
+	<td width="20%"> <img src="images/integrations/unitycsharp/image5.png"/> </td>
+	<td width="20%"> <img src="images/integrations/unitycsharp/image4.png"/> </td>
+	<td width="20%"> <img src="images/integrations/unitycsharp/image2.png"/> </td>
+	<td width="20%"> <img src="images/integrations/unitycsharp/image1.png"/> </td>
+	<td width="20%"> <img src="images/integrations/unitycsharp/image3.png"/> </td>
+</tr>
+<tr>
+	<td><small>Default state for logged-in student </small></td>
+	<td><small>Student is in main menu </small></td>
+	<td><small>Student is in settings menu</small></td>
+	<td><small>Student is playing singleplayer game, Tutorial Level 4 has been passed for detailed state</small></td>
+	<td><small>Student is playing multiplayer game, Round number is being passed to detailed state when round changes</small></td>
+</tr>
+</table>
 
 ##Creatubbles
 Creatubbles integration can be used to take a screenshot of the game and send it to TGA and Creatubbles web page. To use this feature the user needs to be logged in to TGA and the CreatubblesManager script needs to be attached to a gameobject as explained in the FIRST STEPS section.

@@ -2,10 +2,11 @@
 title: API Reference
 
 includes:
-  - general
-  - oauth
-  - sdk_unityc
+  - teachergaming_desk
+  - sdk_general
+  - sdk_unitycsharp
   - sdk_http
+  - oauth
 
 search: true
 ---
