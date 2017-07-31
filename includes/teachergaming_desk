@@ -4,7 +4,7 @@
 
 <p>The TeacherGaming Desk is a classroom toolbox designed to make game-based learning accessible to everyone.  It combinines a portfolio of games with pedagogical support and real-time analytics.</p>
 
-<p>From a technical point of view TeacherGaming desk is made of three things.</p>
+<p>From a technical point of view TeacherGaming Desk is made of three things.</p>
 
 <ol>
 <li>A web based platform ( <a href="https://desk.teachergaming.com">https://desk.teachergaming.com</a> ) for teachers, administrators and game developers called Teachergaming Desk that implements the following functionalities for its users.
@@ -28,7 +28,7 @@
 
 <ul>
 <li>Manage games and their information</li>
-<li>Define the analytics for a game by mananging skills, events and activities</li>
+<li>Define the analytics for a game by managing skills, events and activities</li>
 <li>Generate SDKs for games</li>
 <li>Create lessons for games</li>
 <li>Provide oAuth single sign on support for using the TeacherGaming Desk login in other web based applications</li>
@@ -38,7 +38,11 @@
 
 <ul>
 <li>Download games</li>
-<li>Launch games</li>
+<li>Launch games
+
+<ul>
+<li>with automatic TeacherGaming Desk student login</li>
+</ul></li>
 </ul></li>
 <li>Games with TeacherGaming Desk integration
 

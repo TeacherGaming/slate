@@ -2,11 +2,11 @@
 
 <p>In this document and in the code the SDK for integrating the analytics is often called TGA SDK for short.</p>
 
-<p>This part of the document is written for game developers that are going to integrate TeacherGaming Desk analytics into their games. It describes on a general level how to do the integration. Integration can be done either by using a ready-made SDK for your platform or by manually using the HTTP API.</p>
+<p>This part of the document is written for game developers that are going to integrate TeacherGaming Desk analytics into their games. It describes on a general level how to do the integration. Integration can be done either by using a ready-made SDK for your platform or manually by using the HTTP API.</p>
 
 <p>More detailed information is available in the documentation for the different SDKs and the HTTP API documentation. See the links on the left.</p>
 
-<h2 id="student-id-and-class-id">Student ID and Class ID</h2>
+<h2 id="student-id-and-class-id">Student id and Class id</h2>
 
 <p>Students are identified in TGA by their class and student ids. These are used instead of real names or similar in order to prevent outsiders (anyone except their teachers or parents etc.) from identifying individual students in the system. The class id is a system-wide unique generated alphanumeric identifier that identifies a group of students (usually a class). The student id is an alphanumeric identifier that is unique within a class, and is manually set either by a teacher in the web interface or by the student on first login if automatic generation of students has been allowed for that class.</p>
 
@@ -14,17 +14,17 @@
 
 <p>Logging in can be done through the TeacherGaming app or in the game. If users authenticate in the game you will need to add a UI where the student can type in a class id and a student id. Our Unity C# SDK has a ready-made UI you can use if you are developing on Unity.</p>
 
-<p>You should not save the class and student id’s in your game. The student should need to login separately every time the app is started either through the TG App or in the game UI.</p>
+<p>You should not save the class and student ids in your game. The student should need to login separately every time the app is started either through the TeacherGaming app or in the game UI.</p>
 
-<h3 id="automatically-logging-in-from-tg-app">Automatically logging in from TG App</h3>
+<h3 id="automatically-logging-in-from-teachergaming-app">Automatically logging in from TeacherGaming app</h3>
 
-<p>When the user has logged in to TG App and launches your game the TG App passes the login information to your game to allow your game to log in automatically as it is lauched (or brought back to foreground). On Android this is done by using Intent (when app is not already running) and Broadcast (when app is running) parameters. On iOS this is done using an URI scheme. We are planning to change Android to use the URI scheme as well in the future (the SDK already supports it). On desktop platforms we pass the URI as a command line argument to the application.</p>
+<p>When the user has logged in to TeacherGaming app and launches your game the TeacherGaming app passes the login information to your game to allow your game to log in automatically as it is lauched (or brought back to foreground). On Android this is done by using Intent (when app is not already running) and Broadcast (when app is running) parameters. On iOS this is done using an URI scheme. We are planning to change Android to use the URI scheme as well in the future (the Unity SDK already supports it). On desktop platforms we pass the URI as a command line argument to the application.</p>
 
-<p>The SDKs do the handling of these parameters automatically. When using an SDK all you need to do is listen to a callback (see the platform specific SDK documentation for how to do this) and react appropriately. If you are using the HTTP API you need to do the parameter handling yourself (see the HTTP API documentation and TG App Android Intent login documentation).</p>
+<p>The SDKs do the handling of these parameters automatically. When using an SDK all you need to do is listen to a callback (see the platform specific SDK documentation for how to do this) and react appropriately. If you are using the HTTP API you need to do the parameter handling yourself (see the HTTP API documentation and TeacherGaming app Android Intent login documentation).</p>
 
-<p>When the student has logged in via TG App you should not give the user the option to logout or to login as different student inside the game. Changing the student should only be done via the TG App in this case. It is good if you still have the UI to show the class and student ids but you can leave it out if you wish. This can be the same UI you use to login inside the game just having the input fields and buttons in a disabled state disabled for example.</p>
+<p>When the student has logged in via TeacherGaming app you should not give the user the option to logout or to login as different student inside the game. Changing the student should only be done via the TeacherGaming app in this case. It is good if you still have the UI to show the class and student ids but you can leave it out if you wish. This can be the same UI you use to login inside the game just having the input fields and buttons in a disabled state disabled for example.</p>
 
-<h4 id="testing-automatic-login-through-tg-app">Testing automatic login through TG App</h4>
+<h4 id="testing-automatic-login-through-teachergamning-app">Testing automatic login through TeacherGamning App</h4>
 
 <ol>
 <li>Search for app called TeacherGaming on Play or App store. Install the app and launch it.</li>
@@ -35,7 +35,7 @@
 Your game should now run and a popup should inform you about the login result.</li>
 </ol>
 
-<h4 id="testing-automatic-login-on-mobile-without-tg-app">Testing automatic login on mobile without TG App</h4>
+<h4 id="testing-automatic-login-on-mobile-without-teachergaming-app">Testing automatic login on mobile without TeacherGaming app</h4>
 <pre class="highlight plaintext"><code>URI:
 &lt;your bundle identifier&gt;://?classid=&lt;class id&gt;&amp;studentid=&lt;student id&gt;&amp;command=&lt;login/logout&gt;
 
@@ -46,7 +46,7 @@ Example (in html file):
 </code></pre>
 <p>Create a html file with links according to the URI scheme or input the URI in the device browser address bar.</p>
 
-<h4 id="testing-automatic-login-on-desktop-without-tg-app">Testing automatic login on desktop without TG App</h4>
+<h4 id="testing-automatic-login-on-desktop-without-teachergaming-app">Testing automatic login on desktop without TeacherGaming app</h4>
 <pre class="highlight plaintext"><code>Desktop command line examples:
 
 “Switch &amp; Glitch.exe” “com.fivemoreminutes.switchandglitch://?classid=h1xme&amp;studentid=student1&amp;command=login”
@@ -56,11 +56,11 @@ Example (in html file):
 </code></pre>
 <p>On desktop platforms you should test the automatic login by giving the URI on the right as a command line parameter when starting your game.</p>
 
-<p>Replace <your bundle identifier> with your bundle identifier (f.e. com.teachergaming.switchandglitch) <class id> with a class id and <student id> with a student id and choose login or logout as the command. Note that on desktop you can leave the <your bundle identifier>:// part out in case you don’t have a bundle identifier defined. You can also leave the classid=<class id>&amp;studentid=<student id>&amp; part out if you have logout as the command. Note that you should never leave out the ? character. Note that the parameter contains special characters, so remember to put it in &ldquo;&rdquo;.</p>
+<p>Replace &lt;your bundle identifier&gt; with your bundle identifier (f.e. com.teachergaming.switchandglitch) &lt;class id&gt; with a class id and &lt;student id&gt; with a student id and choose login or logout as the command. Note that on desktop you can leave the &lt;your bundle identifier&gt;:// part out in case you don’t have a bundle identifier defined. You can also leave the classid=&lt;class id&gt;&amp;studentid=&lt;student id&gt;&amp; part out if you have logout as the command. Note that you should never leave out the ? character. Note that the parameter contains special characters, so remember to put it in &ldquo;&rdquo;.</p>
 
 <h3 id="creating-your-own-ui-for-in-game-login">Creating your own UI for in-game login</h3>
 
-<p>For manually logging in to TGA the student needs to be able to input a Class ID and a Student ID. A good place for this UI is for example in a settings menu, or somewhere in the main menu. Usually two input fields with OK and Cancel options is enough. You can also have a Logout button to logout of TGA. Both the Class ID and Student ID fields should be either lowercase or uppercase only, not mixed case. In the system the Class ID and Student ID are not case sensitive. Uppercase only can be used to make it easier for young children to type the ids.</p>
+<p>For manually logging in to TGA the student needs to be able to input a class id and a student id. A good place for this UI is for example in a settings menu, or somewhere in the main menu. Usually two input fields with OK and Cancel options is enough. You can also have a Logout button to logout of TGA. Both the class id and student id fields should be either lowercase or uppercase only, not mixed case. In the system the class id and student id are not case sensitive. Uppercase only can be used to make it easier for young children to type the ids.</p>
 
 <h4 id="login-ui-examples">Login UI examples</h4>
 
@@ -76,7 +76,7 @@ Example (in html file):
     </td>
     <td width="33%">
         <img src="images/integrations/general/image6.png"/><br>
-        Switch & Glitch logged in via TG App
+        Switch & Glitch logged in via TeacherGaming app
     </td>
 </tr>
 </table>
@@ -103,15 +103,15 @@ Example (in html file):
 <span class="n">TGASDKSomeGame</span><span class="p">.</span><span class="n">Event</span><span class="p">.</span><span class="n">LevelCompleted</span><span class="p">.</span><span class="nf">Send</span><span class="p">();</span>
 </code></pre>
 <p>Our SDK can automatically count time for an event and append duration to sent data. You can modify any additional data inside the event before you send it.
-To start the event, call TGASDK.Event.<EventName>.Start().
-Now you can gather all the needed data for the event. You can change the data for the event before you send it using TGASDK.Event.<EventName>.Current.<DataParameter>
-To send the event, call TGASDK.Event.<EventName>.Send()</p>
+To start the event, call TGASDK.Event.&lt;EventName&gt;.Start().
+You can gather all the needed data for the event before you send it using TGASDK.Event.&lt;EventName&gt;.Current.&lt;DataParameter&gt;
+To send the event, call TGASDK.Event.&lt;EventName&gt;.Send()</p>
 
 <h3 id="sending-events-without-duration">Sending events without duration</h3>
 <pre class="highlight csharp tab-csharp"><code><span class="c1">// Sending an event without tracking for duration</span>
-<span class="n">TGASDK</span><span class="p">.</span><span class="n">SomeGame</span><span class="p">.</span><span class="n">Event</span><span class="p">.</span><span class="n">ItemCrafted</span><span class="p">.</span><span class="nf">Send</span><span class="p">(</span><span class="s">"item1"</span><span class="p">);</span>
+<span class="n">TGASDKSomeGame</span><span class="p">.</span><span class="n">Event</span><span class="p">.</span><span class="n">ItemCrafted</span><span class="p">.</span><span class="nf">Send</span><span class="p">(</span><span class="s">"item1"</span><span class="p">);</span>
 </code></pre>
-<p>If the event is something for which it does not make sense to track a duration you can call TGASDK.Event.<EventName>.Send(&hellip;) with event data as parameters to send the event directly.</p>
+<p>If the event is something for which it does not make sense to track a duration you can call TGASDK.Event.&lt;EventName&gt;.Send(&hellip;) with event data as parameters to send the event directly.</p>
 
 <h2 id="updating-state">Updating state</h2>
 
@@ -131,11 +131,11 @@ To send the event, call TGASDK.Event.<EventName>.Send()</p>
 <li>TGASDK.TGA.UpdateUserStateDetailedOnly(string stateDetailed)
 
 <ul>
-<li>This sets the detailed state below main state and does not reset the main state. You can use this to for ex. Update round numbers or other live data happening in current state of your game.</li>
+<li>This sets the detailed state below main state and does not reset the main state. You can use this to for example update round numbers or other live data happening in current state of your game.</li>
 </ul></li>
 </ul>
 
-<p>You can keep the state update calls in your game and don’t need to check if user is logged in to TGA, we will automatically check inside the function calls if player is currently authenticated to TGA and send the state update only if so.</p>
+<p>You can keep the state update calls in your game and don’t need to check if user is logged in to TGA, we will automatically check inside the function calls if player is currently logged in to TGA and send the state update only if so.</p>
 
 <h3 id="state-examples">State examples</h3>
 <pre class="highlight csharp tab-csharp"><code><span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">UpdateUserState</span><span class="p">(</span><span class="s">"In Main Menu"</span><span class="p">);</span>

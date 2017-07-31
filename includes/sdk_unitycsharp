@@ -37,8 +37,8 @@
 
 <p>Logging in can be done through the TeacherGaming app (Android only at the moment) or in game. If users authenticate in game you will need to add a menu where user can type in a classid and a studentid. Authentication must be done before data can be sent.</p>
 
-<h3 id="automatically-logging-in-with-tg-app">Automatically logging in with TG App</h3>
-<pre class="highlight csharp tab-csharp"><code><span class="c1">// Automatically logging in with TG App</span>
+<h3 id="automatically-logging-in-with-teachergaming-app">Automatically logging in with TeacherGaming App</h3>
+<pre class="highlight csharp tab-csharp"><code><span class="c1">// Automatically logging in with TeacherGaming App</span>
 <span class="c1">// Login status delegate &amp; event (in TGASDK.TGA)</span>
 <span class="k">public</span> <span class="k">delegate</span> <span class="k">void</span> <span class="nf">LoginStatusListener</span><span class="p">(</span><span class="kt">bool</span> <span class="n">isLoggedIn</span><span class="p">);</span>
 <span class="k">public</span> <span class="k">static</span> <span class="k">event</span> <span class="n">LoginStatusListener</span> <span class="n">OnLoginStatusChanged</span><span class="p">;</span>
@@ -81,11 +81,11 @@
 </code></pre><pre class="highlight plaintext"><code>You can test automatic login using the following URI format
 &lt;your bundle identifier&gt;://?classid=&lt;class id&gt;&amp;studentid=&lt;student id&gt;&amp;command=&lt;login/logout&gt;
 </code></pre>
-<p>Logging in via TG APP is automatically handled by the SDK. You can listen to the TGASDK.TGA.OnLoginStatusChanged C# event to get notified when the login status changes. The event gives you one boolean parameter that is true if a student logged in and false if the current student logged out. The event is implemented using the C# delegate &amp; event system.</p>
+<p>Logging in via TeacherGaming App is automatically handled by the SDK. You can listen to the TGASDK.TGA.OnLoginStatusChanged C# event to get notified when the login status changes. The event gives you one boolean parameter that is true if a student logged in and false if the current student logged out. The event is implemented using the C# delegate &amp; event system.</p>
 
-<p>You can use the TGASDK.TGA.LoggedInExternally() to check if the user logged in using the TG App.</p>
+<p>You can use the TGASDK.TGA.LoggedInExternally() to check if the user logged in using the TeacherGaming App.</p>
 
-<p>Note for Android! In future versions of TG App we are moving to use URI schemes to forward the login parameters to games on Android, like we already do on iOS. For this to work you need to specify your app&rsquo;s bundle id for the com.teachergaming.tga.TGAAndroidUriSchemeActivity activity in the AndroidManifest.xml file in Assets/Plugins/Android.</p>
+<p>Note for Android! In future versions of TeacherGaming App we are moving to use URI schemes to forward the login parameters to games on Android, like we already do on iOS. For this to work you need to specify your app&rsquo;s bundle id for the com.teachergaming.tga.TGAAndroidUriSchemeActivity activity in the AndroidManifest.xml file in Assets/Plugins/Android.</p>
 
 <p>On Android and iOS you can test the uri scheme login by creating a .html file with links according to the URI scheme and opening it in your device browser and clicking on the links.</p>
 
@@ -107,7 +107,7 @@ A login dialog will be created that looks like this (without the blue background
 
 <p><img src="/images/integrations/unitycsharp/image6.png" title="UnityCSharp Login Example" alt="UnityCSharp Login Example" /></p>
 
-<p>This dialog will inform user if the login failed or succeeded. As with login via TG App you can listen to the TGASDK.TGA.OnLoginStatusChanged event to get notified when the login status changes.</p>
+<p>This dialog will inform user if the login failed or succeeded. As with login via TeacherGaming App you can listen to the TGASDK.TGA.OnLoginStatusChanged event to get notified when the login status changes.</p>
 
 <h3 id="handling-subscription-required">Handling subscription required</h3>
 
@@ -134,7 +134,7 @@ A login dialog will be created that looks like this (without the blue background
     <span class="c1">// Authentication failed (classid &amp; studentid we’re not correct)</span>
 <span class="p">}</span>
 </code></pre>
-<p>Note: If a student has logged in externally (using TG App) your custom login menu should not allow changing the login nor logging out. You can check if the user has logged in externally using TGASDK.TGA.LoggedInExternally(). It is recommended you still have the UI to show the class and student ids. This can be the same UI you use to login inside the game just having the input fields and buttons in a disabled state disabled for example.</p>
+<p>Note: If a student has logged in externally (using TeacherGaming App) your custom login menu should not allow changing the login nor logging out. You can check if the user has logged in externally using TGASDK.TGA.LoggedInExternally(). It is recommended you still have the UI to show the class and student ids. This can be the same UI you use to login inside the game just having the input fields and buttons in a disabled state disabled for example.</p>
 
 <p>If you choose to create your own login menu you need to pass the class id and student id to the auth process. From a Monobehaviour script you need to run a coroutine with the code on the right.</p>
 
