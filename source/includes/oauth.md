@@ -23,7 +23,8 @@ Parameter | Default | Description
 --------- | ------- | -----------
 client_id |  | Your `client_id`.
 redirect_uri |  | URL where client gets redirected after succesfull login. These are whitelisted by Teachergaming.
-student_login | | Set to true to login as a student. Do not include this parameter if doing teacher login.
+student_login | | Set to `true` to login as a student. No need to include this parameter if doing teacher login.
+switch_teacher_student_login | | Set to `true` to allow switching between teacher and student logins.
 response_type | | only `code` allowed for now.
 
 After succesfull login, user will be redirected back to your redirect_uri with code in GET query parameter. Use this code to fetch the token for the user as explained in section [Token](#token).
