@@ -709,6 +709,277 @@ To send the event, call TGASDK.Event.<EventName>.Send() without parameters.</p>
 </code></pre>
 <p>These functions can be used to query if there is a valid subscription for the game. For testing the subscription, there are these two classes: Class h1xme never has subscription expired. Class h1xjr always has subscription expired. Both of these classes have student self-signup enabled so user can login with any studentid for testing.</p>
 
+          <h1 id="c-sdk">C++ SDK</h1>
+
+<h2 id="general">General</h2>
+
+<p>This document describes the specifics of integrating Teachergaming Desk to your game using the TGA C++ SDK. For general integration information and links to other SDK documents see the general SDK information.</p>
+
+<h2 id="requirements">Requirements</h2>
+
+<p>Our current SDK requires a C++ compiler with C++ 11 support. It has been tested with Microsoft Visual (Studio) C++ 2015.</p>
+
+<p>Optional: The SDK has builtin support for using libcurl (https://curl.haxx.se/libcurl/) or Unreal Engine&rsquo;s HTTP functionality for implementing the needed HTTP requests. There is also an interface you can override to provide your own implementation if you can&rsquo;t use either of those.</p>
+
+<h2 id="first-steps">First Steps</h2>
+<pre class="highlight cpp tab-cpp"><code><span class="c1">// TGA SDK initialization examples
+</span>
+<span class="c1">// Unreal Engine ------------
+</span><span class="cp">#include "TGAHTTPUnreal.hpp"
+</span><span class="c1">//...
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">parameters</span><span class="p">;</span>
+    <span class="c1">// Get command line parameters
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">cmdLine</span><span class="p">(</span><span class="n">TCHAR_TO_UTF8</span><span class="p">(</span><span class="o">*</span><span class="n">FCommandLine</span><span class="o">::</span><span class="n">Get</span><span class="p">()));</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">istringstream</span> <span class="n">iss</span><span class="p">(</span><span class="n">cmdLine</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">istream_iterator</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">iss</span><span class="p">),</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">istream_iterator</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(),</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">back_inserter</span><span class="p">(</span><span class="n">parameters</span><span class="p">));</span>
+
+    <span class="c1">// Initialize TGA SDK
+</span>    <span class="n">TGASDKMyGame</span><span class="o">::</span><span class="n">Init</span><span class="p">(</span><span class="k">new</span> <span class="n">TGAHTTPUnreal</span><span class="p">(),</span> <span class="n">parameters</span><span class="p">);</span>
+<span class="c1">// --------------------------
+</span>
+<span class="c1">// Using libcurl ------------
+</span><span class="cp">#include "TGAHTTPlibcurl.hpp"
+</span><span class="c1">//...
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">parameters</span><span class="p">;</span>
+    <span class="c1">// Get parameters
+</span>    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">argc</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">parameters</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">string</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]));</span>
+
+    <span class="c1">// Initialize TGA SDK
+</span>    <span class="n">TGASDKMyGame</span><span class="o">::</span><span class="n">Init</span><span class="p">(</span><span class="k">new</span> <span class="n">TGAHTTPlibcurl</span><span class="p">(),</span> <span class="n">parameters</span><span class="p">);</span>
+<span class="c1">// --------------------------
+</span>
+<span class="c1">// Using your own TGAHTTPImplementation implementation
+</span><span class="cp">#include "TGAHTTPForMyEngine.hpp"
+</span><span class="c1">//...
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">parameters</span><span class="p">;</span>
+    <span class="c1">// Get parameters ...
+</span>
+    <span class="c1">// Initialize TGA SDK
+</span>    <span class="n">TGASDKMyGame</span><span class="o">::</span><span class="n">Init</span><span class="p">(</span><span class="k">new</span> <span class="n">TGAHTTPForMyEngine</span><span class="p">(),</span> <span class="n">parameters</span><span class="p">);</span>
+<span class="c1">// --------------------------
+</span></code></pre>
+<ol>
+<li>TeacherGaming will send you a .zip package with the latest SDK and assets.</li>
+<li>Unzip to your location of choice (inside your project is ok).</li>
+<li>Inside the package you will find the tgasdk directory that contains the SDK header files (.hpp).  Add it to your project’s include directories.
+
+<ul>
+<li>TGA SDK is a header only library, so there are no source code files that need to be compiled nor library files that need to be linked. All code is in the header files.</li>
+</ul></li>
+<li>Prepare for making HTTP requests, choose one
+
+<ul>
+<li>If using Unreal Engine, enable exceptions for your project (add <code class="prettyprint">bEnableExceptions = true;</code> to your ProjectName.Build.cs)</li>
+<li>Install libcurl (https://curl.haxx.se/libcurl/) and add it to your project</li>
+<li>Implement <code class="prettyprint">TGAHTTPImplementation</code> yourself</li>
+</ul></li>
+<li>Add a call to <code class="prettyprint">TGASDK&lt;yourgamenamehere&gt;::Init(...)</code> to your game’s initialization code. 
+
+<ul>
+<li>As the first parameter, use one of these. Ownership is transferred to TGASDK.
+
+<ul>
+<li><code class="prettyprint">new TGAHTTPUnreal()</code> if using Unreal Engine
+
+<ul>
+<li>need to <code class="prettyprint">#include &quot;tgasdk/TGAHTTPUnreal.hpp&quot;</code> first</li>
+</ul></li>
+<li><code class="prettyprint">new TGAHTTPlibcurl()</code>
+
+<ul>
+<li>need to <code class="prettyprint">#include &quot;tgasdk/TGAHTTPlibcurl.hpp&quot;</code> first</li>
+</ul></li>
+<li>an instance your own implementation of <code class="prettyprint">TGAHTTPImplementation</code>
+
+<ul>
+<li>#include your own implementation&rsquo;s header</li>
+</ul></li>
+</ul></li>
+<li>As the second parameter give a list of the command line parameters your application was started with.</li>
+</ul></li>
+<li>Add a call to <code class="prettyprint">TGASDK&lt;yourgamenamehere&gt;::Cleanup()</code> to your game’s cleanup code.</li>
+</ol>
+
+<h2 id="notes">Notes</h2>
+
+<p>Your SDK file is called TGASDK&lt;yourgamenamehere&gt;.hpp. Class inside that file is called TGASDK&lt;yourgamenamehere&gt;. To improve readability, we have not added &lt;yourgamenamehere&gt; for each method call in this document, we are mentioning TGASDK and you should add your game name after each TGASDK call to make it correct.</p>
+
+<h2 id="student-login">Student Login</h2>
+
+<p>Logging in can be done through the TeacherGaming app or in game. If users authenticate in game you will need to add a menu where user can type in a classid and a studentid. Authentication must be done before data can be sent.</p>
+
+<h3 id="automatically-logging-in-with-teachergaming-app">Automatically Logging in with TeacherGaming app</h3>
+<pre class="highlight cpp tab-cpp"><code><span class="c1">// You need to supply command line parameters to the initializer for automatic login to work
+</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">parameters</span><span class="p">;</span>
+<span class="c1">// Get command line parameters and insert them to the vector
+</span><span class="n">TGASDKMyGame</span><span class="o">::</span><span class="n">Init</span><span class="p">(</span><span class="k">new</span> <span class="n">TGAHTTPlibcurl</span><span class="p">(),</span> <span class="n">parameters</span><span class="p">);</span> <span class="o">&lt;-</span> <span class="n">supply</span> <span class="n">the</span> <span class="n">parameters</span> <span class="n">as</span> <span class="n">parameter</span>
+
+<span class="c1">// You can listen to login/logout events by implementing the TGASDK::TGA::LoginStatusChangeListener interface
+</span><span class="k">class</span> <span class="nc">MyClassThatListensToLoginStatusChanges</span> <span class="o">:</span> <span class="k">public</span> <span class="n">TGASDK</span><span class="o">::</span><span class="n">TGA</span><span class="o">::</span><span class="n">LoginStatusChangeListener</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">/// Override to listen for login status changes
+</span>    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">OnLoginStatusChanged</span><span class="p">(</span><span class="kt">bool</span> <span class="n">loggedIn</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// If loggedIn is true, the student has just logged in, if false, logged out.
+</span>        <span class="c1">// NOTE! Calls to this function may (and usually do) happen in another thread.
+</span>    <span class="p">};</span>
+
+    <span class="kt">void</span> <span class="nf">Initialize</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">TGASDKMyGame</span><span class="o">::</span><span class="n">TGA</span><span class="o">::</span><span class="n">AddLoginStatusChangeListener</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="kt">void</span> <span class="nf">Destruct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">TGASDKMyGame</span><span class="o">::</span><span class="n">TGA</span><span class="o">::</span><span class="n">RemoveLoginStatusChangeListener</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>   
+    <span class="p">};</span>
+<span class="p">};</span>
+</code></pre>
+<p>For the automatic login system to work in the C++ SDK you need to supply the command line parameters when calling <code class="prettyprint">TGASDK&lt;yourgamenamehere&gt;::Init(...)</code>.</p>
+
+<p>Logging in via TeacerhGaming App is automatically handled by the SDK. You can use <code class="prettyprint">TGASDK::TGA::AddLoginStatusChangeListener</code> to add listeners (that implement <code class="prettyprint">TGASDK::LoginStatusChangeListener</code> inteface) to get notified when the login status changes. The callback gives you one boolean parameter that is true if a student logged in and false if the current student logged out. Remember to call <code class="prettyprint">TGASDK::TGA::RemoveLoginStatusChangeListener</code> before your listener is deleted. Note that the listener can be (and usually is) called in another thread.</p>
+
+<p>You can use the <code class="prettyprint">TGASDK::TGA::LoggedInExternally()</code> function to check if the user logged in using the TeacherGaming App.</p>
+
+<p>You can test the automatic login by giving your game a command line parameter of the following format.</p>
+
+<p><code class="prettyprint">&lt;your bundle identifier&gt;://?classid=&lt;class id&gt;&amp;studentid=&lt;student id&gt;&amp;command=&lt;login/logout&gt;</code></p>
+
+<h3 id="custom-login-menu">Custom Login Menu</h3>
+
+<p>When the student has logged in via TG App, you should not give the user the option to logout or to login as a different student inside the game. Changing the student should only be done via the TG App in this case. It is good if you still have the UI to show the class and student ids. This can be the same UI you use to login inside the game just having the input fields and buttons in a disabled state disabled for example.</p>
+
+<p>Here is an example of a TGA login UI (the built-in UI in the Unity SDK).</p>
+
+<p><img src="images/integrations/unitycsharp/image6.png"/></p>
+<pre class="highlight cpp tab-cpp"><code><span class="k">class</span> <span class="nc">LoginUI</span> <span class="o">:</span> <span class="k">public</span> <span class="n">TGASDK</span><span class="o">::</span><span class="n">TGA</span><span class="o">::</span><span class="n">LoginStatusChangeListener</span>
+<span class="p">{</span>
+    <span class="kt">void</span> <span class="n">LoginButtonPressed</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">classId</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">studentId</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">TGASDK</span><span class="o">::</span><span class="n">TGA</span><span class="o">::</span><span class="n">LoginAsync</span><span class="p">(</span><span class="n">classId</span><span class="p">,</span> <span class="n">studentId</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<p>From your login menu you need to pass the class id and student id to the auth process. To do this simply call </p>
+
+<p><code class="prettyprint">static void TGASDK::TGA::LoginAsync(const std::string&amp; classId, const std::string&amp; studentId);</code></p>
+
+<p>Calling this function will start the login process in a new thread. Use <code class="prettyprint">TGASDK::TGA::AddLoginStatusChangeListener</code> to add listeners (that implement <code class="prettyprint">TGASDK::LoginStatusChangeListener</code> inteface) to get notified when the login process has finished. The callback gives you one boolean parameter that is true if a student logged successfully and false if the login failed or if the student logged out. Remember to call <code class="prettyprint">TGASDK::TGA::RemoveLoginStatusChangeListener</code> before your listener is deleted. <strong>Note that the listener can be (and usually is) called in another thread.</strong></p>
+
+<h2 id="sending-events">Sending Events</h2>
+
+<p>The events that have been defined in TGA website are generated to the SDK and can be used to send data from the game to TGA. All the events have their own inner class inside <code class="prettyprint">TGA&lt;yourgamename&gt;</code>.Event with a member variable for each event parameter and functions to start and send the event.</p>
+
+<h3 id="sending-events-with-duration">Sending events with duration</h3>
+<pre class="highlight cpp tab-cpp"><code><span class="c1">// Start event
+</span><span class="n">TGASDKMyGame</span><span class="o">::</span><span class="n">Event</span><span class="o">::</span><span class="n">MyEvent</span><span class="o">::</span><span class="n">Start</span><span class="p">();</span>
+<span class="p">...</span>
+<span class="c1">// While event is going on update variables
+</span><span class="n">TGASDKMyGame</span><span class="o">::</span><span class="n">Event</span><span class="o">::</span><span class="n">MyEvent</span><span class="o">::</span><span class="n">Current</span><span class="p">().</span><span class="n">countOfSomething</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="p">...</span>
+<span class="c1">// Send event
+</span><span class="n">TGASDKMyGame</span><span class="o">::</span><span class="n">Event</span><span class="o">::</span><span class="n">MyEvent</span><span class="o">::</span><span class="n">Send</span><span class="p">();</span>
+</code></pre>
+<p>This is useful to start an event and send it to us when it’s ready. Our SDK automatically counts time from beginning to end and appends duration to sent data. You can also modify any additional data inside the event before you send it.
+To start the event, call <code class="prettyprint">TGASDK::Event::&lt;EventName&gt;::Start()</code>
+Now you can gather all needed data for the event. You can change additional data inside the event before you send it. Any data for the started event can be changed using <code class="prettyprint">TGASDK::Event::&lt;EventName&gt;::Current().&lt;datavariable&gt;</code>
+To send the event, call <code class="prettyprint">TGASDK::Event::&lt;EventName&gt;::Send()</code></p>
+
+<h3 id="sending-events-without-duration">Sending events without duration</h3>
+<pre class="highlight cpp tab-cpp"><code><span class="c1">// Send an event immediately without tracking duration
+</span><span class="n">TGASDKMyGame</span><span class="o">::</span><span class="n">Event</span><span class="o">::</span><span class="n">MyInstantaneousEvent</span><span class="o">::</span><span class="n">Send</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">// Event takes an integer parameter
+</span></code></pre>
+<p>You can call <code class="prettyprint">GASDK::Event::&lt;EventName&gt;::Send(...)</code> with event data as parameters to send an event immediately, without tracking for duration.</p>
+
+<h2 id="updating-state">Updating state</h2>
+
+<p>Updating state can be done using one of three function calls</p>
+
+<ul>
+<li><code class="prettyprint">TGASDK::TGA::UpdateUserState(const std::string&amp; state)</code>
+
+<ul>
+<li>This sets the state showing below student name in teacher dashboard. It also resets detailed state showing below this state, if there was any.</li>
+</ul></li>
+<li><code class="prettyprint">TGASDK::TGA::UpdateUserState(const std::string&amp; state, const std::string&amp; detailedState)</code>
+
+<ul>
+<li>This sets the state showing below student name in teacher dashboard and detailed state below it.</li>
+</ul></li>
+<li><code class="prettyprint">TGASDK::TGA::UpdateUserStateDetailedOnly(const std::string&amp; stateDetailed)</code>
+
+<ul>
+<li>This sets the detailed state below main state and does not reset the main state. You can use this to for ex. Update round numbers or other live data happening in current state of your game.</li>
+</ul></li>
+</ul>
+
+<p>You can keep the state update calls in your game and don’t need to check if user is logged in to TGA, we will automatically check inside the function calls if player is currently authenticated to TGA and send the state update only if so.</p>
+
+<h3 id="state-examples">State examples</h3>
+<pre class="highlight cpp tab-cpp"><code><span class="n">TGASDK</span><span class="o">::</span><span class="n">TGA</span><span class="o">::</span><span class="n">UpdateUserState</span><span class="p">(</span><span class="s">"In Main Menu"</span><span class="p">);</span>
+</code></pre><pre class="highlight cpp tab-cpp"><code><span class="n">TGASDK</span><span class="o">::</span><span class="n">TGA</span><span class="o">::</span><span class="n">UpdateUserState</span><span class="p">(</span><span class="s">"In Settings Menu"</span><span class="p">);</span>
+</code></pre><pre class="highlight cpp tab-cpp"><code><span class="n">TGASDK</span><span class="o">::</span><span class="n">TGA</span><span class="o">::</span><span class="n">UpdateUserState</span><span class="p">(</span><span class="s">"Playing Singleplayer Game"</span><span class="p">,</span> <span class="s">"Tutorial Level 4"</span><span class="p">);</span>
+</code></pre><pre class="highlight cpp tab-cpp"><code><span class="c1">// When game begun
+</span><span class="n">TGASDK</span><span class="o">:::</span><span class="n">TGA</span><span class="o">:::</span><span class="n">UpdateUserState</span><span class="p">(</span><span class="s">"Playing Multiplayer Game"</span><span class="p">);</span>
+<span class="c1">// When round changed
+</span><span class="n">TGASDK</span><span class="o">::</span><span class="n">TGA</span><span class="o">::</span><span class="n">UpdateUserStateDetailedOnly</span><span class="p">(</span><span class="s">"Round 2"</span><span class="p">);</span>
+</code></pre>
+<table>
+<tr>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image5.png"/> </td>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image4.png"/> </td>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image2.png"/> </td>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image1.png"/> </td>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image3.png"/> </td>
+</tr>
+<tr>
+    <td><small>Default state for logged-in student </small></td>
+    <td><small>Student is in main menu </small></td>
+    <td><small>Student is in settings menu</small></td>
+    <td><small>Student is playing singleplayer game, Tutorial Level 4 has been passed for detailed state</small></td>
+    <td><small>Student is playing multiplayer game, Round number is being passed to detailed state when round changes</small></td>
+</tr>
+</table>
+
+<h2 id="getting-information">Getting information</h2>
+
+<h3 id="general-information">General information</h3>
+<pre class="highlight csharp tab-csharp"><code><span class="c1">// General information</span>
+
+<span class="c1">// Call example: TGASDK.TGA.IsUserLoggedIn()</span>
+
+<span class="c1">// Login information</span>
+
+<span class="c1">// Returns true if logged into TGA, otherwise false.</span>
+<span class="kt">bool</span> <span class="nf">IsUserLoggedIn</span><span class="p">()</span>
+
+<span class="c1">// Returns true if logged into TGA via broadcast (TGA App), otherwise false.</span>
+<span class="kt">bool</span> <span class="nf">LoggedInExternally</span><span class="p">()</span>
+
+<span class="c1">// Returns the student ID used for login.</span>
+<span class="kt">string</span> <span class="nf">GetStudentId</span><span class="p">()</span>
+
+<span class="c1">// Returns the class ID used for login.</span>
+<span class="kt">string</span> <span class="nf">GetClassId</span><span class="p">()</span>
+</code></pre>
+<p>Here (on the right) are some functions you can use to get status information about TGA. All of these are static functions of TGASDK::TGA.</p>
+
+<h3 id="subscription-information">Subscription information</h3>
+<pre class="highlight csharp tab-csharp"><code><span class="c1">// Subscription information</span>
+
+<span class="c1">// Returns true if game subscription has expired, otherwise false.</span>
+<span class="kt">bool</span> <span class="nf">SubscriptionExpired</span><span class="p">()</span>
+
+<span class="c1">// Returns the message that should be shown to user if the subscription has expired</span>
+<span class="kt">string</span> <span class="nf">SubscriptionExpiredMessage</span><span class="p">()</span>
+</code></pre>
+<p>These functions can be used to query if there is a valid subscription for the game. For testing the subscription, there are these two classes: Class h1xme never has subscription expired. Class h1xjr always has subscription expired. Both of these classes have student self-signup enabled so user can login with any studentid for testing.</p>
+
           <h1 id="http-api">HTTP API</h1>
 
 <p>Our HTTP API can be used if our system does not yet support your programming language / game engine.</p>
