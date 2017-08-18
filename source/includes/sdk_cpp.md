@@ -167,7 +167,7 @@ TGASDKMyGame::Event::MyInstantaneousEvent::Send(5); // Event takes an integer pa
 ```
 You can call `GASDK::Event::<EventName>::Send(...)` with event data as parameters to send an event immediately, without tracking for duration.
 
-##Updating state
+## Updating state
 
 Updating state can be done using one of three function calls
 
@@ -180,7 +180,7 @@ Updating state can be done using one of three function calls
 
 You can keep the state update calls in your game and don’t need to check if user is logged in to TGA, we will automatically check inside the function calls if player is currently authenticated to TGA and send the state update only if so.
 
-###State examples
+### State examples
 ```cpp
 TGASDK::TGA::UpdateUserState("In Main Menu");
 ```
@@ -213,8 +213,8 @@ TGASDK::TGA::UpdateUserStateDetailedOnly("Round 2");
 </tr>
 </table>
 
-##Getting information
-###General information
+## Getting information
+### General information
 ```csharp
 // General information
 
@@ -236,7 +236,7 @@ string GetClassId()
 ```
 Here (on the right) are some functions you can use to get status information about TGA. All of these are static functions of TGASDK::TGA.
 
-###Subscription information
+### Subscription information
 ```csharp
 // Subscription information
 

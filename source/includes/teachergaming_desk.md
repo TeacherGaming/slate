@@ -1,4 +1,4 @@
-# TeacherGaming Desk
+#TeacherGaming Desk
 
 This documentation covers the technical details needed by developers aiming to integrate TeacherGaming Desk in their games or other applications.
 

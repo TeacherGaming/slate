@@ -10,6 +10,9 @@
     $("#nav-button").removeClass('open');
   };
 
+  var hashGeneratorIndex = [1, 1, 1];
+  var lastHashGeneratorLevel = 0;
+
   var makeToc = function() {
     global.toc = $("#toc").tocify({
       selectors: 'h1, h2, h3',
@@ -23,7 +26,24 @@
       scrollTo: -1,
       scrollHistory: true,
       hashGenerator: function (text, element) {
-        return element.prop('id');
+        var level = element.prop('nodeName').substr(1,1);
+
+        if (lastHashGeneratorLevel < level) {
+          hashGeneratorIndex[level - 1] = 1;
+        }
+        else
+          hashGeneratorIndex[level - 1] += 1;
+
+        var headingNumber = "";
+        for (var i = 0; i < level; ++i) {
+          headingNumber = headingNumber.concat(hashGeneratorIndex[i]).concat(".");
+        }
+
+        element.prop('innerHTML', headingNumber.concat(" ").concat(text));
+
+        lastHashGeneratorLevel = level;
+
+        return element.prop('id').concat(headingNumber);
       }
     }).data('toc-tocify');
 

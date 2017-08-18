@@ -57,7 +57,7 @@ On desktop platforms you should test the automatic login by giving the URI on th
 
 Replace &lt;your bundle identifier&gt; with your bundle identifier (f.e. com.teachergaming.switchandglitch) &lt;class id&gt; with a class id and &lt;student id&gt; with a student id and choose login or logout as the command. Note that on desktop you can leave the &lt;your bundle identifier&gt;:// part out in case you don’t have a bundle identifier defined. You can also leave the classid=&lt;class id&gt;&studentid=&lt;student id&gt;& part out if you have logout as the command. Note that you should never leave out the ? character. Note that the parameter contains special characters, so remember to put it in "".
 
-###Creating your own UI for in-game login
+### Creating your own UI for in-game login
 For manually logging in to TGA the student needs to be able to input a class id and a student id. A good place for this UI is for example in a settings menu, or somewhere in the main menu. Usually two input fields with OK and Cancel options is enough. You can also have a Logout button to logout of TGA. Both the class id and student id fields should be either lowercase or uppercase only, not mixed case. In the system the class id and student id are not case sensitive. Uppercase only can be used to make it easier for young children to type the ids.
 
 ####Login UI examples
@@ -78,15 +78,15 @@ For manually logging in to TGA the student needs to be able to input a class id 
 </tr>
 </table>
 
-##Save games, user profiles and tga login
+## Save games, user profiles and tga login
 If your game has different user profiles for different players, you should tie each tga login to a different user profile. Even if you don’t have user profiles otherwise, it is advisable to tie player progress to TGA login.
 
 Note that when resuming the game and switching profiles, you should log the current user out and switch the profile. This can happen for example when user changes logged in user in TeacherGaming App and launches your game again and your game was already running in the background.
 
-##Sending events
+## Sending events
 The events that have been defined in TeacherGaming Desk website are automatically generated to the SDK and can be used to send data from the game to TeacherGaming Desk. In this document just a general overview with pseudocode is given. See the platform specific SDK documentation for more detailed information. You don’t need to check if the user is logged in to TGA before sending events. The SDK will automatically check inside the function calls for this.
 
-###Sending events with duration
+### Sending events with duration
 ```csharp
 // Tracking an event with duration
 // Level Start
@@ -103,14 +103,14 @@ To start the event, call TGASDK.Event.&lt;EventName&gt;.Start().
 You can gather all the needed data for the event before you send it using TGASDK.Event.&lt;EventName&gt;.Current.&lt;DataParameter&gt;
 To send the event, call TGASDK.Event.&lt;EventName&gt;.Send()
 
-###Sending events without duration
+### Sending events without duration
 ```csharp
 // Sending an event without tracking for duration
 TGASDKSomeGame.Event.ItemCrafted.Send("item1");
 ```
 If the event is something for which it does not make sense to track a duration you can call TGASDK.Event.&lt;EventName&gt;.Send(...) with event data as parameters to send the event directly.
 
-##Updating state
+## Updating state
 
 Updating state can be done using one of three function calls
 
@@ -123,7 +123,7 @@ Updating state can be done using one of three function calls
 
 You can keep the state update calls in your game and don’t need to check if user is logged in to TGA, we will automatically check inside the function calls if player is currently logged in to TGA and send the state update only if so.
 
-###State examples
+### State examples
 ```csharp
 TGASDK.TGA.UpdateUserState("In Main Menu");
 ```

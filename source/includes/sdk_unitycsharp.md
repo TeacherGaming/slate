@@ -4,9 +4,9 @@
 
 This document describes the specifics of integrating TGA to your game using the TGA Unity C# SDK. For general integration information and links to other SDK documents see the general SDK instructions.
 
-###Requirements
+### Requirements
 Our current SDK requires Unity 4.0.0f7 or later. If you need an SDK for an earlier version of Unity please contact us.
-###First steps
+### First steps
 * TeacherGaming will send you a .unitypackage with the latest SDK and assets.
 * Import the package by selecting “Assets -> Import package -> Custom package” in Unity.
 * Attach the SDK script to a GameObject that is not deleted during the game. The script is located in “TGAGameSpecific/” folder and is named TGASDK<yourgamenamehere>.cs
@@ -18,13 +18,13 @@ Our current SDK requires Unity 4.0.0f7 or later. If you need an SDK for an earli
 		* Plugins/Android/AndroidManifest.xml
 	* In older versions of the SDK you needed to manually attach the CreatubblesManager script to a GameObject. You no longer need to do this and should remove it if you have attached it previously.
 
-###Notes
+### Notes
 Your game specific SDK file is called TGASDK<yourgamenamehere>.cs. Class inside that file is called TGASDK<yourgamenamehere>. To improve readability, we have not added <yourgamenamehere> for each method call in this document, we are mentioning TGASDK and you should add your game name after each TGASDK call to make it correct.
 
-##Student login
+## Student login
 Logging in can be done through the TeacherGaming app (Android only at the moment) or in game. If users authenticate in game you will need to add a menu where user can type in a classid and a studentid. Authentication must be done before data can be sent.
 
-###Automatically logging in with TeacherGaming App
+### Automatically logging in with TeacherGaming App
 ```csharp
 // Automatically logging in with TeacherGaming App
 // Login status delegate & event (in TGASDK.TGA)
@@ -83,7 +83,7 @@ On Android and iOS you can test the uri scheme login by creating a .html file wi
 
 On desktop platforms you should test the automatic login by giving the uri as a command line parameter when starting your game. See https://docs.google.com/document/d/1nEJ5EGwO6JxTTmJGixvxEcBb0VhpMN7sEfOjGHY4JkI/edit#heading=h.1u1ow8hobpr for details.
 
-###Built-in login menu
+### Built-in login menu
 ```csharp
 // Built-in login menu
 // Using the built-in login menu
@@ -103,12 +103,12 @@ A login dialog will be created that looks like this (without the blue background
 This dialog will inform user if the login failed or succeeded. As with login via TeacherGaming App you can listen to the TGASDK.TGA.OnLoginStatusChanged event to get notified when the login status changes.
 
 
-###Handling subscription required
+### Handling subscription required
 You can define the compile time symbol TGA_SUBSCRIPTION_REQUIRED to make the login menu require a subscription. If the symbol is defined you cannot login if you don't have an active subscription and you cannot close the login menu without logging in. Pressing X in the top-right corner will quit the application by calling Application.Quit(). You can also supply your own function for quitting as a parameter for TGASDK.TGA.CreateLoginPanel() for example if you need to bypass your Monobehaviour.OnApplicationQuit handler that calls Application.CancelQuit.
 
 When TGA_SUBSCRIPTION_REQUIRED is defined you should show the login window when the game app is started (main menu or equivalent).
  
-###Custom login menu
+### Custom login menu
 ```csharp
 // Custom login menu
 // Logging in from code
@@ -134,10 +134,10 @@ If you choose to create your own login menu you need to pass the class id and st
 
 You can also listen to the TGASDK.TGA.OnLoginStatusChanged event to get notified when the login status changes.
 
-##Sending events
-The events that have been defined in TeacherGaming Desk website are generated to the SDK and can be used to send data from the game to Desk. All the events have their own inner class inside TGA<yourgamename>.Event with a property for each event parameter and functions to start and send the event.
+## Sending events
+The events that have been defined in TeacherGaming Desk website are generated to the SDK and can be used to send data from the game to Desk. All the events have their own inner class inside TGA&lt;yourgamename&gt;.Event with a property for each event parameter and functions to start and send the event.
 
-###Sending events with duration
+### Sending events with duration
 ```csharp
 // This is an example with our game Switch N’ Glitch.
 
@@ -157,7 +157,7 @@ To start an event, call TGASDK.Event.<EventName>.Start()
 You can change additional data inside the event before you send it. All data for the started event can be changed using TGASDK.Event.<EventName>.Current.<ParameterName>
 To send the event, call TGASDK.Event.<EventName>.Send() without parameters.
 
-###Sending events without duration
+### Sending events without duration
 ```csharp
 // Sending an event without duration
 
@@ -166,7 +166,7 @@ TGASDKKerbalEdu.Event.SituationChange.Send(FlightGlobals.ActiveVessel.mainBody.b
 ```
 You can call TGASDK.Event.<EventName>.Send(...) with event data as parameters to send an event immediately, without tracking for duration.
 
-##Updating state
+## Updating state
 
 Updating state can be done using one of three function calls
 
@@ -179,7 +179,7 @@ Updating state can be done using one of three function calls
 
 You can keep the state update calls in your game and don’t need to check if user is logged in to TGA, we will automatically check inside the function calls if player is currently authenticated to TGA and send the state update only if so.
 
-###State examples
+### State examples
 ```csharp
 TGASDK.TGA.UpdateUserState("In Main Menu");
 ```
@@ -212,10 +212,10 @@ TGASDK.TGA.UpdateUserStateDetailedOnly("Round 2");
 </tr>
 </table>
 
-##Creatubbles
+## Creatubbles
 Creatubbles integration can be used to take a screenshot of the game and send it to TGA and Creatubbles web page. To use this feature the user needs to be logged in to TGA and the CreatubblesManager script needs to be attached to a gameobject as explained in the FIRST STEPS section.
 
-###Usage
+### Usage
 ```csharp
 /// Creatubbles
 TGASDK.TGA.ScreenShotToCreatubbles();
@@ -225,8 +225,8 @@ To send a screenshot to TGA you can simply call TGASDK.TGA.ScreenShotToCreatubbl
 
 For example you can create a simple button to send the screenshot and show it in your in-game UI. There is a camera texture in the “TGA/Resources/Graphics/” folder that you can use with the button if you wish.
 
-##Getting information
-###General information
+## Getting information
+### General information
 ```csharp
 // General information
 
@@ -248,7 +248,7 @@ string GetClassId()
 ```
 Here (on the right) are some functions you can use to get status information about TGA. All of these are static functions of TGASDK.TGA.
 
-###Subscription information
+### Subscription information
 ```csharp
 // Subscription information
 
