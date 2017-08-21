@@ -34,7 +34,7 @@
 <li>Provide oAuth single sign on support for using the TeacherGaming Desk login in other web based applications</li>
 </ul></li>
 </ul></li>
-<li>TeacherGaming App ( <a href="https://play.google.com/store/apps/details?id=com.teachergaming.com">Android</a>, <a href="https://itunes.apple.com/us/app/teachergaming/id1221257680">iOS</a> )
+<li><p>TeacherGaming App ( <a href="https://play.google.com/store/apps/details?id=com.teachergaming.com">Android</a>, <a href="https://itunes.apple.com/us/app/teachergaming/id1221257680">iOS</a> )</p>
 
 <ul>
 <li>Download games</li>
@@ -43,8 +43,9 @@
 <ul>
 <li>with automatic TeacherGaming Desk student login</li>
 </ul></li>
+<li>The TeacherGaming android app can be viewed as a “Launcher” that is used to log into TeacherGaming Analytics platform and launch games that have been integrated into it. Logging in running the games with the TG app removes the need to log into every game separately.</li>
 </ul></li>
-<li>Games with TeacherGaming Desk integration
+<li><p>Games with TeacherGaming Desk integration</p>
 
 <ul>
 <li>Send analytics to TeacherGaming Desk</li>

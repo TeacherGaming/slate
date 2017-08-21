@@ -1,8 +1,8 @@
-<h1 id="http-api">HTTP API</h1>
+<h1 id="manual-integration-and-http-api">Manual Integration and HTTP API</h1>
 
-<p>Our HTTP API can be used if our system does not yet support your programming language / game engine.</p>
+<p>This document describes how to manually integrate your game with TeacherGaming Desk without using a ready-made SDK.</p>
 
-<p>Basically, just send data to our REST API through standard HTTPS calls. All data passed needs to be inside the GET query string. Note that for compatibility with special characters, you are always required to URL encode all data sent to our API.</p>
+<p>The document is divided into use cases. First we describe and give examples on how to handle automatic login e.g. login parameters coming in from the TeacherGaming App. After that we describe the HTTP API you can use to communicate with TeacherGaming Desk. When integrating with TeacherGaming desk basically you just send data to our REST API through standard HTTPS calls. All data passed needs to be inside the GET query string. Note that for compatibility with special characters, you are always required to URL encode all data sent to our API.</p>
 
 <h2 id="in-game-flow">In-game Flow</h2>
 
@@ -12,63 +12,204 @@
 <ul>
 <li>Successful login needs to be done before any data can be sent to TGA (except anonymous event data)</li>
 </ul></li>
-<li> Start calling playing game once every 60 seconds
+<li>Start calling playing game once every 60 seconds
 
 <ul>
 <li>After login is successful. This will inform the TGA system that the user is currently playing the game and the user can be tracked. Also the TGA Teacher Dashboard shows that the user is currently playing the game.</li>
 </ul></li>
-<li> Update player state as it changes in game
+<li>Update player state as it changes in game
 
 <ul>
 <li>This information will be shown on the Teacher Dashboard on the TGA website so that the Teacher can easily see what the students are currently doing in game.</li>
 </ul></li>
-<li> Send event data
+<li>Send event data
 
 <ul>
 <li>Events and the data in them have been set up on the TGA website by TeacherGaming. This is the data that is needed to track student progress.</li>
 </ul></li>
 </ol>
 
-<h2 id="login-student">Login Student</h2>
+<h2 id="student-login">Student Login</h2>
 
-<blockquote>
-<p>Example Output</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Student with this ID exists in this class."</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-06-13T07:08:47.763Z"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"debug"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"sent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-03-15T12:05:35.722Z"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"container"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zo5jajsD99beDQyt7-pv0n"</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="s2">"login_message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Logged into class &lt;classid&gt; with studentid &lt;studentid&gt;"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"login_message_html"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Logged into class &lt;b&gt;classid&lt;/b&gt; with studentid &lt;b&gt;studentid&lt;/b&gt;"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"subscription"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"subscription_expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"subscription_expired_message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Your subscription has expired."</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="s2">"student"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"studentid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;studentid&gt;"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"studentid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueStudentID&gt;"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"created_account"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"teacher_creatubbles_linked"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-  </span><span class="s2">"class"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"classid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classid&gt;"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"classid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueClassID&gt;"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"allow_student_signup"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="s2">"game_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;game’s name&gt;"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p>Login user to our system. Class ID is unique throughout the whole system and student ID is unique throughout the class the user is in. Student ID can be thought as an username and class ID as a password.</p>
+<h3 id="authentication-login-through-teachergaming-app">Authentication / Login through TeacherGaming App</h3>
+
+<p>To support automatic login you need to handle the login parameters being given to your game by the TeacherGaming App. On Android this is done by using Intent (when app is not already running) and Broadcast (when app is running) parameters. On iOS this is done using a URL scheme. We are planning to change both mobile platforms to use the URL scheme in the future. On desktop latforms the login parameters are passed as command line paramters when starting the game.</p>
+
+<h4 id="intent-login">Intent Login</h4>
+<pre class="highlight csharp tab-csharp"><code><span class="c1">// Example code for handling the login intent from TeacherGaming App in an Android game.</span>
+<span class="c1">// Example is in Unity and C# but you can adapt it for your language &amp; engine.</span>
+
+<span class="c1">// Intent login at App Start (Unity C# code)</span>
+<span class="c1">// This function is run from a Start() in Monobehaviour.</span>
+
+<span class="k">private</span> <span class="kt">bool</span> <span class="nf">TryLoginFromAndroidIntent</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// Get the class, activity (context) and intent from unity android side</span>
+<span class="cp">#if UNITY_ANDROID &amp;&amp; !UNITY_EDITOR
+</span>    <span class="n">AndroidJavaClass</span> <span class="n">javaClass</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AndroidJavaClass</span><span class="p">(</span><span class="s">"com.unity3d.player.UnityPlayer"</span><span class="p">);</span>
+    <span class="n">AndroidJavaObject</span> <span class="n">context</span> <span class="p">=</span> <span class="n">javaClass</span><span class="p">.</span><span class="n">GetStatic</span><span class="p">&lt;</span><span class="n">AndroidJavaObject</span><span class="p">&gt;(</span><span class="s">"currentActivity"</span><span class="p">);</span>
+    <span class="n">AndroidJavaObject</span> <span class="n">intent</span> <span class="p">=</span> <span class="n">context</span><span class="p">.</span><span class="n">Call</span><span class="p">&lt;</span><span class="n">AndroidJavaObject</span><span class="p">&gt;(</span><span class="s">"getIntent"</span><span class="p">);</span>
+
+    <span class="c1">// Check if intent has TGA login related extras</span>
+    <span class="kt">bool</span> <span class="n">hasClassId</span> <span class="p">=</span> <span class="n">intent</span><span class="p">.</span><span class="n">Call</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="s">"hasExtra"</span><span class="p">,</span> <span class="s">"TGA-classid"</span><span class="p">);</span>
+    <span class="kt">bool</span> <span class="n">hasStudentId</span> <span class="p">=</span> <span class="n">intent</span><span class="p">.</span><span class="n">Call</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="s">"hasExtra"</span><span class="p">,</span> <span class="s">"TGA-studentid"</span><span class="p">);</span>
+    <span class="kt">bool</span> <span class="n">hasCommand</span> <span class="p">=</span> <span class="n">intent</span><span class="p">.</span><span class="n">Call</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="s">"hasExtra"</span><span class="p">,</span> <span class="s">"TGA-command"</span><span class="p">);</span>
+    <span class="kt">string</span> <span class="n">command</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="k">class</span><span class="nc">Id</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="n">studentId</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">hasCommand</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">command</span> <span class="p">=</span> <span class="n">intent</span><span class="p">.</span><span class="n">Call</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">"getStringExtra"</span><span class="p">,</span> <span class="s">"TGA-command"</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">hasClassId</span> <span class="p">&amp;&amp;</span> <span class="n">hasStudentId</span> <span class="p">&amp;&amp;</span> <span class="p">(!</span><span class="n">hasCommand</span> <span class="p">||</span> <span class="n">command</span> <span class="p">==</span> <span class="s">"login"</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="k">class</span><span class="nc">Id</span> <span class="p">=</span> <span class="n">intent</span><span class="p">.</span><span class="n">Call</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">"getStringExtra"</span><span class="p">,</span> <span class="s">"TGA-classid"</span><span class="p">);</span>
+        <span class="n">studentId</span> <span class="p">=</span> <span class="n">intent</span><span class="p">.</span><span class="n">Call</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">"getStringExtra"</span><span class="p">,</span> <span class="s">"TGA-studentid"</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">class</span><span class="nc">Id</span> <span class="p">!=</span> <span class="s">""</span> <span class="p">&amp;&amp;</span> <span class="n">studentId</span> <span class="p">!=</span> <span class="s">""</span> <span class="p">&amp;&amp;</span> <span class="k">class</span><span class="nc">Id</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">studentId</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span>
+          <span class="k">class</span><span class="nc">Id</span> <span class="p">!=</span> <span class="s">"null"</span> <span class="p">&amp;&amp;</span> <span class="n">studentId</span> <span class="p">!=</span> <span class="s">"null"</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Got class id &amp; student id &amp; commanded to login. Start login process.</span>
+            <span class="c1">// CALL LOGIN CODE HERE</span>
+            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="cp">#else
+</span>    <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+<span class="cp">#endif
+</span><span class="p">}</span>
+</code></pre>
+<p>Intent is an abstract description of an operation to be performed used in Android applications. Intent can also contain key value pair extras, which can be used to send data internally in app or externally to another app. For the case where the game is not running yet, the TeacherGaming App simply starts the app using an intent that contains the class id and student id as extras.</p>
+
+<p>Keys and values used in TeacherGaming App intents</p>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>TGA-classid</td>
+<td>User’s Class ID. Not needed if not logging in.</td>
+</tr>
+<tr>
+<td>TGA-studentid</td>
+<td>User’s Student ID. Not needed if not logging in.</td>
+</tr>
+<tr>
+<td>TGA-command</td>
+<td>&ldquo;login&rdquo; or &ldquo;logout&rdquo; Do we login or logout.</td>
+</tr>
+</tbody></table>
+
+<p>When using a TGA SDK all of this is handled automatically. However when there is no TGA SDK available for the engine you are using (and you are using the HTTP API directly) or you for some other reason need to implement this yourself you can refer to the examples on the right for help.</p>
+
+<p>If you are unfamiliar with Android development and wish to know more about intents, please refer to the Android documentation: <a href="https://developer.android.com/reference/android/content/Intent.html">https://developer.android.com/reference/android/content/Intent.html</a></p>
+<pre class="highlight csharp tab-csharp"><code><span class="c1">// Receiving broadcasts</span>
+<span class="c1">// Unity C# code</span>
+<span class="k">void</span> <span class="nf">OnApplicationPause</span><span class="p">(</span><span class="kt">bool</span> <span class="n">paused</span><span class="p">)</span> 
+<span class="p">{</span>
+    <span class="n">AndroidJavaClass</span> <span class="n">tgaReceiver</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AndroidJavaClass</span><span class="p">(</span><span class="s">"com.teachergaming.tgareceiver.TGABroadcastReceiver"</span><span class="p">);</span>
+    <span class="n">tgaReceiver</span><span class="p">.</span><span class="nf">CallStatic</span><span class="p">(</span><span class="s">"createInstance"</span><span class="p">);</span>
+
+    <span class="c1">// Get static variables from plugin</span>
+    <span class="kt">string</span> <span class="n">receivedClassID</span> <span class="p">=</span> <span class="n">tgaReceiver</span><span class="p">.</span><span class="n">GetStatic</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">"classId"</span><span class="p">);</span>
+    <span class="kt">string</span> <span class="n">receivedStudentID</span> <span class="p">=</span> <span class="n">tgaReceiver</span><span class="p">.</span><span class="n">GetStatic</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">"studentId"</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">receivedClassID</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">receivedStudentID</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// login code here ...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// Android Java code for BroadcastReceiver</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TGABroadcastReceiver</span> <span class="kd">extends</span> <span class="n">BroadcastReceiver</span> <span class="o">{</span>
+   <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">classId</span><span class="o">;</span>
+   <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">studentId</span><span class="o">;</span>
+
+   <span class="kd">public</span> <span class="nf">TGABroadcastReceiver</span><span class="o">()</span> <span class="o">{</span>
+   <span class="o">}</span>
+
+   <span class="nd">@Override</span>
+   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onReceive</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">Intent</span> <span class="n">intent</span><span class="o">)</span>
+   <span class="o">{</span>
+       <span class="n">String</span> <span class="n">receivedClassId</span> <span class="o">=</span> <span class="n">intent</span><span class="o">.</span><span class="na">getStringExtra</span><span class="o">(</span><span class="s">"TGA-classid"</span><span class="o">);</span>
+       <span class="n">String</span> <span class="n">receivedStudentId</span> <span class="o">=</span> <span class="n">intent</span><span class="o">.</span><span class="na">getStringExtra</span><span class="o">(</span><span class="s">"TGA-studentid"</span><span class="o">);</span>
+
+       <span class="k">if</span> <span class="o">(</span><span class="n">receivedClassId</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">receivedStudentId</span> <span class="o">!=</span> <span class="kc">null</span>
+               <span class="o">&amp;&amp;</span> <span class="n">receivedClassId</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">receivedStudentId</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span>
+       <span class="o">{</span>
+           <span class="n">classId</span> <span class="o">=</span> <span class="n">receivedClassId</span><span class="o">;</span>
+           <span class="n">studentId</span> <span class="o">=</span> <span class="n">receivedStudentId</span><span class="o">;</span>
+       <span class="o">}</span>
+       <span class="k">else</span>
+       <span class="o">{</span>
+           <span class="n">classId</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+           <span class="n">studentId</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+       <span class="o">}</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+</code></pre><pre class="highlight xml tab-xml"><code><span class="c">&lt;!--AndroidManifest for the receiver--&gt;</span>
+<span class="c">&lt;!--You need to add this part to your AndroidManifest.xml file to support the broadcast receiver:--&gt;</span>
+<span class="nt">&lt;receiver</span>
+    <span class="na">android:name=</span><span class="s">".TGABroadcastReceiver"</span>
+    <span class="na">android:enabled=</span><span class="s">"true"</span>
+    <span class="na">android:exported=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;intent-filter&gt;</span>
+        <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">"com.teachergaming.com.TGAbroadcast"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/intent-filter&gt;</span>
+<span class="nt">&lt;/receiver&gt;</span>
+</code></pre>
+<h4 id="broadcast-login-while-game-is-running">Broadcast login (while game is running)</h4>
+
+<p>When the game is running intents can be received via broadcast. Receiving broadcasts requires a BroadcastReceiver. Implementation may differ depending on the engine you are using for your game.</p>
+
+<p>TGA Unity SDK uses an Android plugin for receiving broadcasts.</p>
+
+<h4 id="testing-with-teachergaming-app">Testing with TeacherGaming App</h4>
+
+<ol>
+<li>Install the app from google play: https://play.google.com/store/apps/details?id=com.teachergaming.com&amp;hl=en
+(or search: TeacherGaming)</li>
+<li>Open the TeacherGaming Application on your device</li>
+<li>Press “Login to Analytics” button at the top of the screen</li>
+<li>Tap the laptop image 10 times at the top of the screen A new menu will open where you can input the following information:
+
+<ul>
+<li>Your game package name, for example: com.FiveMoreMinutes.SwitchAndGlitch</li>
+<li>Class ID</li>
+<li>Student ID</li>
+<li>Press “Launch” and the TeacherGaming App will run your game and send given id’s to it.</li>
+</ul></li>
+</ol>
+<pre class="highlight plaintext"><code>Example URI scheme for testing login:
+com.teachergaming.switchandglitch://?classid=5mm&amp;userid=marko&amp;command=login
+</code></pre>
+<p>On iOS the app is launched using the URI scheme
+<code class="prettyprint">&lt;your app bundle identifier&gt;://?classid=&lt;class id&gt;&amp;studentid=&lt;student id&gt;&amp;command=&lt;login/logout&gt;</code></p>
+
+<p>For how to handle URL schemes on iOS see the relevant documentation for your programming language/engine/platform.</p>
+
+<h3 id="manual-authentication-login">Manual Authentication / Login</h3>
+
+<p>Login a student to our system. Class id is unique throughout the whole system and student id is unique throughout the class the user is in. Student id can be thought as an username and class id as a password.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
-<p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/validate</code></p>
+<h4 id="url">URL</h4>
 
-<h3 id="query-parameters">Query Parameters</h3>
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/validate</code></p>
+
+<h4 id="parameters">Parameters</h4>
 
 <table><thead>
 <tr>
@@ -98,63 +239,520 @@
 Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 </aside>
 
-<h2 id="playing-game">Playing Game</h2>
-<pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-</code></pre>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
+<h4 id="response">response</h4>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Student with this ID exists in this class."</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-06-13T07:08:47.763Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"debug"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"sent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-03-15T12:05:35.722Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"container"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zo5jajsD99beDQyt7-pv0n"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"login_message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Logged into class &lt;classid&gt; with studentid &lt;studentid&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"login_message_html"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Logged into class &lt;b&gt;classid&lt;/b&gt; with studentid &lt;b&gt;studentid&lt;/b&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"subscription"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"subscription_expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"subscription_expired_message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Your subscription has expired."</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"student"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"studentid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;studentid&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"studentid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueStudentID&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"created_account"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"teacher_creatubbles_linked"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="s2">"class"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"classid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classid&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"classid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueClassID&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"allow_student_signup"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"game_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;game’s name&gt;"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>Inform TGA that the user is currently logged in and playing. Send once every minute.</p>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>success</td>
+<td>1 for successful login, 0 for failed login</td>
+</tr>
+<tr>
+<td>message</td>
+<td>Detailed information about the login result.</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>Debug information</td>
+</tr>
+<tr>
+<td>responseCreatedAt</td>
+<td>Datetime when reponse was created</td>
+</tr>
+<tr>
+<td>login_message</td>
+<td>login message that can be displayed to user on successful login</td>
+</tr>
+<tr>
+<td>login_message_html</td>
+<td>same as above but with html bold tags in id’s</td>
+</tr>
+<tr>
+<td>subscription_expired</td>
+<td>true if TGA subscription is expired otherwise false</td>
+</tr>
+<tr>
+<td>subscription_expired_message</td>
+<td>Message that can be displayed to user if subscription has expired</td>
+</tr>
+<tr>
+<td>student</td>
+<td>studentid of the logged in student, SHA256 hash of this id, boolean of whether account was created and boolean of whether teacher has linked creatubbles</td>
+</tr>
+<tr>
+<td>class</td>
+<td>classid  of the logged in student, SHA256 hash of this id and boolean of whether student self signup is allowed</td>
+</tr>
+<tr>
+<td>game_name</td>
+<td>name of the game student logged in</td>
+</tr>
+</tbody></table>
 
-<aside class="warning">Inside HTML code blocks like this one, you can&rsquo;t use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+<h4 id="example-usage">Example usage</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/validate?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
+
+<h2 id="playing-game-keep-alive">Playing Game (keep alive)</h2>
+
+<p>Inform TGA that the user is currently logged in and playing. Send once every minute.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
-<p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/playing_game</code></p>
+<h4 id="url">URL</h4>
 
-<h3 id="url-parameters">URL Parameters</h3>
+<p>https://analyticsdata.teachergaming.com/api/playing_game</p>
+
+<h4 id="parameters">Parameters</h4>
 
 <table><thead>
 <tr>
-<th>Parameter</th>
-<th>Required</th>
-<th>Description</th>
+<th>Key</th>
+<th>Value</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>classid</td>
-<td>true</td>
-<td>TGA Class ID</td>
+<td>TGA class id</td>
 </tr>
 <tr>
 <td>studentid</td>
-<td>true</td>
-<td>TGA studentid</td>
+<td>TGA id of the student in the class</td>
 </tr>
 <tr>
 <td>apikey</td>
-<td>true</td>
-<td>Your game&rsquo;s API key</td>
+<td>Api key of your game</td>
 </tr>
 </tbody></table>
+
+<h4 id="response">Response</h4>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Student playtime added"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-06-13T07:10:16.249Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"debug"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"sent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-03-15T12:05:35.722Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"container"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zo5jajsD99beDQyt7-pv0n"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"game_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;game’s name&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"class"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"classid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classid&gt;"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"classid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueClassID&gt;"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"student"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"studentid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;studentid&gt;"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"studentid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueStudentID&gt;"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>success</td>
+<td>1 for success, 0 for fail.</td>
+</tr>
+<tr>
+<td>message</td>
+<td>Detailed information about the result</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>Debug information</td>
+</tr>
+<tr>
+<td>responseCreatedAt</td>
+<td>Datetime when reponse was created</td>
+</tr>
+<tr>
+<td>game_name</td>
+<td>Name of the game the student is logged in</td>
+</tr>
+<tr>
+<td>student</td>
+<td>studentid of the logged in student and SHA256 hash of this id</td>
+</tr>
+<tr>
+<td>class</td>
+<td>classid  of the logged in student and SHA256 hash of this id</td>
+</tr>
+</tbody></table>
+
+<h4 id="example-usage">Example Usage</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/playing_game?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
+
+<h2 id="player-state">Player State</h2>
+
+<p>Inform TGA what the user is currently doing in game.
+Separate calls for State and Detailed State.
+For example: State = Playing Game, Detailed State = Level 1</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<h4 id="url">URL</h4>
+
+<p>https://analyticsdata.teachergaming.com/api/update_state
+https://analyticsdata.teachergaming.com/api/update_state_detailed</p>
+
+<h4 id="parameters">Parameters</h4>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>classid</td>
+<td>TGA class id</td>
+</tr>
+<tr>
+<td>studentid</td>
+<td>TGA id of the student in the class</td>
+</tr>
+<tr>
+<td>apikey</td>
+<td>Api key of your game</td>
+</tr>
+<tr>
+<td>state</td>
+<td>What the user is currently doing</td>
+</tr>
+</tbody></table>
+
+<h4 id="response">Response</h4>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="err">//</span><span class="w"> </span><span class="err">IF</span><span class="w"> </span><span class="err">CALLING</span><span class="w"> </span><span class="err">STATE</span><span class="p">:</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Student state updated to: &lt;newstate&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="err">//</span><span class="w"> </span><span class="err">IF</span><span class="w"> </span><span class="err">CALLING</span><span class="w"> </span><span class="err">DETAILED</span><span class="w"> </span><span class="err">STATE</span><span class="p">:</span><span class="w"> 
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Student detailed state updated to: &lt;newdetailedstate&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-06-13T07:12:46.311Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"debug"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"sent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-03-15T12:05:35.722Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"container"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zo5jajsD99beDQyt7-pv0n"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"game_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;game’s name&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="err">//</span><span class="w"> </span><span class="err">IF</span><span class="w"> </span><span class="err">CALLING</span><span class="w"> </span><span class="err">STATE</span><span class="p">:</span><span class="w">
+    </span><span class="s2">"new_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;newstate&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="err">//</span><span class="w"> </span><span class="err">IF</span><span class="w"> </span><span class="err">CALLING</span><span class="w"> </span><span class="err">DETAILED</span><span class="w"> </span><span class="err">STATE</span><span class="p">:</span><span class="w">
+    </span><span class="s2">"new_detailed_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;newstatedetailed&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"class"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"classid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classid&gt;"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"classid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueClassID&gt;"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"student"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"studentid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;studentid&gt;"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"studentid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueStudentID&gt;"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>success</td>
+<td>1 for success, 0 for fail.</td>
+</tr>
+<tr>
+<td>message</td>
+<td>Detailed information about the result + state sent to method</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>Debug information</td>
+</tr>
+<tr>
+<td>responseCreatedAt</td>
+<td>Datetime when reponse was created</td>
+</tr>
+<tr>
+<td>game_name</td>
+<td>name of the game student logged in</td>
+</tr>
+<tr>
+<td>new_state</td>
+<td></td>
+</tr>
+<tr>
+<td>new_detailed_state</td>
+<td>State that was sent to method in a more detailed form</td>
+</tr>
+<tr>
+<td>student</td>
+<td>studentid of the logged in student and SHA256 hash of this id</td>
+</tr>
+<tr>
+<td>class</td>
+<td>classid  of the logged in student and SHA256 hash of this id</td>
+</tr>
+</tbody></table>
+
+<h4 id="example-usage">Example Usage</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy&amp;state=Playing game</code>
+<code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state_detailed?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy&amp;state=Level 1</code></p>
+
+<h2 id="event-data">Event Data</h2>
+
+<p>Send event data to TGA. The events and needed data for your game can be seen on the Events page on the TGA website. Event data can also be sent anonymously without classid or userid.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<h4 id="url">URL</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/track</code>
+or anonymous
+<code class="prettyprint">https://analyticsanon.teachergaming.com/api/track</code></p>
+
+<h4 id="parameters">Parameters</h4>
+
+<h5 id="required">Required</h5>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>apikey</td>
+<td>Api key of your game</td>
+</tr>
+<tr>
+<td>eventname</td>
+<td>The event name that you are submitting data for.</td>
+</tr>
+</tbody></table>
+
+<h5 id="optional">Optional</h5>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>classid</td>
+<td>TGA class id</td>
+</tr>
+<tr>
+<td>studentid</td>
+<td>TGA id of the student in the class</td>
+</tr>
+<tr>
+<td>duration</td>
+<td>How long it took to complete the event in milliseconds.</td>
+</tr>
+<tr>
+<td>Optional data</td>
+<td>Optional event data for your event is passed in key=value pairs. This is the data that has been set by TeacherGaming for each Event that is tracked in your game Examples: levelID=JungleLevel3 Score=3</td>
+</tr>
+</tbody></table>
+
+<h4 id="response">Response</h4>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Event tracked succesfully."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-06-13T07:21:44.594Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"debug"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"sent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-03-15T12:05:35.722Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"container"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zo5jajsD99beDQyt7-pv0n"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"game_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;game’s name&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;eventname&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"student"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"studentid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;studentid&gt;"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"studentid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueStudentID&gt;"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"class"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"classid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classid&gt;"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"classid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueClassID&gt;"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+    </span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>success</td>
+<td>1 for success, 0 for fail.</td>
+</tr>
+<tr>
+<td>message</td>
+<td>Detailed information about the result</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>Debug information</td>
+</tr>
+<tr>
+<td>responseCreatedAt</td>
+<td>Datetime when reponse was created</td>
+</tr>
+<tr>
+<td>game_name</td>
+<td>name of the game student logged in</td>
+</tr>
+<tr>
+<td>event</td>
+<td>name of the event that is being tracked</td>
+</tr>
+<tr>
+<td>student</td>
+<td>studentid of the logged in student and SHA256 hash of this id</td>
+</tr>
+<tr>
+<td>class</td>
+<td>classid  of the logged in student and SHA256 hash of this id</td>
+</tr>
+<tr>
+<td>data</td>
+<td>All of the additional data fields sent to method</td>
+</tr>
+<tr>
+<td>duration</td>
+<td>Duration of the event, sent to method</td>
+</tr>
+</tbody></table>
+
+<h4 id="example-usage">Example Usage</h4>
+
+<p>This is the LevelComplete event in Switch &amp; Glitch
+<code class="prettyprint">https://analyticsdata.teachergaming.com/api/track?apikey=K8SaQRDsSFdFt5zFthTy&amp;studentid=johndoe&amp;classid=democlass&amp;eventname=LevelComplete&amp;GameType=Network&amp;LevelId=Level1&amp;TileCount=20&amp;FailedTileCount=-1&amp;SuccessTileCount=3&amp;CommitCount=1&amp;Score=101&amp;duration=17389</code></p>
+
+<h2 id="student-logout">Student Logout</h2>
+
+<p>You can allow student to log out of TeacherGaming Desk only if your game is not subscription based. Logging out stops all student specific interactions with TeacehrGaming Desk.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<h4 id="url">URL</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/logout_student</code></p>
+
+<h4 id="parameters">Parameters</h4>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>classid</td>
+<td>TGA class id</td>
+</tr>
+<tr>
+<td>studentid</td>
+<td>TGA id of the student in the class</td>
+</tr>
+<tr>
+<td>apikey</td>
+<td>Api key of your game</td>
+</tr>
+</tbody></table>
+
+<h4 id="response">Response</h4>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Student logged out"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-06-13T06:56:25.169Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"debug"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"sent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-03-15T12:05:35.722Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"container"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zo5jajsD99beDQyt7-pv0n"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"game_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;game’s name&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"class"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"classid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classid&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"classid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueClassID&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"student"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"studentid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;studentid&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"studentid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueStudentID&gt;"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>success</td>
+<td>1 for success, 0 for fail.</td>
+</tr>
+<tr>
+<td>message</td>
+<td>Detailed information about the result</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>Debug information</td>
+</tr>
+<tr>
+<td>responseCreatedAt</td>
+<td>Datetime when reponse was created</td>
+</tr>
+<tr>
+<td>game_name</td>
+<td>Name of the game student logged out of</td>
+</tr>
+<tr>
+<td>student</td>
+<td>studentid of the logged out student and SHA256 hash of this id</td>
+</tr>
+<tr>
+<td>class</td>
+<td>classid of the logged out student and SHA256 hash of this id</td>
+</tr>
+</tbody></table>
+
+<h4 id="example-usage">Example Usage</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/logout_student?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>

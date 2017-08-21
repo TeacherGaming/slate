@@ -142,7 +142,7 @@ A login dialog will be created that looks like this (without the blue background
 
 <h2 id="sending-events">Sending events</h2>
 
-<p>The events that have been defined in TeacherGaming Desk website are generated to the SDK and can be used to send data from the game to Desk. All the events have their own inner class inside TGA<yourgamename>.Event with a property for each event parameter and functions to start and send the event.</p>
+<p>The events that have been defined in TeacherGaming Desk website are generated to the SDK and can be used to send data from the game to Desk. All the events have their own inner class inside TGA&lt;yourgamename&gt;.Event with a property for each event parameter and functions to start and send the event.</p>
 
 <h3 id="sending-events-with-duration">Sending events with duration</h3>
 <pre class="highlight csharp tab-csharp"><code><span class="c1">// This is an example with our game Switch N’ Glitch.</span>
