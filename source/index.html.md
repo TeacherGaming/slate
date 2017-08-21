@@ -6,6 +6,7 @@ includes:
   - sdk_general
   - sdk_unitycsharp
   - sdk_cpp
+  - sdk_androidjava
   - sdk_http
   - oauth
 
