@@ -173,20 +173,22 @@ To send the event, call TGASDK.Event.<EventName>.Send() without parameters.</p>
 
 <h2 id="updating-state">Updating state</h2>
 
+<p>See <a href="#updating-state2.4.">2.4. UPDATING STATE</a>.</p>
+
 <p>Updating state can be done using one of three function calls</p>
 
 <ul>
-<li>TGASDK.TGA.UpdateUserState(string state)
+<li><code class="prettyprint">TGASDK.TGA.UpdateUserState(string state)</code>
 
 <ul>
 <li>This sets the state showing below student name in teacher dashboard. It also resets detailed state showing below this state, if there was any.</li>
 </ul></li>
-<li>TGASDK.TGA.UpdateUserState(string state, string detailedState)
+<li><code class="prettyprint">TGASDK.TGA.UpdateUserState(string state, string detailedState)</code>
 
 <ul>
 <li>This sets the state showing below student name in teacher dashboard and detailed state below it.</li>
 </ul></li>
-<li>TGASDK.TGA.UpdateUserStateDetailedOnly(string stateDetailed)
+<li><code class="prettyprint">TGASDK.TGA.UpdateUserStateDetailedOnly(string stateDetailed)</code>
 
 <ul>
 <li>This sets the detailed state below main state and does not reset the main state. You can use this to for ex. Update round numbers or other live data happening in current state of your game.</li>

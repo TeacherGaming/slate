@@ -187,6 +187,8 @@ To send the event, call <code class="prettyprint">TGASDK::Event::&lt;EventName&g
 
 <h2 id="updating-state">Updating state</h2>
 
+<p>See <a href="#updating-state2.4.">2.4. UPDATING STATE</a>.</p>
+
 <p>Updating state can be done using one of three function calls</p>
 
 <ul>

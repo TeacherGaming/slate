@@ -2,7 +2,7 @@
 
 <p>This document describes how to manually integrate your game with TeacherGaming Desk without using a ready-made SDK.</p>
 
-<p>The document is divided into use cases. First we describe and give examples on how to handle automatic login e.g. login parameters coming in from the TeacherGaming App. After that we describe the HTTP API you can use to communicate with TeacherGaming Desk. When integrating with TeacherGaming desk basically you just send data to our REST API through standard HTTPS calls. All data passed needs to be inside the GET query string. Note that for compatibility with special characters, you are always required to URL encode all data sent to our API.</p>
+<p>The document is divided into use cases. First we describe and give examples on how to handle automatic login e.g. login parameters coming in from the TeacherGaming App. After that we describe the HTTP API you can use to communicate with TeacherGaming Desk. When integrating with TeacherGaming Desk basically you just send data to our REST API through standard HTTPS calls. All data passed needs to be inside the GET query string. Note that for compatibility with special characters, you are always required to URL encode all data sent to our API.</p>
 
 <h2 id="in-game-flow">In-game Flow</h2>
 
@@ -10,22 +10,22 @@
 <li>User login
 
 <ul>
-<li>Successful login needs to be done before any data can be sent to TGA (except anonymous event data)</li>
+<li>Successful login needs to be done before any data can be sent to TeacherGaming Desk (except anonymous event data)</li>
 </ul></li>
 <li>Start calling playing game once every 60 seconds
 
 <ul>
-<li>After login is successful. This will inform the TGA system that the user is currently playing the game and the user can be tracked. Also the TGA Teacher Dashboard shows that the user is currently playing the game.</li>
+<li>After login is successful. This will inform the TeacherGaming Desk system that the user is currently playing the game and the user can be tracked. Also the TeacherGaming Desk Teacher Dashboard shows that the user is currently playing the game.</li>
 </ul></li>
 <li>Update player state as it changes in game
 
 <ul>
-<li>This information will be shown on the Teacher Dashboard on the TGA website so that the Teacher can easily see what the students are currently doing in game.</li>
+<li>This information will be shown on the Teacher Dashboard on the TeacherGaming Desk website so that the Teacher can easily see what the students are currently doing in game.</li>
 </ul></li>
 <li>Send event data
 
 <ul>
-<li>Events and the data in them have been set up on the TGA website by TeacherGaming. This is the data that is needed to track student progress.</li>
+<li>Events and the data in them have been set up on the TeacherGaming Desk website by TeacherGaming. This is the data that is needed to track student progress.</li>
 </ul></li>
 </ol>
 
@@ -50,7 +50,7 @@
     <span class="n">AndroidJavaObject</span> <span class="n">context</span> <span class="p">=</span> <span class="n">javaClass</span><span class="p">.</span><span class="n">GetStatic</span><span class="p">&lt;</span><span class="n">AndroidJavaObject</span><span class="p">&gt;(</span><span class="s">"currentActivity"</span><span class="p">);</span>
     <span class="n">AndroidJavaObject</span> <span class="n">intent</span> <span class="p">=</span> <span class="n">context</span><span class="p">.</span><span class="n">Call</span><span class="p">&lt;</span><span class="n">AndroidJavaObject</span><span class="p">&gt;(</span><span class="s">"getIntent"</span><span class="p">);</span>
 
-    <span class="c1">// Check if intent has TGA login related extras</span>
+    <span class="c1">// Check if intent has TeacherGaming Desk login related extras</span>
     <span class="kt">bool</span> <span class="n">hasClassId</span> <span class="p">=</span> <span class="n">intent</span><span class="p">.</span><span class="n">Call</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="s">"hasExtra"</span><span class="p">,</span> <span class="s">"TGA-classid"</span><span class="p">);</span>
     <span class="kt">bool</span> <span class="n">hasStudentId</span> <span class="p">=</span> <span class="n">intent</span><span class="p">.</span><span class="n">Call</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="s">"hasExtra"</span><span class="p">,</span> <span class="s">"TGA-studentid"</span><span class="p">);</span>
     <span class="kt">bool</span> <span class="n">hasCommand</span> <span class="p">=</span> <span class="n">intent</span><span class="p">.</span><span class="n">Call</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="s">"hasExtra"</span><span class="p">,</span> <span class="s">"TGA-command"</span><span class="p">);</span>
@@ -221,12 +221,12 @@ com.teachergaming.switchandglitch://?classid=5mm&amp;userid=marko&amp;command=lo
 <tr>
 <td>classid</td>
 <td></td>
-<td>TGA Class ID</td>
+<td>TeacherGaming Desk Class ID</td>
 </tr>
 <tr>
 <td>studentid</td>
 <td></td>
-<td>TGA studentid</td>
+<td>TeacherGaming Desk studentid</td>
 </tr>
 <tr>
 <td>apikey</td>
@@ -300,7 +300,7 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 </tr>
 <tr>
 <td>subscription_expired</td>
-<td>true if TGA subscription is expired otherwise false</td>
+<td>true if TeacherGaming Desk subscription is expired otherwise false</td>
 </tr>
 <tr>
 <td>subscription_expired_message</td>
@@ -326,7 +326,7 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 
 <h2 id="playing-game-keep-alive">Playing Game (keep alive)</h2>
 
-<p>Inform TGA that the user is currently logged in and playing. Send once every minute.</p>
+<p>Inform TeacherGaming Desk that the user is currently logged in and playing. Send once every minute. If TeacherGaming Desk does not receive this request for 3 minutes it will deduce that the student has quit the game and log him out.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -344,11 +344,11 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 </thead><tbody>
 <tr>
 <td>classid</td>
-<td>TGA class id</td>
+<td>TeacherGaming Desk class id</td>
 </tr>
 <tr>
 <td>studentid</td>
-<td>TGA id of the student in the class</td>
+<td>TeacherGaming Desk id of the student in the class</td>
 </tr>
 <tr>
 <td>apikey</td>
@@ -418,7 +418,7 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 
 <h2 id="player-state">Player State</h2>
 
-<p>Inform TGA what the user is currently doing in game.
+<p>Inform TeacherGaming Desk what the user is currently doing in game.
 Separate calls for State and Detailed State.
 For example: State = Playing Game, Detailed State = Level 1</p>
 
@@ -426,8 +426,9 @@ For example: State = Playing Game, Detailed State = Level 1</p>
 
 <h4 id="url">URL</h4>
 
-<p>https://analyticsdata.teachergaming.com/api/update_state
-https://analyticsdata.teachergaming.com/api/update_state_detailed</p>
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state</code></p>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state_detailed</code></p>
 
 <h4 id="parameters">Parameters</h4>
 
@@ -439,11 +440,11 @@ https://analyticsdata.teachergaming.com/api/update_state_detailed</p>
 </thead><tbody>
 <tr>
 <td>classid</td>
-<td>TGA class id</td>
+<td>TeacherGaming Desk class id</td>
 </tr>
 <tr>
 <td>studentid</td>
-<td>TGA id of the student in the class</td>
+<td>TeacherGaming Desk id of the student in the class</td>
 </tr>
 <tr>
 <td>apikey</td>
@@ -528,12 +529,13 @@ https://analyticsdata.teachergaming.com/api/update_state_detailed</p>
 
 <h4 id="example-usage">Example Usage</h4>
 
-<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy&amp;state=Playing game</code>
-<code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state_detailed?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy&amp;state=Level 1</code></p>
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy&amp;state=Playing game</code></p>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state_detailed?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy&amp;state=Level 1</code></p>
 
 <h2 id="event-data">Event Data</h2>
 
-<p>Send event data to TGA. The events and needed data for your game can be seen on the Events page on the TGA website. Event data can also be sent anonymously without classid or userid.</p>
+<p>Send event data to TeacherGaming Desk. The events and needed data for your game can be seen on the Events page on the TeacherGaming Desk website. Event data can also be sent anonymously without classid or userid.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -573,11 +575,11 @@ or anonymous
 </thead><tbody>
 <tr>
 <td>classid</td>
-<td>TGA class id</td>
+<td>TeacherGaming Desk class id</td>
 </tr>
 <tr>
 <td>studentid</td>
-<td>TGA id of the student in the class</td>
+<td>TeacherGaming Desk id of the student in the class</td>
 </tr>
 <tr>
 <td>duration</td>
@@ -685,11 +687,11 @@ or anonymous
 </thead><tbody>
 <tr>
 <td>classid</td>
-<td>TGA class id</td>
+<td>TeacherGaming Desk class id</td>
 </tr>
 <tr>
 <td>studentid</td>
-<td>TGA id of the student in the class</td>
+<td>TeacherGaming Desk id of the student in the class</td>
 </tr>
 <tr>
 <td>apikey</td>

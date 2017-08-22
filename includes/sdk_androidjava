@@ -1,0 +1,166 @@
+<h1 id="android-java-sdk">Android Java SDK</h1>
+
+<p>This document describes the specifics of integrating TeacherGaming Desk to your game using the TGA Android Java SDK. For general integration information and links to other SDK documents see the general SDK instructions.</p>
+
+<h2 id="first-steps">First Steps</h2>
+
+<p>TeacherGaming will send you a <code class="prettyprint">TGASDK&lt;gamename&gt;.java</code> file. Copy the <code class="prettyprint">TGASDK&lt;gamename&gt;.java</code> file to your project’s <code class="prettyprint">src/com/teachergaming/tga</code> folder. Updating the SDK can be done by simply replacing the old SDK file with new one.</p>
+
+<h2 id="notes">Notes</h2>
+
+<p>Your SDK file is called <code class="prettyprint">TGASDK&lt;gamename&gt;.java</code>. Class inside that file is called <code class="prettyprint">TGASDK&lt;gamename&gt;</code>. To improve readability, we have not added &lt;gamename&gt; for each method call in this document, we are mentioning TGASDK and you should add your game name after each TGASDK call to make it correct.</p>
+
+<h2 id="student-login">Student Login</h2>
+
+<h3 id="automatically-logging-in-with-teachergaming-app">Automatically Logging in with TeacherGaming App</h3>
+
+<p>For the automatic login to work correctly you need to pass the intent received in your main activity’s <code class="prettyprint">onCreate</code> function to the SDK by calling</p>
+
+<p><code class="prettyprint">TGASDKSwitchGlitch.TGA.HandleIntent(getIntent());</code></p>
+<pre class="highlight java tab-java"><code><span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onNewIntent</span><span class="o">(</span><span class="n">Intent</span> <span class="n">intent</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">.</span><span class="na">onNewIntent</span><span class="o">(</span><span class="n">intent</span><span class="o">);</span>
+    <span class="n">setIntent</span><span class="o">(</span><span class="n">intent</span><span class="o">);</span>
+    <span class="n">TGASDKSwitchGlitch</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">HandleIntent</span><span class="o">(</span><span class="n">intent</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+<p>You also need to override the onNewIntent function with the code on the right.</p>
+
+<p>The Java Android SDK automatically handles broadcast logins via TG App. You can get notified about students logging in and logging out by implementing the <code class="prettyprint">TGASDK.TGA.AuthUserListener</code>
+interface and adding your listener using
+<code class="prettyprint">TGASDK.TGA.AddAuthUserListener(AuthUserListener added)</code>
+Remember to also remove the listener using
+<code class="prettyprint">TGASDK.TGA.RemoveAuthUserListener(AuthUserListener removed)</code></p>
+
+<h3 id="manual-login">Manual Login</h3>
+
+<h4 id="see-2-1-2-creating-your-own-ui-for-in-game-login-for-information-about-manual-login-and-guidelines-for-creating-a-login-ui">See <a href="#creating-your-own-ui-for-in-game-login2.1.2.">2.1.2. Creating your own UI for in-game login</a> for information about manual login and guidelines for creating a login UI.</h4>
+
+<h4 id="validating-login">Validating Login</h4>
+<pre class="highlight java tab-java"><code><span class="n">TGASDK</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">AuthUser</span><span class="o">(</span><span class="n">classID</span><span class="o">,</span> <span class="n">studentID</span><span class="o">,</span> <span class="n">listener</span><span class="o">);</span>
+</code></pre>
+<p>Login can be authenticated with the code below and on the right.</p>
+
+<p><code class="prettyprint">TGASDK.TGA.AuthUser(classID, studentID, listener);</code></p>
+<pre class="highlight java tab-java"><code><span class="c1">// Login listener interface</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">AuthUserListener</span>
+<span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">OnTGAAuthUserComplete</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">authenticated</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="c1">// Override example</span>
+<span class="n">TGASDKTeacherGamingApp</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">AuthUser</span><span class="o">(</span><span class="s">"test"</span><span class="o">,</span> <span class="s">"student1"</span><span class="o">,</span> <span class="k">new</span> <span class="n">AuthUserListener</span><span class="o">()</span> <span class="o">{</span>
+<span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">OnTGAAuthUserComplete</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">authenticated</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Handle login here</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"LOGIN RESPONSE: "</span> <span class="o">+</span> <span class="n">authenticated</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+</code></pre>
+<p>Where classID and studentID are the class and student ID’s you want to login with, and listener implements the <code class="prettyprint">AuthUserListener</code> interface to listen when the login has completed.</p>
+
+<h2 id="sending-events">Sending Events</h2>
+
+<p>The events that have been defined in TGA website are generated to the SDK and can be used to send data from the game to TGA.</p>
+
+<h3 id="sending-events-with-duration">Sending Events with Duration</h3>
+<pre class="highlight java tab-java"><code><span class="c1">// Start event</span>
+<span class="n">TGASDKMyGame</span><span class="o">.</span><span class="na">Event</span><span class="o">.</span><span class="na">MyEvent</span><span class="o">.</span><span class="na">Start</span><span class="o">();</span>
+<span class="o">...</span>
+<span class="c1">// While event is going on update variables</span>
+<span class="n">TGASDKMyGame</span><span class="o">.</span><span class="na">Event</span><span class="o">.</span><span class="na">MyEvent</span><span class="o">.</span><span class="na">Current</span><span class="o">().</span><span class="na">countOfSomething</span> <span class="o">+=</span> <span class="mi">5</span><span class="o">;</span>
+<span class="o">...</span>
+<span class="c1">// Send event</span>
+<span class="n">TGASDKMyGame</span><span class="o">.</span><span class="na">Event</span><span class="o">.</span><span class="na">MyEvent</span><span class="o">.</span><span class="na">Send</span><span class="o">();</span>
+</code></pre>
+<p>This is useful for events that have a duration. You can start an event and then send it to TeacherGaming Desk when it ends. Our SDK automatically counts time from beginning to end and appends duration to sent data. You can also modify any additional data inside the event before you send it.
+To start the event, call <code class="prettyprint">TGASDK.Event.&lt;EventName&gt;.Start()</code>
+After that you can gather all needed data for the event. You can change additional data inside the event before you send it. All data for the started event can be changed using <code class="prettyprint">TGASDK.Event.&lt;EventName&gt;.Current.&lt;EventParameter&gt;</code> variables.
+To send the event, call <code class="prettyprint">TGASDK.Event.&lt;EventName&gt;.Send()</code></p>
+
+<h2 id="sending-events-without-duration">Sending Events without Duration</h2>
+<pre class="highlight java tab-java"><code><span class="c1">// Send an event immediately without tracking duration</span>
+<span class="n">TGASDKMyGame</span><span class="o">.</span><span class="na">Event</span><span class="o">.</span><span class="na">MyInstantaneousEvent</span><span class="o">.</span><span class="na">Send</span><span class="o">(</span><span class="mi">5</span><span class="o">);</span> <span class="c1">// Event takes an integer parameter</span>
+</code></pre>
+<p>If event is something for which it does not make sense to track duration you can call <code class="prettyprint">TGASDK.Event.&lt;EventName&gt;.Send(...)</code> with the event data as parameters to send the event directly.</p>
+
+<h2 id="updating-state">Updating state</h2>
+
+<p>See <a href="#updating-state2.4.">2.4. UPDATING STATE</a>.</p>
+
+<p>Updating state can be done using one of three function calls.</p>
+
+<ul>
+<li><code class="prettyprint">TGASDK.TGA.UpdateUserState(string state)</code>
+
+<ul>
+<li>This sets the state showing below student name in teacher dashboard. It also resets detailed state showing below this state, if there was any.</li>
+</ul></li>
+<li><code class="prettyprint">TGASDK.TGA.UpdateUserState(string state, string detailedState)</code>
+
+<ul>
+<li>This sets the state showing below student name in teacher dashboard and detailed state below it.</li>
+</ul></li>
+<li><code class="prettyprint">TGASDK.TGA.UpdateUserStateDetailedOnly(string stateDetailed)</code>
+
+<ul>
+<li>This sets the detailed state below main state and does not reset the main state. You can use this to for ex. Update round numbers or other live data happening in current state of your game.</li>
+</ul></li>
+</ul>
+
+<p>You can keep the state update calls in your game and don’t need to check if user is logged in to TGA, we will automatically check inside the function calls if player is currently authenticated to TGA and send the state update only if so.</p>
+
+<h3 id="state-examples">State examples</h3>
+<pre class="highlight java tab-java"><code><span class="n">TGASDK</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">UpdateUserState</span><span class="o">(</span><span class="s">"In Main Menu"</span><span class="o">);</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TGASDK</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">UpdateUserState</span><span class="o">(</span><span class="s">"In Settings Menu"</span><span class="o">);</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TGASDK</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">UpdateUserState</span><span class="o">(</span><span class="s">"Playing Singleplayer Game"</span><span class="o">,</span> <span class="s">"Tutorial Level 4"</span><span class="o">);</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// When game begun</span>
+<span class="n">TGASDK</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">UpdateUserState</span><span class="o">(</span><span class="s">"Playing Multiplayer Game"</span><span class="o">);</span>
+<span class="c1">// When round changed</span>
+<span class="n">TGASDK</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">UpdateUserStateDetailedOnly</span><span class="o">(</span><span class="s">"Round 2"</span><span class="o">);</span>
+</code></pre>
+<table>
+<tr>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image5.png"/> </td>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image4.png"/> </td>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image2.png"/> </td>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image1.png"/> </td>
+    <td width="20%"> <img src="images/integrations/unitycsharp/image3.png"/> </td>
+</tr>
+<tr>
+    <td><small>Default state for logged-in student </small></td>
+    <td><small>Student is in main menu </small></td>
+    <td><small>Student is in settings menu</small></td>
+    <td><small>Student is playing singleplayer game, Tutorial Level 4 has been passed for detailed state</small></td>
+    <td><small>Student is playing multiplayer game, Round number is being passed to detailed state when round changes</small></td>
+</tr>
+</table>
+
+<h2 id="handling-foreground-background-transitions-on-android">Handling foreground - background transitions on android</h2>
+
+<p>On android you should call:
+<code class="prettyprint">TGASDK.TGA.HandleApplicationToBackground()</code>
+when your application goes to background (for example in your Activity’s <code class="prettyprint">onStop()</code>) and
+<code class="prettyprint">TGASDK.TGA.HandleApplicationToForeground()</code>
+when your application returns to foreground. These stop and restart the thread sending keepalive status messages. If <code class="prettyprint">HandleApplicationToBackground</code> is not called the thread will keep running and analytics will show the app as active even if it is on the background (for example when user has pressed home key).</p>
+
+<h2 id="getting-data">Getting Data</h2>
+<pre class="highlight java tab-java"><code><span class="c1">// Login information</span>
+<span class="c1">// Get logged in user class ID</span>
+<span class="n">TGASDK</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">getClassId</span><span class="o">()</span>
+<span class="c1">// Get logged in user student ID</span>
+<span class="n">TGASDK</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">getStudentId</span><span class="o">()</span>
+<span class="c1">// Logs user out of TGA.</span>
+<span class="n">TGASDK</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">Logout</span><span class="o">()</span>
+<span class="c1">// Sets classid &amp; studentid but skips authentication. Use with care.</span>
+<span class="n">TGASDK</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">SetTGAIds</span><span class="o">(</span><span class="n">studentId</span><span class="o">,</span> <span class="n">classId</span><span class="o">)</span>
+
+<span class="c1">// Creatubbles</span>
+<span class="c1">// Returns true if teacher account is linked to creatubbles.</span>
+<span class="n">TGASDK</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">isCreatubblesLinked</span><span class="o">()</span>
+<span class="c1">// Gets student creatubbles token, if available.</span>
+<span class="n">TGASDK</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">getCreatubblesToken</span><span class="o">()</span>
+<span class="c1">// Gets creatubbles gallery ID where creation needs to be submitted.</span>
+<span class="n">TGASDK</span><span class="o">.</span><span class="na">TGA</span><span class="o">.</span><span class="na">getCreatubblesGalleryId</span><span class="o">()</span>
+</code></pre>
+<p>There is some useful data you can get inside the <code class="prettyprint">TGASDK&lt;gamename&gt;</code> class, like current logged in user class ID, studentID, if user is logged in or creatubbles tokens (if teacher account is linked to Creatubbles). On the right you can find the most useful ones (but you can also open the <code class="prettyprint">TGASDK&lt;gamename&gt;.java</code> file and check the class TGA to find all variables and methods available).</p>
