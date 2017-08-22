@@ -17,6 +17,72 @@ The document is divided into use cases. First we describe and give examples on h
 
 ## Student Login
 
+### Manual Authentication / Login
+Login a student to our system. Class id is unique throughout the whole system and student id is unique throughout the class the user is in. Student id can be thought as an username and class id as a password.
+
+### HTTP Request
+#### URL
+`https://analyticsdata.teachergaming.com/api/validate`
+
+#### Parameters
+
+Parameter | Default | Description
+--------- | ------- | -----------
+classid |  | TeacherGaming Desk Class ID
+studentid |  | TeacherGaming Desk studentid
+apikey | | Your game's API key
+
+<aside class="info">
+Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
+</aside>
+
+#### response
+```json
+{
+  "success": 1,
+  "message": "Student with this ID exists in this class.",
+  "responseCreatedAt": "2017-06-13T07:08:47.763Z",
+  "debug": {
+      "sent": "2017-03-15T12:05:35.722Z",
+      "container": "zo5jajsD99beDQyt7-pv0n"
+  },
+  "login_message": "Logged into class <classid> with studentid <studentid>",
+  "login_message_html": "Logged into class <b>classid</b> with studentid <b>studentid</b>",
+  "subscription": {
+      "subscription_expired": false,
+      "subscription_expired_message": "Your subscription has expired."
+  },
+  "student": {
+      "studentid": "<studentid>",
+      "studentid_unique": "<HashedUniqueStudentID>",
+      "created_account": false,
+      "teacher_creatubbles_linked": true
+  }
+  "class": {
+      "classid": "<classid>",
+      "classid_unique": "<HashedUniqueClassID>",
+      "allow_student_signup": true
+  },
+  "game_name": "<game’s name>"
+}
+```
+Key | Value
+--- | -----
+success | 1 for successful login, 0 for failed login
+message | Detailed information about the login result.
+debug | Debug information
+responseCreatedAt | Datetime when reponse was created
+login_message | login message that can be displayed to user on successful login
+login_message_html | same as above but with html bold tags in id’s
+subscription_expired | true if TeacherGaming Desk subscription is expired otherwise false
+subscription_expired_message | Message that can be displayed to user if subscription has expired
+student | studentid of the logged in student, SHA256 hash of this id, boolean of whether account was created and boolean of whether teacher has linked creatubbles
+class | classid  of the logged in student, SHA256 hash of this id and boolean of whether student self signup is allowed
+game_name | name of the game student logged in
+
+#### Example usage
+`https://analyticsdata.teachergaming.com/api/validate?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
+
 ### Authentication / Login through TeacherGaming App
 To support automatic login you need to handle the login parameters being given to your game by the TeacherGaming App. On Android this is done by using Intent (when app is not already running) and Broadcast (when app is running) parameters. On iOS this is done using a URL scheme. We are planning to change both mobile platforms to use the URL scheme in the future. On desktop latforms the login parameters are passed as command line paramters when starting the game.
 
@@ -173,72 +239,6 @@ On iOS the app is launched using the URI scheme
 
 For how to handle URL schemes on iOS see the relevant documentation for your programming language/engine/platform.
 
-
-### Manual Authentication / Login
-Login a student to our system. Class id is unique throughout the whole system and student id is unique throughout the class the user is in. Student id can be thought as an username and class id as a password.
-
-### HTTP Request
-#### URL
-`https://analyticsdata.teachergaming.com/api/validate`
-
-#### Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-classid |  | TeacherGaming Desk Class ID
-studentid |  | TeacherGaming Desk studentid
-apikey | | Your game's API key
-
-<aside class="info">
-Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
-</aside>
-
-#### response
-```json
-{
-  "success": 1,
-  "message": "Student with this ID exists in this class.",
-  "responseCreatedAt": "2017-06-13T07:08:47.763Z",
-  "debug": {
-      "sent": "2017-03-15T12:05:35.722Z",
-      "container": "zo5jajsD99beDQyt7-pv0n"
-  },
-  "login_message": "Logged into class <classid> with studentid <studentid>",
-  "login_message_html": "Logged into class <b>classid</b> with studentid <b>studentid</b>",
-  "subscription": {
-      "subscription_expired": false,
-      "subscription_expired_message": "Your subscription has expired."
-  },
-  "student": {
-      "studentid": "<studentid>",
-      "studentid_unique": "<HashedUniqueStudentID>",
-      "created_account": false,
-      "teacher_creatubbles_linked": true
-  }
-  "class": {
-      "classid": "<classid>",
-      "classid_unique": "<HashedUniqueClassID>",
-      "allow_student_signup": true
-  },
-  "game_name": "<game’s name>"
-}
-```
-Key | Value
---- | -----
-success | 1 for successful login, 0 for failed login
-message | Detailed information about the login result.
-debug | Debug information
-responseCreatedAt | Datetime when reponse was created
-login_message | login message that can be displayed to user on successful login
-login_message_html | same as above but with html bold tags in id’s
-subscription_expired | true if TeacherGaming Desk subscription is expired otherwise false
-subscription_expired_message | Message that can be displayed to user if subscription has expired
-student | studentid of the logged in student, SHA256 hash of this id, boolean of whether account was created and boolean of whether teacher has linked creatubbles
-class | classid  of the logged in student, SHA256 hash of this id and boolean of whether student self signup is allowed
-game_name | name of the game student logged in
-
-#### Example usage
-`https://analyticsdata.teachergaming.com/api/validate?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
 
 ## Playing Game (keep alive)
 Inform TeacherGaming Desk that the user is currently logged in and playing. Send once every minute. If TeacherGaming Desk does not receive this request for 3 minutes it will deduce that the student has quit the game and log him out.
