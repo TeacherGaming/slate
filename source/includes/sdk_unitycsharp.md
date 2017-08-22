@@ -168,13 +168,15 @@ You can call TGASDK.Event.<EventName>.Send(...) with event data as parameters to
 
 ## Updating state
 
+See [2.4. UPDATING STATE](#updating-state2.4.).
+
 Updating state can be done using one of three function calls
 
-* TGASDK.TGA.UpdateUserState(string state)
+* `TGASDK.TGA.UpdateUserState(string state)`
 	* This sets the state showing below student name in teacher dashboard. It also resets detailed state showing below this state, if there was any.
-* TGASDK.TGA.UpdateUserState(string state, string detailedState)
+* `TGASDK.TGA.UpdateUserState(string state, string detailedState)`
 	* This sets the state showing below student name in teacher dashboard and detailed state below it.
-* TGASDK.TGA.UpdateUserStateDetailedOnly(string stateDetailed)
+* `TGASDK.TGA.UpdateUserStateDetailedOnly(string stateDetailed)`
 	* This sets the detailed state below main state and does not reset the main state. You can use this to for ex. Update round numbers or other live data happening in current state of your game.
 
 You can keep the state update calls in your game and don’t need to check if user is logged in to TGA, we will automatically check inside the function calls if player is currently authenticated to TGA and send the state update only if so.

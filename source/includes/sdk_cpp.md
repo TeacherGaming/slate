@@ -169,6 +169,8 @@ You can call `GASDK::Event::<EventName>::Send(...)` with event data as parameter
 
 ## Updating state
 
+See [2.4. UPDATING STATE](#updating-state2.4.).
+
 Updating state can be done using one of three function calls
 
 * `TGASDK::TGA::UpdateUserState(const std::string& state)`

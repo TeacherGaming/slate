@@ -2,18 +2,18 @@
 
 This document describes how to manually integrate your game with TeacherGaming Desk without using a ready-made SDK.
 
-The document is divided into use cases. First we describe and give examples on how to handle automatic login e.g. login parameters coming in from the TeacherGaming App. After that we describe the HTTP API you can use to communicate with TeacherGaming Desk. When integrating with TeacherGaming desk basically you just send data to our REST API through standard HTTPS calls. All data passed needs to be inside the GET query string. Note that for compatibility with special characters, you are always required to URL encode all data sent to our API.
+The document is divided into use cases. First we describe and give examples on how to handle automatic login e.g. login parameters coming in from the TeacherGaming App. After that we describe the HTTP API you can use to communicate with TeacherGaming Desk. When integrating with TeacherGaming Desk basically you just send data to our REST API through standard HTTPS calls. All data passed needs to be inside the GET query string. Note that for compatibility with special characters, you are always required to URL encode all data sent to our API.
 
 ## In-game Flow
 
 1. User login
-  * Successful login needs to be done before any data can be sent to TGA (except anonymous event data)
+  * Successful login needs to be done before any data can be sent to TeacherGaming Desk (except anonymous event data)
 2. Start calling playing game once every 60 seconds
-  * After login is successful. This will inform the TGA system that the user is currently playing the game and the user can be tracked. Also the TGA Teacher Dashboard shows that the user is currently playing the game.
+  * After login is successful. This will inform the TeacherGaming Desk system that the user is currently playing the game and the user can be tracked. Also the TeacherGaming Desk Teacher Dashboard shows that the user is currently playing the game.
 3. Update player state as it changes in game
-  * This information will be shown on the Teacher Dashboard on the TGA website so that the Teacher can easily see what the students are currently doing in game.
+  * This information will be shown on the Teacher Dashboard on the TeacherGaming Desk website so that the Teacher can easily see what the students are currently doing in game.
 4. Send event data
-  * Events and the data in them have been set up on the TGA website by TeacherGaming. This is the data that is needed to track student progress.
+  * Events and the data in them have been set up on the TeacherGaming Desk website by TeacherGaming. This is the data that is needed to track student progress.
 
 ## Student Login
 
@@ -36,7 +36,7 @@ private bool TryLoginFromAndroidIntent()
     AndroidJavaObject context = javaClass.GetStatic<AndroidJavaObject>("currentActivity");
     AndroidJavaObject intent = context.Call<AndroidJavaObject>("getIntent");
 
-    // Check if intent has TGA login related extras
+    // Check if intent has TeacherGaming Desk login related extras
     bool hasClassId = intent.Call<bool>("hasExtra", "TGA-classid");
     bool hasStudentId = intent.Call<bool>("hasExtra", "TGA-studentid");
     bool hasCommand = intent.Call<bool>("hasExtra", "TGA-command");
@@ -185,8 +185,8 @@ Login a student to our system. Class id is unique throughout the whole system an
 
 Parameter | Default | Description
 --------- | ------- | -----------
-classid |  | TGA Class ID
-studentid |  | TGA studentid
+classid |  | TeacherGaming Desk Class ID
+studentid |  | TeacherGaming Desk studentid
 apikey | | Your game's API key
 
 <aside class="info">
@@ -231,7 +231,7 @@ debug | Debug information
 responseCreatedAt | Datetime when reponse was created
 login_message | login message that can be displayed to user on successful login
 login_message_html | same as above but with html bold tags in id’s
-subscription_expired | true if TGA subscription is expired otherwise false
+subscription_expired | true if TeacherGaming Desk subscription is expired otherwise false
 subscription_expired_message | Message that can be displayed to user if subscription has expired
 student | studentid of the logged in student, SHA256 hash of this id, boolean of whether account was created and boolean of whether teacher has linked creatubbles
 class | classid  of the logged in student, SHA256 hash of this id and boolean of whether student self signup is allowed
@@ -241,7 +241,7 @@ game_name | name of the game student logged in
 `https://analyticsdata.teachergaming.com/api/validate?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
 
 ## Playing Game (keep alive)
-Inform TGA that the user is currently logged in and playing. Send once every minute.
+Inform TeacherGaming Desk that the user is currently logged in and playing. Send once every minute. If TeacherGaming Desk does not receive this request for 3 minutes it will deduce that the student has quit the game and log him out.
 
 ### HTTP Request
 #### URL
@@ -250,8 +250,8 @@ https://analyticsdata.teachergaming.com/api/playing_game
 #### Parameters
 Key | Value
 --- | -----
-classid | TGA class id
-studentid | TGA id of the student in the class
+classid | TeacherGaming Desk class id
+studentid | TeacherGaming Desk id of the student in the class
 apikey | Api key of your game
 
 #### Response
@@ -289,21 +289,22 @@ class | classid  of the logged in student and SHA256 hash of this id
 `https://analyticsdata.teachergaming.com/api/playing_game?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
 
 ## Player State
-Inform TGA what the user is currently doing in game.
+Inform TeacherGaming Desk what the user is currently doing in game.
 Separate calls for State and Detailed State.
 For example: State = Playing Game, Detailed State = Level 1
 
 ### HTTP Request
 
 #### URL
-https://analyticsdata.teachergaming.com/api/update_state
-https://analyticsdata.teachergaming.com/api/update_state_detailed
+`https://analyticsdata.teachergaming.com/api/update_state`
+
+`https://analyticsdata.teachergaming.com/api/update_state_detailed`
 
 #### Parameters
 Key | Value
 --- | -----
-classid | TGA class id
-studentid | TGA id of the student in the class
+classid | TeacherGaming Desk class id
+studentid | TeacherGaming Desk id of the student in the class
 apikey | Api key of your game
 state | What the user is currently doing
 
@@ -349,10 +350,11 @@ class | classid  of the logged in student and SHA256 hash of this id
 
 ####Example Usage
 `https://analyticsdata.teachergaming.com/api/update_state?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy&state=Playing game`
+
 `https://analyticsdata.teachergaming.com/api/update_state_detailed?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy&state=Level 1`
 
 ## Event Data
-Send event data to TGA. The events and needed data for your game can be seen on the Events page on the TGA website. Event data can also be sent anonymously without classid or userid.
+Send event data to TeacherGaming Desk. The events and needed data for your game can be seen on the Events page on the TeacherGaming Desk website. Event data can also be sent anonymously without classid or userid.
 
 ### HTTP Request
 
@@ -372,8 +374,8 @@ eventname | The event name that you are submitting data for.
 ##### Optional
 Key | Value
 --- | -----
-classid | TGA class id
-studentid | TGA id of the student in the class
+classid | TeacherGaming Desk class id
+studentid | TeacherGaming Desk id of the student in the class
 duration | How long it took to complete the event in milliseconds.
 Optional data | Optional event data for your event is passed in key=value pairs. This is the data that has been set by TeacherGaming for each Event that is tracked in your game Examples: levelID=JungleLevel3 Score=3
 
@@ -429,8 +431,8 @@ You can allow student to log out of TeacherGaming Desk only if your game is not 
 #### Parameters
 Key | Value
 --- | -----
-classid | TGA class id
-studentid | TGA id of the student in the class
+classid | TeacherGaming Desk class id
+studentid | TeacherGaming Desk id of the student in the class
 apikey | Api key of your game
 
 #### Response

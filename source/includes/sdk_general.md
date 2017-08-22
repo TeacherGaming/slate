@@ -111,6 +111,7 @@ TGASDKSomeGame.Event.ItemCrafted.Send("item1");
 If the event is something for which it does not make sense to track a duration you can call TGASDK.Event.&lt;EventName&gt;.Send(...) with event data as parameters to send the event directly.
 
 ## Updating state
+By default when user logs in, teacher will see in their dashboard state “Playing game” for that student. It is possible to update the state and detailed state for student for what they are currently doing in the game, like In main menu, Playing level 1, Playing Multiplayer, In Settings Menu. This allows teacher to see by glance in teacher dashboard what student is currently doing.
 
 Updating state can be done using one of three function calls
 
