@@ -1,10 +1,12 @@
 <h1 id="general-sdk-information">General SDK Information</h1>
 
-<p>In this document and in the code the SDK for integrating the analytics is often called TGA SDK for short.</p>
+<h2 id="what-is-tga-sdk">What is TGA SDK</h2>
 
-<p>This part of the document is written for game developers that are going to integrate TeacherGaming Desk analytics into their games. It describes on a general level how to do the integration. Integration can be done either by using a ready-made SDK for your platform or manually by using the HTTP API.</p>
+<p>TeacherGaming Desk, our learning platform, aims to demystify the processes behind game-based learning. It aims to provide educators with an easily understandable way of tracking and assessing the learning that happens in-game.</p>
 
-<p>More detailed information is available in the documentation for the different SDKs and the HTTP API documentation. See the links on the left.</p>
+<p>In more technical terms, the analytics part of TeacherGaming Desk is a web-based platform that collects analytics information (events) sent by games and processes it to reveal what the students (users, players) have learned while playing the game. The SDK for integrating the analytics is called TeacherGaming Desk Analytics SDK, or TGA SDK for short.</p>
+
+<p>This part of the document is written for all game developers that are going to integrate TeacherGaming Desk analytics into their games. It describes how to do the integration on a general level. Integration can be done either by using a ready-made SDK for your platform, or by manually using the HTTP API. More detailed information is available in the specific parts for each SDK, easily accessed from the table of contents on the left.</p>
 
 <h2 id="student-id-and-class-id">Student id and Class id</h2>
 
@@ -12,13 +14,15 @@
 
 <p>TeacherGaming Desk analytics (TGA) requires the game to send a class id and a student id for each student playing the game to assign data to the right student. This means that students need to login before data can be sent, except for anonymous event data.</p>
 
-<p>Logging in can be done through the TeacherGaming app or in the game. If users authenticate in the game you will need to add a UI where the student can type in a class id and a student id. Our Unity C# SDK has a ready-made UI you can use if you are developing on Unity.</p>
+<p>Logging in can be done through the TeacherGaming App or in the game. Implementing the automatic login through TeacherGaming App is mandatory, implementing an in-game login UI is optional. Our Unity C# SDK has a ready-made UI you can use if you are developing on Unity.</p>
 
 <p>You should not save the class and student ids in your game. The student should need to login separately every time the app is started either through the TeacherGaming app or in the game UI.</p>
 
 <h3 id="automatically-logging-in-from-teachergaming-app">Automatically logging in from TeacherGaming app</h3>
 
-<p>When the user has logged in to TeacherGaming app and launches your game the TeacherGaming app passes the login information to your game to allow your game to log in automatically as it is lauched (or brought back to foreground). On Android this is done by using Intent (when app is not already running) and Broadcast (when app is running) parameters. On iOS this is done using an URI scheme. We are planning to change Android to use the URI scheme as well in the future (the Unity SDK already supports it). On desktop platforms we pass the URI as a command line argument to the application.</p>
+<p>When the user has logged in to TeacherGaming app and launches your game the TeacherGaming app passes the login information to your game to allow your game to log in automatically as it is lauched (or brought back to foreground). On Android this is done by using Intent (when app is not already running) and Broadcast (when app is running) parameters. On iOS this is done using an URI scheme. We are planning to change Android to also use the URL scheme in the future, so all new integrations on Android should support that. Support for Intent &amp; Broadcast is also needed since the TeacherGaming App still currently uses those.</p>
+
+<p>On desktop platforms we pass the login information to the game as command line parameters.</p>
 
 <p>The SDKs do the handling of these parameters automatically. When using an SDK all you need to do is listen to a callback (see the platform specific SDK documentation for how to do this) and react appropriately. If you are using the HTTP API you need to do the parameter handling yourself (see the HTTP API documentation and TeacherGaming app Android Intent login documentation).</p>
 
