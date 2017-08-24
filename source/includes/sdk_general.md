@@ -1,10 +1,12 @@
 # General SDK Information
 
-In this document and in the code the SDK for integrating the analytics is often called TGA SDK for short.
- 
-This part of the document is written for game developers that are going to integrate TeacherGaming Desk analytics into their games. It describes on a general level how to do the integration. Integration can be done either by using a ready-made SDK for your platform or manually by using the HTTP API.
+## What is TGA SDK
 
-More detailed information is available in the documentation for the different SDKs and the HTTP API documentation. See the links on the left.
+TeacherGaming Desk, our learning platform, aims to demystify the processes behind game-based learning. It aims to provide educators with an easily understandable way of tracking and assessing the learning that happens in-game.
+
+In more technical terms, the analytics part of TeacherGaming Desk is a web-based platform that collects analytics information (events) sent by games and processes it to reveal what the students (users, players) have learned while playing the game. The SDK for integrating the analytics is called TeacherGaming Desk Analytics SDK, or TGA SDK for short.
+
+This part of the document is written for all game developers that are going to integrate TeacherGaming Desk analytics into their games. It describes how to do the integration on a general level. Integration can be done either by using a ready-made SDK for your platform, or by manually using the HTTP API. More detailed information is available in the specific parts for each SDK, easily accessed from the table of contents on the left.
 
 ## Student id and Class id
 
@@ -12,18 +14,20 @@ Students are identified in TGA by their class and student ids. These are used in
  
 TeacherGaming Desk analytics (TGA) requires the game to send a class id and a student id for each student playing the game to assign data to the right student. This means that students need to login before data can be sent, except for anonymous event data.
  
-Logging in can be done through the TeacherGaming app or in the game. If users authenticate in the game you will need to add a UI where the student can type in a class id and a student id. Our Unity C# SDK has a ready-made UI you can use if you are developing on Unity.
+Logging in can be done through the TeacherGaming App or in the game. Implementing the automatic login through TeacherGaming App is mandatory, implementing an in-game login UI is optional. Our Unity C# SDK has a ready-made UI you can use if you are developing on Unity.
  
 You should not save the class and student ids in your game. The student should need to login separately every time the app is started either through the TeacherGaming app or in the game UI.
 
 ### Automatically logging in from TeacherGaming app
-When the user has logged in to TeacherGaming app and launches your game the TeacherGaming app passes the login information to your game to allow your game to log in automatically as it is lauched (or brought back to foreground). On Android this is done by using Intent (when app is not already running) and Broadcast (when app is running) parameters. On iOS this is done using an URI scheme. We are planning to change Android to use the URI scheme as well in the future (the Unity SDK already supports it). On desktop platforms we pass the URI as a command line argument to the application.
+When the user has logged in to TeacherGaming app and launches your game the TeacherGaming app passes the login information to your game to allow your game to log in automatically as it is lauched (or brought back to foreground). On Android this is done by using Intent (when app is not already running) and Broadcast (when app is running) parameters. On iOS this is done using an URI scheme. We are planning to change Android to also use the URL scheme in the future, so all new integrations on Android should support that. Support for Intent & Broadcast is also needed since the TeacherGaming App still currently uses those.
+
+On desktop platforms we pass the login information to the game as command line parameters.
 
 The SDKs do the handling of these parameters automatically. When using an SDK all you need to do is listen to a callback (see the platform specific SDK documentation for how to do this) and react appropriately. If you are using the HTTP API you need to do the parameter handling yourself (see the HTTP API documentation and TeacherGaming app Android Intent login documentation).
 
 When the student has logged in via TeacherGaming app you should not give the user the option to logout or to login as different student inside the game. Changing the student should only be done via the TeacherGaming app in this case. It is good if you still have the UI to show the class and student ids but you can leave it out if you wish. This can be the same UI you use to login inside the game just having the input fields and buttons in a disabled state disabled for example.
 
-####Testing automatic login through TeacherGamning App
+#### Testing automatic login through TeacherGamning App
 1. Search for app called TeacherGaming on Play or App store. Install the app and launch it.
 2. Press “LOGIN TO ANALYTICS” button at the top of the screen
 3. Tap 10 times TG logo at the top of the screen and a new menu will appear
@@ -31,7 +35,7 @@ When the student has logged in via TeacherGaming app you should not give the use
 5. Press “Launch”
 Your game should now run and a popup should inform you about the login result.
 
-####Testing automatic login on mobile without TeacherGaming app
+#### Testing automatic login on mobile without TeacherGaming app
 
 ```url
 URI:
@@ -44,7 +48,7 @@ Example (in html file):
 ```
 Create a html file with links according to the URI scheme or input the URI in the device browser address bar.
 
-####Testing automatic login on desktop without TeacherGaming app
+#### Testing automatic login on desktop without TeacherGaming app
 ```url
 Desktop command line examples:
 
@@ -60,7 +64,7 @@ Replace &lt;your bundle identifier&gt; with your bundle identifier (f.e. com.tea
 ### Creating your own UI for in-game login
 For manually logging in to TGA the student needs to be able to input a class id and a student id. A good place for this UI is for example in a settings menu, or somewhere in the main menu. Usually two input fields with OK and Cancel options is enough. You can also have a Logout button to logout of TGA. Both the class id and student id fields should be either lowercase or uppercase only, not mixed case. In the system the class id and student id are not case sensitive. Uppercase only can be used to make it easier for young children to type the ids.
 
-####Login UI examples
+#### Login UI examples
 <table>
 <tr>
 	<td width="33%">

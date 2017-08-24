@@ -1,6 +1,4 @@
-#TeacherGaming Desk
-
-This documentation covers the technical details needed by developers aiming to integrate TeacherGaming Desk in their games or other applications.
+# TeacherGaming Desk
 
 The TeacherGaming Desk is a classroom toolbox designed to make game-based learning accessible to everyone.  It combinines a portfolio of games with pedagogical support and real-time analytics.
 
