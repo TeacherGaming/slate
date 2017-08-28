@@ -2064,66 +2064,124 @@ or anonymous
 
 <ol>
 <li>Request your <code class="prettyprint">client_id</code> and <code class="prettyprint">client_secret</code> from TeacherGaming</li>
-<li>Redirect user to login URL as mentioned in section <a href="#authorization">Authorization</a></li>
-<li>User gets redirected to your specified URL, you will get code as parameter. Call our <a href="#token">Token</a> endpoint to exchange that code for token</li>
-<li>Verify that token is correct and user is correct by calling our <a href="#user-profile">Profile</a> endpoint.</li>
+<li>Redirect user to login URL as mentioned in section <code class="prettyprint">Authorization</code></li>
+<li>User gets redirected to your specified URL, you will get code as parameter. Call our <code class="prettyprint">Token</code> endpoint to exchange that code for token</li>
+<li>Verify that token is correct and user is correct by calling our <code class="prettyprint">Profile</code> endpoint.</li>
 </ol>
 
 <h2 id="authorization">Authorization</h2>
 
 <p>We currently support authorization code flow. You will need to redirect the user to our request URL and pass the additional parameters.</p>
 
-<h3 id="request">Request</h3>
+<h3 id="request-type">Request Type</h3>
 
-<p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/oauth/authorize</code></p>
+<p>GET</p>
 
-<h3 id="query-parameters">Query Parameters</h3>
+<h3 id="url">Url</h3>
+
+<p><code class="prettyprint">https://desk.teachergaming.com/api/oauth/authorize</code></p>
+
+<aside class="notice">
+Note that the domain here is different than most other API methods in the documentation. Make sure to copy the correct URL from here.
+</aside>
+
+<h3 id="parameters">Parameters</h3>
 
 <table><thead>
 <tr>
 <th>Parameter</th>
-<th>Default</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>client_id</td>
-<td></td>
 <td>Your <code class="prettyprint">client_id</code>.</td>
+<td><strong>true</strong></td>
 </tr>
 <tr>
 <td>redirect_uri</td>
-<td></td>
 <td>URL where client gets redirected after succesfull login. These are whitelisted by Teachergaming.</td>
-</tr>
-<tr>
-<td>student_login</td>
-<td></td>
-<td>Set to <code class="prettyprint">true</code> to login as a student. No need to include this parameter if doing teacher login.</td>
-</tr>
-<tr>
-<td>switch_teacher_student_login</td>
-<td></td>
-<td>Set to <code class="prettyprint">true</code> to allow switching between teacher and student logins.</td>
+<td><strong>true</strong></td>
 </tr>
 <tr>
 <td>response_type</td>
-<td></td>
 <td>only <code class="prettyprint">code</code> allowed for now.</td>
+<td><strong>true</strong></td>
+</tr>
+<tr>
+<td>student_login</td>
+<td>Set to <code class="prettyprint">true</code> to login as a student. No need to include this parameter if doing teacher login, or you can pass false.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>switch_teacher_student_login</td>
+<td>Set to <code class="prettyprint">true</code> to allow switching between teacher and student logins.</td>
+<td>false</td>
 </tr>
 </tbody></table>
 
-<p>After succesfull login, user will be redirected back to your redirect_uri with code in GET query parameter. Use this code to fetch the token for the user as explained in section <a href="#token">Token</a>.</p>
+<h3 id="response">Response</h3>
+<pre class="highlight plaintext"><code>// Example of address where user's browser gets redirected after succesfull login
+https://yourRedirectUri.com?code=&lt;yourcode&gt;&amp;is_teacher=&lt;true|false&gt;
+</code></pre>
+<p>After succesfull login, user will be redirected back to your redirect_uri with code in GET query parameter. Use this code to fetch the token for the user as explained in section <code class="prettyprint">Token</code>.</p>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code</td>
+<td>Code that can be exchanged for token.</td>
+</tr>
+<tr>
+<td>is_teacher</td>
+<td>True if logged in as a teacher, otherwise false.</td>
+</tr>
+</tbody></table>
 
 <h2 id="token">Token</h2>
 
 <p>This endpoint can be used to exchange oauth code with token.</p>
 
-<h3 id="request">Request</h3>
+<h3 id="request-type">Request Type</h3>
 
-<p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/oauth/token</code></p>
+<p>GET</p>
 
-<h3 id="query-parameters">Query Parameters</h3>
+<h3 id="url">Url</h3>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/oauth/token</code></p>
+
+<h3 id="parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>client_id</td>
+<td>Your <code class="prettyprint">client_id</code>.</td>
+<td><strong>true</strong></td>
+</tr>
+<tr>
+<td>client_secret</td>
+<td>Your <code class="prettyprint">client_secret</code>.</td>
+<td><strong>true</strong></td>
+</tr>
+<tr>
+<td>code</td>
+<td>Code you got from us in the <code class="prettyprint">Authorization</code> section.</td>
+<td><strong>true</strong></td>
+</tr>
+</tbody></table>
+
+<h3 id="response">Response</h3>
 
 <blockquote>
 <p><span style="color: green">Example Success Output</span></p>
@@ -2144,32 +2202,25 @@ or anonymous
   </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Code not found."</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
+<p>Returns back the token that can be used to access rest of oAuth endpoints.</p>
+
 <table><thead>
 <tr>
-<th>Parameter</th>
-<th>Default</th>
-<th>Description</th>
+<th>Key</th>
+<th>Value</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>client_id</td>
-<td></td>
-<td>Your <code class="prettyprint">client_id</code>.</td>
+<td>success</td>
+<td>1 for success, 0 for failure.</td>
 </tr>
 <tr>
-<td>client_secret</td>
-<td></td>
-<td>Your <code class="prettyprint">client_secret</code>.</td>
+<td>token</td>
+<td>User&rsquo;s oAuth token.</td>
 </tr>
 <tr>
-<td>student_login</td>
-<td></td>
-<td>Set to true if student. Do not include this parameter if teacher.</td>
-</tr>
-<tr>
-<td>code</td>
-<td></td>
-<td>Code you got from us in the <a href="#Authorization">Authorization</a> section.</td>
+<td>service</td>
+<td>Your service&rsquo;s name.</td>
 </tr>
 </tbody></table>
 
@@ -2177,21 +2228,75 @@ or anonymous
 
 <p>This endpoint returns information about the user. Requires valid token. This method is useful for verifying that the user information like email address is correct after getting token for a user.</p>
 
-<h3 id="request">Request</h3>
+<h3 id="request-type">Request Type</h3>
 
-<p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/oauth/profile</code></p>
+<p>GET</p>
 
-<h3 id="query-parameters">Query Parameters</h3>
+<h3 id="url">Url</h3>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/oauth/profile</code></p>
+
+<h3 id="parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>token</td>
+<td>User&rsquo;s token</td>
+<td><strong>true</strong></td>
+</tr>
+</tbody></table>
+
+<h3 id="response">Response</h3>
 
 <blockquote>
-<p><span style="color: green">Example Success Output</span></p>
+<p><span style="color: green">Example Teacher Success Output</span></p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
   </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Profile information fetched succesfully."</span><span class="p">,</span><span class="w">
   </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-07-26T09:51:01.858Z"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"isStudent"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;userEmail&gt;"</span><span class="w">
+  </span><span class="s2">"teacher"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;first_name&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;last_name&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;email&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"unique_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;unique_id&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"institution"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+  </span><span class="s2">"subscription"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p><span style="color: green">Example Student Success Output</span></p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Profile information fetched succesfully."</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-07-26T09:51:01.858Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"isStudent"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"student"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;studentname&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"studentid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;studentid&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"studentid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;studentid_unique&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"class"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"class_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classname&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"classid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classid&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"classid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classid_unique&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"subscription"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"subscription_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"subscription_expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <blockquote>
@@ -2202,32 +2307,51 @@ or anonymous
   </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Token not found."</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
+<aside class="notice">
+Some values in this response are only available for teachers and some for students. See the role column for more information.
+</aside>
+
 <table><thead>
 <tr>
-<th>Parameter</th>
-<th>Default</th>
-<th>Description</th>
+<th>Key</th>
+<th>Value</th>
+<th>Role</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>client_id</td>
-<td></td>
-<td>Your <code class="prettyprint">client_id</code>.</td>
+<td>success</td>
+<td>1 for success, 0 for failure.</td>
+<td>both</td>
 </tr>
 <tr>
-<td>client_secret</td>
-<td></td>
-<td>Your <code class="prettyprint">client_secret</code>.</td>
+<td>isStudent</td>
+<td>true if this user is student, false otherwise.</td>
+<td>both</td>
 </tr>
 <tr>
-<td>student_login</td>
-<td></td>
-<td>Set to true if student. Do not include this parameter if teacher.</td>
+<td>subscription</td>
+<td>Information if user currently has active subscription</td>
+<td>both</td>
 </tr>
 <tr>
-<td>token</td>
-<td></td>
-<td>Your token.</td>
+<td>teacher</td>
+<td>Information about the teacher</td>
+<td>teacher</td>
+</tr>
+<tr>
+<td>institution</td>
+<td>Information about the institution user is part of. Can be empty if user is not part of any institution.</td>
+<td>teacher</td>
+</tr>
+<tr>
+<td>student</td>
+<td>Information about the student</td>
+<td>student</td>
+</tr>
+<tr>
+<td>class</td>
+<td>Information about class the student is part of</td>
+<td>student</td>
 </tr>
 </tbody></table>
 
@@ -2235,11 +2359,31 @@ or anonymous
 
 <p>This endpoint can be used to revoke a token.</p>
 
-<h3 id="request">Request</h3>
+<h3 id="request-type">Request Type</h3>
 
-<p><code class="prettyprint">GET https://analyticsdata.teachergaming.com/api/oauth/revoke</code></p>
+<p>GET</p>
 
-<h3 id="query-parameters">Query Parameters</h3>
+<h3 id="url">Url</h3>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/oauth/revoke</code></p>
+
+<h3 id="parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>token</td>
+<td>User&rsquo;s oAuth token.</td>
+<td><strong>true</strong></td>
+</tr>
+</tbody></table>
+
+<h3 id="response">Response</h3>
 
 <blockquote>
 <p><span style="color: green">Example Success Output</span></p>
@@ -2260,30 +2404,13 @@ or anonymous
 </span></code></pre>
 <table><thead>
 <tr>
-<th>Parameter</th>
-<th>Default</th>
-<th>Description</th>
+<th>Key</th>
+<th>Value</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>client_id</td>
-<td></td>
-<td>Your <code class="prettyprint">client_id</code>.</td>
-</tr>
-<tr>
-<td>client_secret</td>
-<td></td>
-<td>Your <code class="prettyprint">client_secret</code>.</td>
-</tr>
-<tr>
-<td>student_login</td>
-<td></td>
-<td>Set to true if student. Do not include this parameter if teacher.</td>
-</tr>
-<tr>
-<td>token</td>
-<td></td>
-<td>Your token.</td>
+<td>success</td>
+<td>1 for success, 0 for failure.</td>
 </tr>
 </tbody></table>
 
