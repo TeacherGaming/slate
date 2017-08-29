@@ -67,7 +67,7 @@ Parameter | Description | Required
 --------- | ------- | -----------
 grant_type | Set to `authorization_code`. Required by oAuth standard. | **true**
 code | Code you got from us in the `Authorization` section. | **true**
-redirect_uri | Same redirect_uri used in `Authorization` section. | **true**
+redirect_uri | Exact same redirect_uri used in `Authorization` section. Do not include query parameters or any extra information to this. | **true**
 client_id | Your `client_id`. | **true**
 client_secret | Your `client_secret`. | **true**
 
