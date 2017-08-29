@@ -7,8 +7,8 @@
 <ol>
 <li>Request your <code class="prettyprint">client_id</code> and <code class="prettyprint">client_secret</code> from TeacherGaming</li>
 <li>Redirect user to login URL as mentioned in section <code class="prettyprint">Authorization</code></li>
-<li>User gets redirected to your specified URL, you will get code as parameter. Call our <code class="prettyprint">Token</code> endpoint to exchange that code for token</li>
-<li>Verify that token is correct and user is correct by calling our <code class="prettyprint">Profile</code> endpoint.</li>
+<li>User gets redirected to your specified URL, you will get code as parameter. Call our <code class="prettyprint">Token</code> endpoint to exchange that code for access token</li>
+<li>Verify that access token is correct and user is correct by calling our <code class="prettyprint">Profile</code> endpoint.</li>
 </ol>
 
 <h2 id="authorization">Authorization</h2>
@@ -37,6 +37,11 @@ Note that the domain here is different than most other API methods in the docume
 </tr>
 </thead><tbody>
 <tr>
+<td>response_type</td>
+<td>only <code class="prettyprint">code</code> allowed for now.</td>
+<td><strong>true</strong></td>
+</tr>
+<tr>
 <td>client_id</td>
 <td>Your <code class="prettyprint">client_id</code>.</td>
 <td><strong>true</strong></td>
@@ -44,11 +49,6 @@ Note that the domain here is different than most other API methods in the docume
 <tr>
 <td>redirect_uri</td>
 <td>URL where client gets redirected after succesfull login. These are whitelisted by Teachergaming.</td>
-<td><strong>true</strong></td>
-</tr>
-<tr>
-<td>response_type</td>
-<td>only <code class="prettyprint">code</code> allowed for now.</td>
 <td><strong>true</strong></td>
 </tr>
 <tr>
@@ -67,7 +67,7 @@ Note that the domain here is different than most other API methods in the docume
 <pre class="highlight plaintext"><code>// Example of address where user's browser gets redirected after succesfull login
 https://yourRedirectUri.com?code=&lt;yourcode&gt;&amp;is_teacher=&lt;true|false&gt;
 </code></pre>
-<p>After succesfull login, user will be redirected back to your redirect_uri with code in GET query parameter. Use this code to fetch the token for the user as explained in section <code class="prettyprint">Token</code>.</p>
+<p>After succesfull login, user will be redirected back to your redirect_uri with code in GET query parameter. Use this code to fetch the access token for the user as explained in section <code class="prettyprint">Token</code>.</p>
 
 <table><thead>
 <tr>
@@ -77,7 +77,7 @@ https://yourRedirectUri.com?code=&lt;yourcode&gt;&amp;is_teacher=&lt;true|false&
 </thead><tbody>
 <tr>
 <td>code</td>
-<td>Code that can be exchanged for token.</td>
+<td>Code that can be exchanged for access token.</td>
 </tr>
 <tr>
 <td>is_teacher</td>
@@ -87,7 +87,7 @@ https://yourRedirectUri.com?code=&lt;yourcode&gt;&amp;is_teacher=&lt;true|false&
 
 <h2 id="token">Token</h2>
 
-<p>This endpoint can be used to exchange oauth code with token.</p>
+<p>This endpoint can be used to exchange oauth code with access token.</p>
 
 <h3 id="request-type">Request Type</h3>
 
@@ -107,6 +107,21 @@ https://yourRedirectUri.com?code=&lt;yourcode&gt;&amp;is_teacher=&lt;true|false&
 </tr>
 </thead><tbody>
 <tr>
+<td>grant_type</td>
+<td>Set to <code class="prettyprint">authorization_code</code>. Required by oAuth standard.</td>
+<td><strong>true</strong></td>
+</tr>
+<tr>
+<td>code</td>
+<td>Code you got from us in the <code class="prettyprint">Authorization</code> section.</td>
+<td><strong>true</strong></td>
+</tr>
+<tr>
+<td>redirect_uri</td>
+<td>Same redirect_uri used in <code class="prettyprint">Authorization</code> section.</td>
+<td><strong>true</strong></td>
+</tr>
+<tr>
 <td>client_id</td>
 <td>Your <code class="prettyprint">client_id</code>.</td>
 <td><strong>true</strong></td>
@@ -114,11 +129,6 @@ https://yourRedirectUri.com?code=&lt;yourcode&gt;&amp;is_teacher=&lt;true|false&
 <tr>
 <td>client_secret</td>
 <td>Your <code class="prettyprint">client_secret</code>.</td>
-<td><strong>true</strong></td>
-</tr>
-<tr>
-<td>code</td>
-<td>Code you got from us in the <code class="prettyprint">Authorization</code> section.</td>
 <td><strong>true</strong></td>
 </tr>
 </tbody></table>
@@ -132,7 +142,9 @@ https://yourRedirectUri.com?code=&lt;yourcode&gt;&amp;is_teacher=&lt;true|false&
   </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
   </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Token created succesfully."</span><span class="p">,</span><span class="w">
   </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-07-26T09:47:48.733Z"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;YourToken&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"access_token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;YourToken&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"token_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bearer"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expires_in"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
   </span><span class="s2">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;ServiceName&gt;"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -157,8 +169,16 @@ https://yourRedirectUri.com?code=&lt;yourcode&gt;&amp;is_teacher=&lt;true|false&
 <td>1 for success, 0 for failure.</td>
 </tr>
 <tr>
-<td>token</td>
-<td>User&rsquo;s oAuth token.</td>
+<td>access_token</td>
+<td>User&rsquo;s access token.</td>
+</tr>
+<tr>
+<td>token_type</td>
+<td>Type of token. Currently only bearer.</td>
+</tr>
+<tr>
+<td>expires_in</td>
+<td>Time when token expires. 0 means token does not expire.</td>
 </tr>
 <tr>
 <td>service</td>
@@ -188,8 +208,8 @@ https://yourRedirectUri.com?code=&lt;yourcode&gt;&amp;is_teacher=&lt;true|false&
 </tr>
 </thead><tbody>
 <tr>
-<td>token</td>
-<td>User&rsquo;s token</td>
+<td>access_token</td>
+<td>User&rsquo;s access token</td>
 <td><strong>true</strong></td>
 </tr>
 </tbody></table>
@@ -236,8 +256,8 @@ https://yourRedirectUri.com?code=&lt;yourcode&gt;&amp;is_teacher=&lt;true|false&
       </span><span class="s2">"classid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classid_unique&gt;"</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="s2">"subscription"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"subscription_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"subscription_expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+      </span><span class="s2">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -246,7 +266,9 @@ https://yourRedirectUri.com?code=&lt;yourcode&gt;&amp;is_teacher=&lt;true|false&
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Token not found."</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Access token not found."</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invalid_request"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"error_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Access token not found."</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <aside class="notice">
@@ -297,6 +319,140 @@ Some values in this response are only available for teachers and some for studen
 </tr>
 </tbody></table>
 
+<h2 id="classes">Classes</h2>
+
+<p>This endpoint returns the classes and students assosicated with the authorized teacher. Requires valid token. This method is useful for example for creating accounts for the students in your game.</p>
+
+<h3 id="request-type">Request Type</h3>
+
+<p>GET</p>
+
+<h3 id="url">Url</h3>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/oauth/classes</code></p>
+
+<h3 id="parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>access_token</td>
+<td>User&rsquo;s access token.</td>
+<td><strong>true</strong></td>
+</tr>
+</tbody></table>
+
+<h3 id="response">Response</h3>
+
+<blockquote>
+<p><span style="color: green">Example Classes Success Output</span></p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Teachers classes information fetched succesfully."</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-08-28T14:43:51.572Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"debug"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"container"</span><span class="p">:</span><span class="w"> </span><span class="s2">"undefined"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"host"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tietokone-PC"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"classes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"classid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classid&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"classid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;uniqueclassid&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"class_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classname&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"students"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"studentid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;studentid&gt;"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"studentid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;unique_studentid&gt;"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p><span style="color: red">Example Failed Output</span></p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Access token cannot be empty."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invalid_request"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"error_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Access token cannot be empty."</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>success</td>
+<td>1 for success, 0 for failure.</td>
+</tr>
+<tr>
+<td>message</td>
+<td>Information about the request (f.e. error message)</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>Debug information</td>
+</tr>
+<tr>
+<td>classes</td>
+<td>Teacher&rsquo;s classes (array of class json elements described below)</td>
+</tr>
+</tbody></table>
+
+<h4 id="class-element">Class element</h4>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>classid</td>
+<td>Class id of the class. Student inputs this when logging in.</td>
+</tr>
+<tr>
+<td>classid_unique</td>
+<td>Unique id for the class. Can be used f.e. for databases. Does not change.</td>
+</tr>
+<tr>
+<td>class_name</td>
+<td>Name of the class</td>
+</tr>
+<tr>
+<td>students</td>
+<td>Students belonging to the class (array of class json elements described below)</td>
+</tr>
+</tbody></table>
+
+<h4 id="student-element">Student element</h4>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>studentid</td>
+<td>Student id. Student inputs this and the class id when logging in.</td>
+</tr>
+<tr>
+<td>studentid_unique</td>
+<td>Unique id for the student. Can be used f.e. for databases. Does not change.</td>
+</tr>
+</tbody></table>
+
 <h2 id="revoke-token">Revoke Token</h2>
 
 <p>This endpoint can be used to revoke a token.</p>
@@ -319,8 +475,8 @@ Some values in this response are only available for teachers and some for studen
 </tr>
 </thead><tbody>
 <tr>
-<td>token</td>
-<td>User&rsquo;s oAuth token.</td>
+<td>access_token</td>
+<td>User&rsquo;s access token.</td>
 <td><strong>true</strong></td>
 </tr>
 </tbody></table>
@@ -341,7 +497,9 @@ Some values in this response are only available for teachers and some for studen
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Token not found."</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Access token not found."</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invalid_request"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"error_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Access token not found."</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <table><thead>
