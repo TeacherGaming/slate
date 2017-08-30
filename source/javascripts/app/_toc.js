@@ -43,7 +43,9 @@
 
         lastHashGeneratorLevel = level;
 
-        return element.prop('id').concat(headingNumber);
+        element.prop('id', element.prop('id').concat(headingNumber));
+
+        return element.prop('id');
       }
     }).data('toc-tocify');
 
