@@ -89,6 +89,8 @@ Note that when resuming the game and switching profiles, you should log the curr
 
 ## Sending events
 
+### Events
+
 Events are used to send specific information about a student's actions in the game. Events and their parameters are defined in TeacherGaming Desk and the API for sending them is generated to the SDK. The events are designed in collaboration with the game developer and the event definitions are put into the TeacherGaming Desk system by TeacherGaming staff.
 
 Events can have three types of parameters: strings, integers or booleans. Each event defined in TeacherGaming Desk will have its own class under TGASDKSomeGame.Event the functions of which you can use to send the event. In this section a general overview with pseudocode is given. See the platform specific SDK documentation for more detailed information on how to send the events.. You don’t need to check if the user is logged in to TGA before sending events. The SDK will automatically check inside the function calls for this.
