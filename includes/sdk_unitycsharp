@@ -35,7 +35,7 @@
 
 <h2 id="student-login">Student login</h2>
 
-<p>Logging in can be done through the TeacherGaming app (Android only at the moment) or in game. If users authenticate in game you will need to add a menu where user can type in a classid and a studentid. Authentication must be done before data can be sent.</p>
+<p>Logging in can be done through the TeacherGaming app or in game. If users authenticate in game you will need to add a menu where user can type in a classid and a studentid. Authentication must be done before data can be sent.</p>
 
 <h3 id="automatically-logging-in-with-teachergaming-app">Automatically logging in with TeacherGaming App</h3>
 <pre class="highlight csharp tab-csharp"><code><span class="c1">// Automatically logging in with TeacherGaming App</span>

@@ -254,7 +254,7 @@
 <li>Provide oAuth single sign on support for using the TeacherGaming Desk login in other web based applications</li>
 </ul></li>
 </ul></li>
-<li><p>TeacherGaming App ( <a href="https://play.google.com/store/apps/details?id=com.teachergaming.com">Android</a>, <a href="https://itunes.apple.com/us/app/teachergaming/id1221257680">iOS</a> )</p>
+<li>TeacherGaming App (<a href="https://app.teachergaming.com/">https://app.teachergaming.com/</a>) that is installed on student devices.
 
 <ul>
 <li>Download games</li>
@@ -265,7 +265,7 @@
 </ul></li>
 <li>The TeacherGaming android app can be viewed as a “Launcher” that is used to log into TeacherGaming Analytics platform and launch games that have been integrated into it. Logging in running the games with the TG app removes the need to log into every game separately.</li>
 </ul></li>
-<li><p>Games with TeacherGaming Desk integration</p>
+<li>Games with TeacherGaming Desk integration
 
 <ul>
 <li>Send analytics to TeacherGaming Desk</li>
@@ -483,7 +483,7 @@ To send the event, call TGASDK.Event.&lt;EventName&gt;.Send()</p>
 
 <h2 id="student-login">Student login</h2>
 
-<p>Logging in can be done through the TeacherGaming app (Android only at the moment) or in game. If users authenticate in game you will need to add a menu where user can type in a classid and a studentid. Authentication must be done before data can be sent.</p>
+<p>Logging in can be done through the TeacherGaming app or in game. If users authenticate in game you will need to add a menu where user can type in a classid and a studentid. Authentication must be done before data can be sent.</p>
 
 <h3 id="automatically-logging-in-with-teachergaming-app">Automatically logging in with TeacherGaming App</h3>
 <pre class="highlight csharp tab-csharp"><code><span class="c1">// Automatically logging in with TeacherGaming App</span>
@@ -1622,6 +1622,102 @@ com.teachergaming.switchandglitch://?classid=5mm&amp;userid=marko&amp;command=lo
 <code class="prettyprint">&lt;your app bundle identifier&gt;://?classid=&lt;class id&gt;&amp;studentid=&lt;student id&gt;&amp;command=&lt;login/logout&gt;</code></p>
 
 <p>For how to handle URL schemes on iOS see the relevant documentation for your programming language/engine/platform.</p>
+
+<h2 id="check-class">Check class</h2>
+
+<p>Can be used to check if a class with a given class id exists in the system.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<h4 id="url">URL</h4>
+
+<p>https://analyticsdata.teachergaming.com/api/check_class</p>
+
+<h4 id="parameters">Parameters</h4>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>apikey</td>
+<td>Api key of your game</td>
+</tr>
+<tr>
+<td>classid</td>
+<td>TeacherGaming Desk class id</td>
+</tr>
+</tbody></table>
+
+<h4 id="response">Response</h4>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Class check successfull, class found with this id."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-06-13T07:10:16.249Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"debug"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"sent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-03-15T12:05:35.722Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"container"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zo5jajsD99beDQyt7-pv0n"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"class"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"classid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classid&gt;"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"class_exists"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"classid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueClassID&gt;"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>success</td>
+<td>1 for success, 0 for fail.</td>
+</tr>
+<tr>
+<td>message</td>
+<td>Detailed information about the result</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>Debug information</td>
+</tr>
+<tr>
+<td>responseCreatedAt</td>
+<td>Datetime when reponse was created</td>
+</tr>
+<tr>
+<td>class</td>
+<td>Described in the following table</td>
+</tr>
+</tbody></table>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>classid</td>
+<td>The class id (same as the one given as parameter)</td>
+</tr>
+<tr>
+<td>class_exists</td>
+<td>True if class exists, false if not</td>
+</tr>
+<tr>
+<td>classid_unique</td>
+<td>Unique id of the class</td>
+</tr>
+</tbody></table>
+
+<h4 id="example-usage">Example Usage</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/check_class?classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
 
 <h2 id="playing-game-keep-alive">Playing Game (keep alive)</h2>
 
