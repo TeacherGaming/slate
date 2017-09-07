@@ -239,6 +239,53 @@ On iOS the app is launched using the URI scheme
 
 For how to handle URL schemes on iOS see the relevant documentation for your programming language/engine/platform.
 
+## Check class
+Can be used to check if a class with a given class id exists in the system.
+
+### HTTP Request
+#### URL
+https://analyticsdata.teachergaming.com/api/check_class
+
+#### Parameters
+Key | Value
+--- | -----
+apikey | Api key of your game
+classid | TeacherGaming Desk class id
+
+
+#### Response
+```json
+{
+    "success": 1,
+    "message": "Class check successfull, class found with this id.",
+    "responseCreatedAt": "2017-06-13T07:10:16.249Z",
+    "debug": {
+        "sent": "2017-03-15T12:05:35.722Z",
+        "container": "zo5jajsD99beDQyt7-pv0n"
+    },
+    "class": {
+        "classid": "<classid>",
+        "class_exists" : true,
+        "classid_unique": "<HashedUniqueClassID>"
+    },
+}
+```
+Key | Value
+--- | -----
+success | 1 for success, 0 for fail.
+message | Detailed information about the result
+debug | Debug information
+responseCreatedAt | Datetime when reponse was created 
+class | Described in the following table
+
+Key | Value
+--- | -----
+classid | The class id (same as the one given as parameter)
+class_exists | True if class exists, false if not
+classid_unique | Unique id of the class
+
+#### Example Usage
+`https://analyticsdata.teachergaming.com/api/check_class?classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
 
 ## Playing Game (keep alive)
 Inform TeacherGaming Desk that the user is currently logged in and playing. Send once every minute. If TeacherGaming Desk does not receive this request for 3 minutes it will deduce that the student has quit the game and log him out.

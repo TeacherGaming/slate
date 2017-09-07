@@ -19,12 +19,11 @@ From a technical point of view TeacherGaming Desk is made of three things.
 		* Generate SDKs for games
 		* Create lessons for games
 		* Provide oAuth single sign on support for using the TeacherGaming Desk login in other web based applications
-2. TeacherGaming App ( [Android](https://play.google.com/store/apps/details?id=com.teachergaming.com), [iOS](https://itunes.apple.com/us/app/teachergaming/id1221257680) )
+2. TeacherGaming App ([https://app.teachergaming.com/](https://app.teachergaming.com/)) that is installed on student devices.
 	* Download games
 	* Launch games
 		* with automatic TeacherGaming Desk student login
 	* The TeacherGaming android app can be viewed as a “Launcher” that is used to log into TeacherGaming Analytics platform and launch games that have been integrated into it. Logging in running the games with the TG app removes the need to log into every game separately.
-
 3. Games with TeacherGaming Desk integration
 	* Send analytics to TeacherGaming Desk
 	* Send screenshots and other creations to Creatubbles

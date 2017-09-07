@@ -22,7 +22,7 @@ Our current SDK requires Unity 4.0.0f7 or later. If you need an SDK for an earli
 Your game specific SDK file is called TGASDK<yourgamenamehere>.cs. Class inside that file is called TGASDK<yourgamenamehere>. To improve readability, we have not added <yourgamenamehere> for each method call in this document, we are mentioning TGASDK and you should add your game name after each TGASDK call to make it correct.
 
 ## Student login
-Logging in can be done through the TeacherGaming app (Android only at the moment) or in game. If users authenticate in game you will need to add a menu where user can type in a classid and a studentid. Authentication must be done before data can be sent.
+Logging in can be done through the TeacherGaming app or in game. If users authenticate in game you will need to add a menu where user can type in a classid and a studentid. Authentication must be done before data can be sent.
 
 ### Automatically logging in with TeacherGaming App
 ```csharp
