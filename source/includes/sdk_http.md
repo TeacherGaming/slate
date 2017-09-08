@@ -7,7 +7,7 @@ The document is divided into use cases. First we describe and give examples on h
 ## In-game Flow
 
 1. User login
-  * Successful login needs to be done before any data can be sent to TeacherGaming Desk (except anonymous event data)
+  * Successful login needs to be done before any data can be sent to TeacherGaming Desk
 2. Start calling playing game once every 60 seconds
   * After login is successful. This will inform the TeacherGaming Desk system that the user is currently playing the game and the user can be tracked. Also the TeacherGaming Desk Teacher Dashboard shows that the user is currently playing the game.
 3. Update player state as it changes in game
@@ -401,14 +401,12 @@ class | classid  of the logged in student and SHA256 hash of this id
 `https://analyticsdata.teachergaming.com/api/update_state_detailed?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy&state=Level 1`
 
 ## Event Data
-Send event data to TeacherGaming Desk. The events and needed data for your game can be seen on the Events page on the TeacherGaming Desk website. Event data can also be sent anonymously without classid or userid.
+Send event data to TeacherGaming Desk. The events and needed data for your game can be seen on the Events page on the TeacherGaming Desk website.
 
 ### HTTP Request
 
 #### URL
 `https://analyticsdata.teachergaming.com/api/track`
-or anonymous
-`https://analyticsanon.teachergaming.com/api/track`
 
 #### Parameters
 
