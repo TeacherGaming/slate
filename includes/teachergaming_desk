@@ -4,8 +4,36 @@
 
 <p>From a technical point of view TeacherGaming Desk is made of three things.</p>
 
+<p><img src="https://lh3.googleusercontent.com/k-mq_EkwgTnbG4lFdZVd6R5B0yznujjWrO3jy-kQVAmoV-vWK6aFtKain9lA-_6KAWLhTUgRc8umatc=w1920-h901-rw"/></p>
+
 <ol>
-<li>A web based platform ( <a href="https://desk.teachergaming.com">https://desk.teachergaming.com</a> ) for teachers, administrators and game developers called Teachergaming Desk that implements the following functionalities for its users.
+<li>TeacherGaming App (<a href="https://app.teachergaming.com/">https://app.teachergaming.com/</a>) that is installed on student devices. TeacherGaming App is used to
+
+<ul>
+<li>Download games</li>
+<li>Launch games
+
+<ul>
+<li>with automatic TeacherGaming Desk student login
+
+<ul>
+<li>User logs into TeacherGaming App. Login is passed on to the game when lauched.</li>
+</ul></li>
+</ul></li>
+<li>Notify students when the Teacher starts a lesson</li>
+</ul></li>
+<li>Games with TeacherGaming Desk integration (TGA SDK)
+
+<ul>
+<li>Log in using TeacherGaming Desk student id and class id
+
+<ul>
+<li>Can be used for license check (DRM)</li>
+</ul></li>
+<li>Send analytics to TeacherGaming Desk</li>
+<li>Send screenshots and other creations to Creatubbles</li>
+</ul></li>
+<li>A web based platform (called TeacherGaming Desk) ( <a href="https://desk.teachergaming.com">https://desk.teachergaming.com</a> ) for teachers, administrators, game developers and TeacherGaming that implements the following functionalities for its users.
 
 <ul>
 <li>Teachers
@@ -13,8 +41,8 @@
 <ul>
 <li>Lesson plans for using games in education</li>
 <li>Analytics information about student skill progress and real-time information about what students are doing in a game</li>
-<li>Managing students and classes</li>
 <li>Viewing screenshots and other creations students send to Creatubbles</li>
+<li>Managing students and classes</li>
 </ul></li>
 <li>Administrators
 
@@ -22,31 +50,19 @@
 <li>Manage subscriptions</li>
 <li>Manage teachers</li>
 </ul></li>
-<li>Developers
+<li>Game developers
+
+<ul>
+<li>Provide oAuth single sign on support for using the TeacherGaming Desk login in other web based applications</li>
+<li>HTTP API for sending analytics and otherwise integrating to TeacherGaming desk (when not using a ready-made SDK)</li>
+</ul></li>
+<li>TeacherGaming
 
 <ul>
 <li>Manage games and their information</li>
 <li>Define the analytics for a game by managing skills, events and activities</li>
 <li>Generate SDKs for games</li>
-<li>Create lessons for games</li>
-<li>Provide oAuth single sign on support for using the TeacherGaming Desk login in other web based applications</li>
+<li>Create lessons for gamesä</li>
 </ul></li>
-</ul></li>
-<li>TeacherGaming App (<a href="https://app.teachergaming.com/">https://app.teachergaming.com/</a>) that is installed on student devices.
-
-<ul>
-<li>Download games</li>
-<li>Launch games
-
-<ul>
-<li>with automatic TeacherGaming Desk student login</li>
-</ul></li>
-<li>The TeacherGaming android app can be viewed as a “Launcher” that is used to log into TeacherGaming Analytics platform and launch games that have been integrated into it. Logging in running the games with the TG app removes the need to log into every game separately.</li>
-</ul></li>
-<li>Games with TeacherGaming Desk integration
-
-<ul>
-<li>Send analytics to TeacherGaming Desk</li>
-<li>Send screenshots and other creations to Creatubbles</li>
 </ul></li>
 </ol>

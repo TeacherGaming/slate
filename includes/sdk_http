@@ -10,7 +10,7 @@
 <li>User login
 
 <ul>
-<li>Successful login needs to be done before any data can be sent to TeacherGaming Desk (except anonymous event data)</li>
+<li>Successful login needs to be done before any data can be sent to TeacherGaming Desk</li>
 </ul></li>
 <li>Start calling playing game once every 60 seconds
 
@@ -631,15 +631,13 @@ For example: State = Playing Game, Detailed State = Level 1</p>
 
 <h2 id="event-data">Event Data</h2>
 
-<p>Send event data to TeacherGaming Desk. The events and needed data for your game can be seen on the Events page on the TeacherGaming Desk website. Event data can also be sent anonymously without classid or userid.</p>
+<p>Send event data to TeacherGaming Desk. The events and needed data for your game can be seen on the Events page on the TeacherGaming Desk website.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
 <h4 id="url">URL</h4>
 
-<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/track</code>
-or anonymous
-<code class="prettyprint">https://analyticsanon.teachergaming.com/api/track</code></p>
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/track</code></p>
 
 <h4 id="parameters">Parameters</h4>
 
