@@ -74,6 +74,7 @@
     $('.content').imagesLoaded( function() {
       global.toc.calculateHeights();
     });
+    $('body').scrollTo($(location).attr('hash')); 
   });
 })(window);
 
