@@ -31,9 +31,19 @@ Parameter | Description | Required
 --------- | ------- | -----------
 response_type | only `code` allowed for now. | **true**
 client_id | Your `client_id`. | **true**
-redirect_uri | URL where client gets redirected after succesfull login. These are whitelisted by Teachergaming. | **true**
+redirect_uri | URL where client gets redirected after succesfull login. These are whitelisted by Teachergaming. Special characters need to be url encoded. See table below | **true**
 student_login | Set to `true` to login as a student. No need to include this parameter if doing teacher login, or you can pass false. | false
 switch_teacher_student_login | Set to `true` to allow switching between teacher and student logins. | false
+
+#### redirect_uri encoding
+
+Character | Endoced
+--------- | -------
+# | %23
+? | &3F
+= | %3D
+@ | %40
+' ' (space) | %20
 
 ### Response
 
@@ -67,9 +77,19 @@ Parameter | Description | Required
 --------- | ------- | -----------
 grant_type | Set to `authorization_code`. Required by oAuth standard. | **true**
 code | Code you got from us in the `Authorization` section. | **true**
-redirect_uri | Exact same redirect_uri used in `Authorization` section. Do not include query parameters or any extra information to this. | **true**
+redirect_uri | Exact same redirect_uri used in `Authorization` section. Do not include query parameters or any extra information to this. Special characters need to be url encoded. See table below. | **true**
 client_id | Your `client_id`. | **true**
 client_secret | Your `client_secret`. | **true**
+
+#### redirect_uri encoding
+
+Character | Endoced
+--------- | -------
+# | %23
+? | &3F
+= | %3D
+@ | %40
+' ' (space) | %20
 
 ### Response
 
