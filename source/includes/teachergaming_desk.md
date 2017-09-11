@@ -4,7 +4,7 @@ The TeacherGaming Desk is a classroom toolbox designed to make game-based learni
 
 From a technical point of view TeacherGaming Desk is made of three things.
 
-<img src="https://lh3.googleusercontent.com/k-mq_EkwgTnbG4lFdZVd6R5B0yznujjWrO3jy-kQVAmoV-vWK6aFtKain9lA-_6KAWLhTUgRc8umatc=w1920-h901-rw"/>
+<img src="images/general/teachergamingdeskparts.webp" />
 
 1. TeacherGaming App ([https://app.teachergaming.com/](https://app.teachergaming.com/)) that is installed on student devices. TeacherGaming App is used to
 	* Download games
