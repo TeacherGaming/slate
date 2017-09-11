@@ -2243,7 +2243,7 @@ Note that the domain here is different than most other API methods in the docume
 </tr>
 <tr>
 <td>redirect_uri</td>
-<td>URL where client gets redirected after succesfull login. These are whitelisted by Teachergaming.</td>
+<td>URL where client gets redirected after succesfull login. These are whitelisted by Teachergaming. Special characters need to be url encoded. See table below</td>
 <td><strong>true</strong></td>
 </tr>
 <tr>
@@ -2255,6 +2255,36 @@ Note that the domain here is different than most other API methods in the docume
 <td>switch_teacher_student_login</td>
 <td>Set to <code class="prettyprint">true</code> to allow switching between teacher and student logins.</td>
 <td>false</td>
+</tr>
+</tbody></table>
+
+<h4 id="redirect_uri-encoding">redirect_uri encoding</h4>
+
+<table><thead>
+<tr>
+<th>Character</th>
+<th>Endoced</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>#</td>
+<td>%23</td>
+</tr>
+<tr>
+<td>?</td>
+<td>&amp;3F</td>
+</tr>
+<tr>
+<td>=</td>
+<td>%3D</td>
+</tr>
+<tr>
+<td>@</td>
+<td>%40</td>
+</tr>
+<tr>
+<td>&lsquo; &rsquo; (space)</td>
+<td>%20</td>
 </tr>
 </tbody></table>
 
@@ -2313,7 +2343,7 @@ https://yourRedirectUri.com?code=&lt;yourcode&gt;&amp;is_teacher=&lt;true|false&
 </tr>
 <tr>
 <td>redirect_uri</td>
-<td>Exact same redirect_uri used in <code class="prettyprint">Authorization</code> section. Do not include query parameters or any extra information to this.</td>
+<td>Exact same redirect_uri used in <code class="prettyprint">Authorization</code> section. Do not include query parameters or any extra information to this. Special characters need to be url encoded. See table below.</td>
 <td><strong>true</strong></td>
 </tr>
 <tr>
@@ -2325,6 +2355,36 @@ https://yourRedirectUri.com?code=&lt;yourcode&gt;&amp;is_teacher=&lt;true|false&
 <td>client_secret</td>
 <td>Your <code class="prettyprint">client_secret</code>.</td>
 <td><strong>true</strong></td>
+</tr>
+</tbody></table>
+
+<h4 id="redirect_uri-encoding">redirect_uri encoding</h4>
+
+<table><thead>
+<tr>
+<th>Character</th>
+<th>Endoced</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>#</td>
+<td>%23</td>
+</tr>
+<tr>
+<td>?</td>
+<td>&amp;3F</td>
+</tr>
+<tr>
+<td>=</td>
+<td>%3D</td>
+</tr>
+<tr>
+<td>@</td>
+<td>%40</td>
+</tr>
+<tr>
+<td>&lsquo; &rsquo; (space)</td>
+<td>%20</td>
 </tr>
 </tbody></table>
 
