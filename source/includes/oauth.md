@@ -39,8 +39,9 @@ switch_teacher_student_login | Set to `true` to allow switching between teacher 
 
 Character | Endoced
 --------- | -------
+& | %26
 # | %23
-? | &3F
+? | %3F
 = | %3D
 @ | %40
 ' ' (space) | %20
@@ -85,8 +86,9 @@ client_secret | Your `client_secret`. | **true**
 
 Character | Endoced
 --------- | -------
+& | %26
 # | %23
-? | &3F
+? | %3F
 = | %3D
 @ | %40
 ' ' (space) | %20
