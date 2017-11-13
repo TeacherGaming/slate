@@ -513,3 +513,48 @@ class | classid of the logged out student and SHA256 hash of this id
 
 #### Example Usage
 `https://analyticsdata.teachergaming.com/api/logout_student?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
+
+## Creatubbles
+*Optional*
+If your game has Creatubbles integration, this method can be used to get student's creatubbles token and gallery where to submit game screenshots into.
+
+### HTTP Request
+
+#### URL
+`https://analyticsdata.teachergaming.com/api/get_student_creatubbles_token`
+
+#### Parameters
+Key | Value
+--- | -----
+classid | TeacherGaming Desk class id
+studentid | TeacherGaming Desk id of the student in the class
+apikey | Api key of your game
+
+#### Response
+```json
+{
+  "creatubblesAccountCreated": false,
+  "creatubblesTokenFetched": true,
+  "creatubbles_username": "<creatubblesUsername>",
+  "creatubbles_id": "<creatubblesUserId>",
+  "creatubbles_token": "<creatubblesToken>",
+  "creatubbles_class_gallery_id": "<creatubblesClassGalleryId>",
+  "creatubblesClassGalleryCreated": false,
+  "creatubbles_gallery_id": "<creatubblesGalleryId>",
+  "creatubblesGalleryCreated": false
+}
+```
+Key | Value
+--- | -----
+creatubblesAccountCreated | True if new account was created for the user (did not have existing CTB account)
+creatubblesTokenFetched | True if CTB token was succesfully fetched for the user
+creatubbles_username | Student CTB username
+creatubbles_id | Student CTB id
+creatubbles_token | Student CTB token
+creatubbles_class_gallery_id | Class gallery where you should submit student creations into
+creatubblesClassGalleryCreated | True if gallery for the class was just created (did not exist before)
+creatubbles_gallery_id | *Deprecated* Gallery where to submit creations into
+creatubblesGalleryCreated | *Deprecated* If gallery was just created for class
+
+#### Example Usage
+`https://analyticsdata.teachergaming.com/api/get_student_creatubbles_token?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
