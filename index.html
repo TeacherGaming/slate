@@ -2193,6 +2193,100 @@ For example: State = Playing Game, Detailed State = Level 1</p>
 
 <p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/logout_student?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
 
+<h2 id="creatubbles">Creatubbles</h2>
+
+<p><em>Optional</em>
+If your game has Creatubbles integration, this method can be used to get student&rsquo;s creatubbles token and gallery where to submit game screenshots into.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<h4 id="url">URL</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/get_student_creatubbles_token</code></p>
+
+<h4 id="parameters">Parameters</h4>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>classid</td>
+<td>TeacherGaming Desk class id</td>
+</tr>
+<tr>
+<td>studentid</td>
+<td>TeacherGaming Desk id of the student in the class</td>
+</tr>
+<tr>
+<td>apikey</td>
+<td>Api key of your game</td>
+</tr>
+</tbody></table>
+
+<h4 id="response">Response</h4>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"creatubblesAccountCreated"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"creatubblesTokenFetched"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"creatubbles_username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;creatubblesUsername&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"creatubbles_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;creatubblesUserId&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"creatubbles_token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;creatubblesToken&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"creatubbles_class_gallery_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;creatubblesClassGalleryId&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"creatubblesClassGalleryCreated"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"creatubbles_gallery_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;creatubblesGalleryId&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"creatubblesGalleryCreated"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>creatubblesAccountCreated</td>
+<td>True if new account was created for the user (did not have existing CTB account)</td>
+</tr>
+<tr>
+<td>creatubblesTokenFetched</td>
+<td>True if CTB token was succesfully fetched for the user</td>
+</tr>
+<tr>
+<td>creatubbles_username</td>
+<td>Student CTB username</td>
+</tr>
+<tr>
+<td>creatubbles_id</td>
+<td>Student CTB id</td>
+</tr>
+<tr>
+<td>creatubbles_token</td>
+<td>Student CTB token</td>
+</tr>
+<tr>
+<td>creatubbles_class_gallery_id</td>
+<td>Class gallery where you should submit student creations into</td>
+</tr>
+<tr>
+<td>creatubblesClassGalleryCreated</td>
+<td>True if gallery for the class was just created (did not exist before)</td>
+</tr>
+<tr>
+<td>creatubbles_gallery_id</td>
+<td><em>Deprecated</em> Gallery where to submit creations into</td>
+</tr>
+<tr>
+<td>creatubblesGalleryCreated</td>
+<td><em>Deprecated</em> If gallery was just created for class</td>
+</tr>
+</tbody></table>
+
+<h4 id="example-usage">Example Usage</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/get_student_creatubbles_token?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
+
           <h1 id="oauth">oAuth</h1>
 
 <p>Desk works as oAuth 2 identity provider server. To gain access to these features, please contact us to get your <code class="prettyprint">client_id</code> and <code class="prettyprint">client_secret</code> generated for you.</p>
