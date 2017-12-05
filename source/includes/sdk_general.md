@@ -97,7 +97,7 @@ For logging in to TeacherGaming Desk in-game the student needs to be able to inp
 </table>
 
 ## Save games, user profiles and TeacherGaming student login
-<b>If your game has different user profiles for different players, you should tie each TeacherGaming login (class id & student id combination) to a different user profile. Even if you don’t have user profiles you should to tie player progress to TeacherGaming login, for example so that different users see different savegames.</b> If you need an exception to this rule or would like to have help in implementing it please contact TeacherGaming.
+<b>Player progress should be tied to TeacherGaming login (class id & student id combination), so that different users see different savegames. If your game has different user profiles for different players, this is especially important.</b> If you need an exception to this rule or would like to have help in implementing it please contact TeacherGaming.
 
 Note that the user can put your game in the background, go back to TeacherGaming app, and log out and/or log in with different student & class ids. For desktop games this is not a problem since launching the game again from TeacherGaming app after that launches a new instance of it, but for mobile games you should check if the login has changed when your game comes back to foreground and handle it (f.e. change profile, go back to main menu) in the way best suited for your game.
 
