@@ -13,7 +13,7 @@
 <ul>
 <li>TeacherGaming will send you a .unitypackage with the latest SDK and assets.</li>
 <li>Import the package by selecting “Assets -&gt; Import package -&gt; Custom package” in Unity.</li>
-<li>Attach the SDK script to a GameObject that is not deleted during the game. The script is located in “TGAGameSpecific/” folder and is named TGASDK<yourgamenamehere>.cs</li>
+<li>Attach the SDK script to a GameObject that is not deleted during the game. The script is located in “TGAGameSpecific/” folder and is named TGASDK&lt;yourgamenamehere&gt;.cs</li>
 <li>Updating the SDK and assets can usually be done by simply importing new package and updated files will automatically be detected.
 
 <ul>
@@ -31,7 +31,7 @@
 
 <h3 id="notes">Notes</h3>
 
-<p>Your game specific SDK file is called TGASDK<yourgamenamehere>.cs. Class inside that file is called TGASDK<yourgamenamehere>. To improve readability, we have not added <yourgamenamehere> for each method call in this document, we are mentioning TGASDK and you should add your game name after each TGASDK call to make it correct.</p>
+<p>Your game specific SDK file is called TGASDK&lt;yourgamenamehere&gt;.cs. Class inside that file is called TGASDK&lt;yourgamenamehere&gt;. To improve readability, we have not added &lt;yourgamenamehere&gt; for each method call in this document, we are mentioning TGASDK and you should add your game name after each TGASDK call to make it correct.</p>
 
 <h2 id="student-login">Student login</h2>
 
@@ -159,9 +159,9 @@ A login dialog will be created that looks like this (without the blue background
 <span class="n">TGASDKSwitchGlitch</span><span class="p">.</span><span class="n">Event</span><span class="p">.</span><span class="n">SPLevelComplete</span><span class="p">.</span><span class="nf">Send</span><span class="p">();</span>
 </code></pre>
 <p>This is useful for events that have a clear start and end times and as such a duration. Our SDK can automatically count time from beginning to end and append duration to sent data. You can also modify any additional data inside the event before you send it.
-To start an event, call TGASDK.Event.<EventName>.Start()
-You can change additional data inside the event before you send it. All data for the started event can be changed using TGASDK.Event.<EventName>.Current.<ParameterName>
-To send the event, call TGASDK.Event.<EventName>.Send() without parameters.</p>
+To start an event, call TGASDK.Event.&lt;EventName&gt;.Start()
+You can change additional data inside the event before you send it. All data for the started event can be changed using TGASDK.Event.&lt;EventName&gt;.Current.&lt;ParameterName&gt;
+To send the event, call TGASDK.Event.&lt;EventName&gt;.Send() without parameters.</p>
 
 <h3 id="sending-events-without-duration">Sending events without duration</h3>
 <pre class="highlight csharp tab-csharp"><code><span class="c1">// Sending an event without duration</span>
@@ -169,7 +169,7 @@ To send the event, call TGASDK.Event.<EventName>.Send() without parameters.</p>
 <span class="c1">// This example is from KerbalEdu</span>
 <span class="n">TGASDKKerbalEdu</span><span class="p">.</span><span class="n">Event</span><span class="p">.</span><span class="n">SituationChange</span><span class="p">.</span><span class="nf">Send</span><span class="p">(</span><span class="n">FlightGlobals</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">.</span><span class="n">mainBody</span><span class="p">.</span><span class="n">bodyName</span><span class="p">,</span> <span class="n">FlightGlobals</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">.</span><span class="n">situation</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">FlightGlobals</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">.</span><span class="n">totalMass</span><span class="p">);</span>
 </code></pre>
-<p>You can call TGASDK.Event.<EventName>.Send(&hellip;) with event data as parameters to send an event immediately, without tracking for duration.</p>
+<p>You can call TGASDK.Event.&lt;EventName&gt;.Send(&hellip;) with event data as parameters to send an event immediately, without tracking for duration.</p>
 
 <h2 id="updating-state">Updating state</h2>
 
