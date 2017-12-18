@@ -8,8 +8,8 @@ This document describes the specifics of integrating TGA to your game using the 
 Our current SDK requires Unity 4.0.0f7 or later. If you need an SDK for an earlier version of Unity please contact us.
 ### First steps
 * TeacherGaming will send you a .unitypackage with the latest SDK and assets.
-* Import the package by selecting “Assets -> Import package -> Custom package” in Unity.
-* Attach the SDK script to a GameObject that is not deleted during the game. The script is located in “TGAGameSpecific/” folder and is named TGASDK<yourgamenamehere>.cs
+* Import the package by selecting “Assets -&gt; Import package -&gt; Custom package” in Unity.
+* Attach the SDK script to a GameObject that is not deleted during the game. The script is located in “TGAGameSpecific/” folder and is named TGASDK&lt;yourgamenamehere&gt;.cs
 * Updating the SDK and assets can usually be done by simply importing new package and updated files will automatically be detected.
 	* If you are having problems and would like to try a complete reimport of the SDK, you can delete the following directories & files before importing the package
 		* TGA
@@ -19,7 +19,7 @@ Our current SDK requires Unity 4.0.0f7 or later. If you need an SDK for an earli
 	* In older versions of the SDK you needed to manually attach the CreatubblesManager script to a GameObject. You no longer need to do this and should remove it if you have attached it previously.
 
 ### Notes
-Your game specific SDK file is called TGASDK<yourgamenamehere>.cs. Class inside that file is called TGASDK<yourgamenamehere>. To improve readability, we have not added <yourgamenamehere> for each method call in this document, we are mentioning TGASDK and you should add your game name after each TGASDK call to make it correct.
+Your game specific SDK file is called TGASDK&lt;yourgamenamehere&gt;.cs. Class inside that file is called TGASDK&lt;yourgamenamehere&gt;. To improve readability, we have not added &lt;yourgamenamehere&gt; for each method call in this document, we are mentioning TGASDK and you should add your game name after each TGASDK call to make it correct.
 
 ## Student login
 Logging in can be done through the TeacherGaming app or in game. If users authenticate in game you will need to add a menu where user can type in a classid and a studentid. Authentication must be done before data can be sent.
@@ -153,9 +153,9 @@ TGASDKSwitchGlitch.Event.SPLevelComplete.Current.MetagelCollected = player.playe
 TGASDKSwitchGlitch.Event.SPLevelComplete.Send();
 ```
 This is useful for events that have a clear start and end times and as such a duration. Our SDK can automatically count time from beginning to end and append duration to sent data. You can also modify any additional data inside the event before you send it.
-To start an event, call TGASDK.Event.<EventName>.Start()
-You can change additional data inside the event before you send it. All data for the started event can be changed using TGASDK.Event.<EventName>.Current.<ParameterName>
-To send the event, call TGASDK.Event.<EventName>.Send() without parameters.
+To start an event, call TGASDK.Event.&lt;EventName&gt;.Start()
+You can change additional data inside the event before you send it. All data for the started event can be changed using TGASDK.Event.&lt;EventName&gt;.Current.&lt;ParameterName&gt;
+To send the event, call TGASDK.Event.&lt;EventName&gt;.Send() without parameters.
 
 ### Sending events without duration
 ```csharp
@@ -164,7 +164,7 @@ To send the event, call TGASDK.Event.<EventName>.Send() without parameters.
 // This example is from KerbalEdu
 TGASDKKerbalEdu.Event.SituationChange.Send(FlightGlobals.ActiveVessel.mainBody.bodyName, FlightGlobals.ActiveVessel.situation.ToString(), (int)FlightGlobals.ActiveVessel.totalMass);
 ```
-You can call TGASDK.Event.<EventName>.Send(...) with event data as parameters to send an event immediately, without tracking for duration.
+You can call TGASDK.Event.&lt;EventName&gt;.Send(...) with event data as parameters to send an event immediately, without tracking for duration.
 
 ## Updating state
 
