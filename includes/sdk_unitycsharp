@@ -89,7 +89,7 @@
 
 <p>On Android and iOS you can test the uri scheme login by creating a .html file with links according to the URI scheme and opening it in your device browser and clicking on the links.</p>
 
-<p>On desktop platforms you should test the automatic login by giving the uri as a command line parameter when starting your game. See https://docs.google.com/document/d/1nEJ5EGwO6JxTTmJGixvxEcBb0VhpMN7sEfOjGHY4JkI/edit#heading=h.1u1ow8hobpr for details.</p>
+<p>On desktop platforms you should test the automatic login by giving the uri as a command line parameter when starting your game. See <a href="#automatically-logging-in-from-teachergaming-app2.3.1.">2.3.1. AUTOMATICALLY LOGGING IN FROM TEACHERGAMING APP</a> for details.</p>
 
 <h3 id="built-in-login-menu">Built-in login menu</h3>
 <pre class="highlight csharp tab-csharp"><code><span class="c1">// Built-in login menu</span>
@@ -222,6 +222,69 @@ To send the event, call TGASDK.Event.&lt;EventName&gt;.Send() without parameters
     <td><small>Student is playing multiplayer game, Round number is being passed to detailed state when round changes</small></td>
 </tr>
 </table>
+
+<h2 id="cloud-saves">Cloud saves</h2>
+
+<p>You can save arbitrary binary information from your game to TeacherGaming Desk on a per student basis. This is intended for use in implementing a cloud save functionality so that game progress would be the same for each TeacherGaming Desk student login regardless of which device they login on.</p>
+
+<h3 id="uploading-data">Uploading data</h3>
+<pre class="highlight csharp tab-csharp"><code><span class="kt">byte</span><span class="p">[]</span> <span class="n">saveData</span> <span class="p">=</span> <span class="n">Game</span><span class="p">.</span><span class="nf">GetSaveData</span><span class="p">();</span>
+<span class="kt">string</span> <span class="n">format</span> <span class="p">=</span> <span class="n">Game</span><span class="p">.</span><span class="nf">GetSaveDataFormat</span><span class="p">();</span>
+
+<span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">UploadCloudSave</span><span class="p">(</span><span class="n">format</span><span class="p">,</span> <span class="n">saveData</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">success</span><span class="p">)</span> <span class="p">=&gt;</span> 
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">success</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"Save uploaded to TG Desk successfully."</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"Save upload to TG Desk failed!"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">);</span>
+
+</code></pre>
+<p><code class="prettyprint">public static void TGASDK.TGA.UploadCloudSave(string format, byte[] data, Action&lt;bool&gt; afterUpload = null)</code> is used for uploading the data. Works only when logged in. Starts upload of data for the currently logged in user. A good place for uploading the data is each time the game progress is saved. Note however that you should not upload the data too frequently. A minimum of 3 minutes between uploads is recommended.</p>
+
+<h4 id="parameters">Parameters:</h4>
+
+<p><code class="prettyprint">string format</code>
+Freeform format string. Should not be empty. Can be used for example when game save format changes between versions of the game.</p>
+
+<p><code class="prettyprint">byte[] data</code>
+Game save data serialized to a byte array.</p>
+
+<p><code class="prettyprint">Action&lt;bool&gt; afterUpload = null</code>
+Optional callback function. Called when the upload has completed. Callback parameter is true on successful upload, false otherwise.</p>
+
+<h3 id="getting-data">Getting data</h3>
+<pre class="highlight csharp tab-csharp"><code>
+<span class="k">void</span> <span class="nf">Awake</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="n">OnLoginStatusChanged</span> <span class="p">+=</span> <span class="n">OnLoginStatusChanged</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">void</span> <span class="nf">OnLoginStatusChanged</span><span class="p">(</span><span class="kt">bool</span> <span class="n">loggedIn</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">loggedIn</span> <span class="p">==</span> <span class="k">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Game</span><span class="p">.</span><span class="nf">UpdateGameStateFromSaveData</span><span class="p">(</span><span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">GetCloudSaveFormat</span><span class="p">(),</span> <span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">GetCloudSave</span><span class="p">());</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">Game</span><span class="p">.</span><span class="nf">LoadLocalGameState</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">void</span> <span class="nf">OnDestroy</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="n">OnLoginStatusChanged</span> <span class="p">-=</span> <span class="n">OnLoginStatusChanged</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+<p>Data is downloaded on login and updated on each call to <code class="prettyprint">UploadCloudSave</code>. You can use <code class="prettyprint">public static byte[] TGASDK.TGA.GetCloudSave()</code> to get the data and <code class="prettyprint">public static string TGASDK.TGA.GetCloudSaveFormat()</code> to get the format. Both of these functions should only be called when logged in. A good place to get the data and update game state accordingly is in a <code class="prettyprint">TGASDK.TGA.OnLoginStatusChanged</code> event handler.</p>
 
 <h2 id="creatubbles">Creatubbles</h2>
 

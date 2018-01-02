@@ -97,7 +97,11 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
       </span><span class="s2">"classid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueClassID&gt;"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"allow_student_signup"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="s2">"game_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;game’s name&gt;"</span><span class="w">
+  </span><span class="s2">"game_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;game’s name&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"gameSave"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"format"</span><span class="p">:</span><span class="s2">"Base64SGDict"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"saveData"</span><span class="p">:</span><span class="s2">"AAEAAAD/////AQAAAAAAAAAEAQAAANQBU3lzdGVtLkNvbGxlY3Rpb25zLkdlbmVyaWMuRGljdGlvbmFyeWAyW1tTeXN0ZW0uU3 &lt;and so on&gt; "</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <table><thead>
@@ -149,6 +153,10 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 <tr>
 <td>game_name</td>
 <td>name of the game student logged in</td>
+</tr>
+<tr>
+<td>gameSave</td>
+<td>cloud save data of the logged in student, see <a href="#cloud-save-upload7.7.">7.7. CLOUD SAVE UPLOAD</a></td>
 </tr>
 </tbody></table>
 
@@ -760,6 +768,54 @@ For example: State = Playing Game, Detailed State = Level 1</p>
 
 <p>This is the LevelComplete event in Switch &amp; Glitch
 <code class="prettyprint">https://analyticsdata.teachergaming.com/api/track?apikey=K8SaQRDsSFdFt5zFthTy&amp;studentid=johndoe&amp;classid=democlass&amp;eventname=LevelComplete&amp;GameType=Network&amp;LevelId=Level1&amp;TileCount=20&amp;FailedTileCount=-1&amp;SuccessTileCount=3&amp;CommitCount=1&amp;Score=101&amp;duration=17389</code></p>
+
+<h2 id="cloud-save-upload">Cloud save upload</h2>
+
+<p>You can save arbitrary binary information from your game to TeacherGaming Desk on a per student basis. This is intended for use in implementing a cloud save functionality so that game progress would be the same for each TeacherGaming Desk student login regardless of which device they login on.</p>
+
+<p>Cloud saves are downloaded in the response to the login request, see <a href="#student-login7.2.79">Student Login</a>.</p>
+
+<h3 id="http-request">HTTP REQUEST</h3>
+
+<aside class="notice">
+Note! Despite all other requests in the API being GET requests this one is a POST request!
+</aside>
+
+<h4 id="url">URL</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/upload_cloud_save</code></p>
+
+<h4 id="parameters">Parameters</h4>
+
+<p>As this is a POST request the parameters go into form data (form-data) instead of URL parameters.</p>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>classid</td>
+<td>TeacherGaming Desk class id</td>
+</tr>
+<tr>
+<td>studentid</td>
+<td>TeacherGaming Desk id of the student in the class</td>
+</tr>
+<tr>
+<td>apikey</td>
+<td>Api key of your game</td>
+</tr>
+<tr>
+<td>format</td>
+<td>Freeform format string. Should not be empty. Can be used for example when game save format changes between versions of the game.</td>
+</tr>
+<tr>
+<td>savedata</td>
+<td>Game save data as a string (for example base64 encoded binary data).</td>
+</tr>
+</tbody></table>
 
 <h2 id="student-logout">Student Logout</h2>
 
