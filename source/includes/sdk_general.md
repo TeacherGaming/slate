@@ -101,6 +101,9 @@ For logging in to TeacherGaming Desk in-game the student needs to be able to inp
 
 Note that the user can put your game in the background, go back to TeacherGaming app, and log out and/or log in with different student & class ids. For desktop games this is not a problem since launching the game again from TeacherGaming app after that launches a new instance of it, but for mobile games you should check if the login has changed when your game comes back to foreground and handle it (f.e. change profile, go back to main menu) in the way best suited for your game.
 
+### Cloud saves
+You can save arbitrary binary information from your game to TeacherGaming Desk on a per student basis. This is intended for use in implementing a cloud save functionality so that game progress would be the same for each TeacherGaming Desk student login regardless of which device they login on. See [Unity C# SDK/Cloud saves](#cloud-saves3.5.) and [Manual Integration And HTTP API/Cloud Save Upload](http://localhost:4567/#cloud-save-upload7.7.) for more information.
+
 ## Sending events
 
 ### Events

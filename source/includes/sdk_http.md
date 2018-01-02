@@ -63,7 +63,11 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
       "classid_unique": "<HashedUniqueClassID>",
       "allow_student_signup": true
   },
-  "game_name": "<game’s name>"
+  "game_name": "<game’s name>",
+  "gameSave": {
+    "format":"Base64SGDict",
+    "saveData":"AAEAAAD/////AQAAAAAAAAAEAQAAANQBU3lzdGVtLkNvbGxlY3Rpb25zLkdlbmVyaWMuRGljdGlvbmFyeWAyW1tTeXN0ZW0uU3 <and so on> "
+  }
 }
 ```
 Key | Value
@@ -79,6 +83,7 @@ subscription_expired_message | Message that can be displayed to user if subscrip
 student | studentid of the logged in student, SHA256 hash of this id, boolean of whether account was created and boolean of whether teacher has linked creatubbles
 class | classid  of the logged in student, SHA256 hash of this id and boolean of whether student self signup is allowed
 game_name | name of the game student logged in
+gameSave | cloud save data of the logged in student, see [7.7. CLOUD SAVE UPLOAD](#cloud-save-upload7.7.)
 
 #### Example usage
 `https://analyticsdata.teachergaming.com/api/validate?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
@@ -464,6 +469,31 @@ duration | Duration of the event, sent to method
 #### Example Usage
 This is the LevelComplete event in Switch & Glitch
 `https://analyticsdata.teachergaming.com/api/track?apikey=K8SaQRDsSFdFt5zFthTy&studentid=johndoe&classid=democlass&eventname=LevelComplete&GameType=Network&LevelId=Level1&TileCount=20&FailedTileCount=-1&SuccessTileCount=3&CommitCount=1&Score=101&duration=17389`
+
+## Cloud save upload
+You can save arbitrary binary information from your game to TeacherGaming Desk on a per student basis. This is intended for use in implementing a cloud save functionality so that game progress would be the same for each TeacherGaming Desk student login regardless of which device they login on.
+
+Cloud saves are downloaded in the response to the login request, see [Student Login](#student-login7.2.79).
+
+### HTTP REQUEST
+
+<aside class="notice">
+Note! Despite all other requests in the API being GET requests this one is a POST request!
+</aside>
+
+#### URL
+`https://analyticsdata.teachergaming.com/api/upload_cloud_save`
+
+#### Parameters
+As this is a POST request the parameters go into form data (form-data) instead of URL parameters.
+
+Key | Value
+--- | -----
+classid | TeacherGaming Desk class id
+studentid | TeacherGaming Desk id of the student in the class
+apikey | Api key of your game
+format | Freeform format string. Should not be empty. Can be used for example when game save format changes between versions of the game.
+savedata | Game save data as a string (for example base64 encoded binary data).
 
 ## Student Logout
 You can allow student to log out of TeacherGaming Desk only if your game is not subscription based. Logging out stops all student specific interactions with TeacehrGaming Desk.

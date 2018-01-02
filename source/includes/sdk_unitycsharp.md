@@ -81,7 +81,7 @@ Note for Android! In future versions of TeacherGaming App we are moving to use U
 
 On Android and iOS you can test the uri scheme login by creating a .html file with links according to the URI scheme and opening it in your device browser and clicking on the links.
 
-On desktop platforms you should test the automatic login by giving the uri as a command line parameter when starting your game. See https://docs.google.com/document/d/1nEJ5EGwO6JxTTmJGixvxEcBb0VhpMN7sEfOjGHY4JkI/edit#heading=h.1u1ow8hobpr for details.
+On desktop platforms you should test the automatic login by giving the uri as a command line parameter when starting your game. See [2.3.1. AUTOMATICALLY LOGGING IN FROM TEACHERGAMING APP](#automatically-logging-in-from-teachergaming-app2.3.1.) for details.
 
 ### Built-in login menu
 ```csharp
@@ -213,6 +213,71 @@ TGASDK.TGA.UpdateUserStateDetailedOnly("Round 2");
 	<td><small>Student is playing multiplayer game, Round number is being passed to detailed state when round changes</small></td>
 </tr>
 </table>
+
+## Cloud saves
+You can save arbitrary binary information from your game to TeacherGaming Desk on a per student basis. This is intended for use in implementing a cloud save functionality so that game progress would be the same for each TeacherGaming Desk student login regardless of which device they login on.
+
+### Uploading data
+```csharp
+byte[] saveData = Game.GetSaveData();
+string format = Game.GetSaveDataFormat();
+
+TGASDK.TGA.UploadCloudSave(format, saveData,
+	(success) => 
+	{
+		if (success)
+		{
+			Debug.Log("Save uploaded to TG Desk successfully.");
+		}
+		else
+		{
+			Debug.Log("Save upload to TG Desk failed!");
+		}
+	}
+);
+
+```
+
+`public static void TGASDK.TGA.UploadCloudSave(string format, byte[] data, Action<bool> afterUpload = null)` is used for uploading the data. Works only when logged in. Starts upload of data for the currently logged in user. A good place for uploading the data is each time the game progress is saved. Note however that you should not upload the data too frequently. A minimum of 3 minutes between uploads is recommended.
+
+#### Parameters:
+`string format`
+Freeform format string. Should not be empty. Can be used for example when game save format changes between versions of the game.
+
+`byte[] data`
+Game save data serialized to a byte array.
+
+`Action<bool> afterUpload = null`
+Optional callback function. Called when the upload has completed. Callback parameter is true on successful upload, false otherwise.
+
+### Getting data
+```csharp
+
+void Awake()
+{
+	TGASDK.TGA.OnLoginStatusChanged += OnLoginStatusChanged;
+}
+
+void OnLoginStatusChanged(bool loggedIn)
+{
+	if (loggedIn == true)
+	{
+		Game.UpdateGameStateFromSaveData(TGASDK.TGA.GetCloudSaveFormat(), TGASDK.TGA.GetCloudSave());
+	}
+	else
+	{
+		Game.LoadLocalGameState();
+	}
+}
+
+void OnDestroy()
+{
+	TGASDK.TGA.OnLoginStatusChanged -= OnLoginStatusChanged;
+}
+
+```
+
+Data is downloaded on login and updated on each call to `UploadCloudSave`. You can use `public static byte[] TGASDK.TGA.GetCloudSave()` to get the data and `public static string TGASDK.TGA.GetCloudSaveFormat()` to get the format. Both of these functions should only be called when logged in. A good place to get the data and update game state accordingly is in a `TGASDK.TGA.OnLoginStatusChanged` event handler.
 
 ## Creatubbles
 Creatubbles integration can be used to take a screenshot of the game and send it to TGA and Creatubbles web page. To use this feature the user needs to be logged in to TGA and the CreatubblesManager script needs to be attached to a gameobject as explained in the FIRST STEPS section.
