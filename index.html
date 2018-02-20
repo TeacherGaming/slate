@@ -1440,13 +1440,17 @@ To send the event, call <code class="prettyprint">TG.&lt;EventName&gt;.send(*dat
 
 <h3 id="manual-authentication-login">Manual Authentication / Login</h3>
 
-<p>Login a student to our system. Class id is unique throughout the whole system and student id is unique throughout the class the user is in. Student id can be thought as an username and class id as a password.</p>
+<p>Login a student to the system using their class id and student id, and an API key to identify which game they are logging in with.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
 <h4 id="url">URL</h4>
 
 <p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/validate</code></p>
+
+<h4 id="example-usage">Example Usage</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/validate?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
 
 <h4 id="parameters">Parameters</h4>
 
@@ -1470,7 +1474,7 @@ To send the event, call <code class="prettyprint">TG.&lt;EventName&gt;.send(*dat
 <tr>
 <td>apikey</td>
 <td></td>
-<td>Your game&rsquo;s API key</td>
+<td>The game&rsquo;s TeacherGaming Desk API key</td>
 </tr>
 </tbody></table>
 
@@ -1484,15 +1488,10 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
   </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Student with this ID exists in this class."</span><span class="p">,</span><span class="w">
   </span><span class="s2">"responseCreatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-06-13T07:08:47.763Z"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"debug"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"sent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-03-15T12:05:35.722Z"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"container"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zo5jajsD99beDQyt7-pv0n"</span><span class="w">
+    </span><span class="s2">"container"</span><span class="p">:</span><span class="w"> </span><span class="s2">"undefined"</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="s2">"login_message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Logged into class &lt;classid&gt; with studentid &lt;studentid&gt;"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"login_message_html"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Logged into class &lt;b&gt;classid&lt;/b&gt; with studentid &lt;b&gt;studentid&lt;/b&gt;"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"subscription"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"subscription_expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"subscription_expired_message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Your subscription has expired."</span><span class="w">
-  </span><span class="p">},</span><span class="w">
   </span><span class="s2">"student"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
       </span><span class="s2">"studentid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;studentid&gt;"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"studentid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueStudentID&gt;"</span><span class="p">,</span><span class="w">
@@ -1502,7 +1501,13 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
   </span><span class="s2">"class"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
       </span><span class="s2">"classid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;classid&gt;"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"classid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueClassID&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"owner_teacher_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueTeacherID&gt;"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"allow_student_signup"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"subscription"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"subscription_exists"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"subscription_expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"subscription_expired_message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Your subscription has expired."</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="s2">"game_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;game’s name&gt;"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"gameSave"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -1523,43 +1528,39 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 </tr>
 <tr>
 <td>message</td>
-<td>Detailed information about the login result.</td>
-</tr>
-<tr>
-<td>debug</td>
-<td>Debug information</td>
+<td>Detailed information about the login result. DEPRECATED, don&rsquo;t use in new integrations.</td>
 </tr>
 <tr>
 <td>responseCreatedAt</td>
 <td>Datetime when reponse was created</td>
 </tr>
 <tr>
+<td>debug</td>
+<td>Debug information</td>
+</tr>
+<tr>
 <td>login_message</td>
-<td>login message that can be displayed to user on successful login</td>
+<td>login message that can be displayed to user on successful login. DEPRECATED, don&rsquo;t use in new integrations.</td>
 </tr>
 <tr>
 <td>login_message_html</td>
-<td>same as above but with html bold tags in id’s</td>
-</tr>
-<tr>
-<td>subscription_expired</td>
-<td>true if TeacherGaming Desk subscription is expired otherwise false</td>
-</tr>
-<tr>
-<td>subscription_expired_message</td>
-<td>Message that can be displayed to user if subscription has expired</td>
+<td>same as above but with html bold tags in id’s. DEPRECATED, don&rsquo;t use in new integrations.</td>
 </tr>
 <tr>
 <td>student</td>
-<td>studentid of the logged in student, SHA256 hash of this id, boolean of whether account was created and boolean of whether teacher has linked creatubbles</td>
+<td>student information, see table below</td>
 </tr>
 <tr>
 <td>class</td>
-<td>classid  of the logged in student, SHA256 hash of this id and boolean of whether student self signup is allowed</td>
+<td>class information, see table below</td>
+</tr>
+<tr>
+<td>subscription</td>
+<td>subscription information, see table below</td>
 </tr>
 <tr>
 <td>game_name</td>
-<td>name of the game student logged in</td>
+<td>name of the game that was logged in to</td>
 </tr>
 <tr>
 <td>gameSave</td>
@@ -1567,9 +1568,79 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 </tr>
 </tbody></table>
 
-<h4 id="example-usage">Example usage</h4>
+<h5 id="student">student</h5>
 
-<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/validate?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>studentid</td>
+<td>student id</td>
+</tr>
+<tr>
+<td>studentid_unique</td>
+<td>hashed unique id for the student</td>
+</tr>
+<tr>
+<td>created_account</td>
+<td>true if student was created on login, otherwise false. DEPRECATED, don&rsquo;t use in new integrations.</td>
+</tr>
+<tr>
+<td>teacher_creatubbles_linked</td>
+<td>true if teacher has linked their account to creatubbles, otherwise false</td>
+</tr>
+</tbody></table>
+
+<h5 id="class">class</h5>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>classid</td>
+<td>class id</td>
+</tr>
+<tr>
+<td>classid_unique</td>
+<td>hashed unique id for the class</td>
+</tr>
+<tr>
+<td>owner_teacher_unique</td>
+<td>hashed unique id for the teacher of the class</td>
+</tr>
+<tr>
+<td>allow_student_signup</td>
+<td>true if student self-signup is allowed, otherwise false. DEPRECATED, don&rsquo;t use in new integrations.</td>
+</tr>
+</tbody></table>
+
+<h5 id="subscription">subscription</h5>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>subscription_exists</td>
+<td>true if the teacher of the class has a TeacherGaming Desk subscription, otherwise false</td>
+</tr>
+<tr>
+<td>subscription_expired</td>
+<td>true if the TeacherGaming Desk subscription has expired, otherwise false</td>
+</tr>
+<tr>
+<td>subscription_expired_message</td>
+<td>Message that can be displayed to user if subscription has expired. English only. DEPRECATED, don&rsquo;t use in new integrations.</td>
+</tr>
+</tbody></table>
 
 <h3 id="authentication-login-through-teachergaming-app">Authentication / Login through TeacherGaming App</h3>
 
@@ -1749,6 +1820,10 @@ com.teachergaming.switchandglitch://?classid=5mm&amp;userid=marko&amp;command=lo
 
 <p>https://analyticsdata.teachergaming.com/api/check_class</p>
 
+<h4 id="example-usage">Example Usage</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/check_class?classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
+
 <h4 id="parameters">Parameters</h4>
 
 <table><thead>
@@ -1831,19 +1906,19 @@ com.teachergaming.switchandglitch://?classid=5mm&amp;userid=marko&amp;command=lo
 </tr>
 </tbody></table>
 
-<h4 id="example-usage">Example Usage</h4>
-
-<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/check_class?classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
-
 <h2 id="playing-game-keep-alive">Playing Game (keep alive)</h2>
 
-<p>Inform TeacherGaming Desk that the user is currently logged in and playing. Send once every minute. If TeacherGaming Desk does not receive this request for 3 minutes it will deduce that the student has quit the game and log him out.</p>
+<p>Inform TeacherGaming Desk that the user is currently logged in and playing. Send once every minute. If TeacherGaming Desk does not receive this request for 3 minutes it will deduce that the student has quit the game and log him out. In the response to this request we also get the lessonActionId of the ongoing lesson (if any) that can be used to launch the lesson specific activity (f.e. level) in the game.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
 <h4 id="url">URL</h4>
 
 <p>https://analyticsdata.teachergaming.com/api/playing_game</p>
+
+<h4 id="example-usage">Example Usage</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/playing_game?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
 
 <h4 id="parameters">Parameters</h4>
 
@@ -1884,7 +1959,8 @@ com.teachergaming.switchandglitch://?classid=5mm&amp;userid=marko&amp;command=lo
     </span><span class="s2">"student"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
         </span><span class="s2">"studentid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;studentid&gt;"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"studentid_unique"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;HashedUniqueStudentID&gt;"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"lessonActionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Level 5"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <table><thead>
@@ -1921,11 +1997,11 @@ com.teachergaming.switchandglitch://?classid=5mm&amp;userid=marko&amp;command=lo
 <td>class</td>
 <td>classid  of the logged in student and SHA256 hash of this id</td>
 </tr>
+<tr>
+<td>lessonActionId</td>
+<td>game specific lesson action id of the currently ongoing lesson, not present if no ongoing lesson, empty if lesson has no action id. Used to for example launch the game directly to the relevant level for the ongoing lesson.</td>
+</tr>
 </tbody></table>
-
-<h4 id="example-usage">Example Usage</h4>
-
-<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/playing_game?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
 
 <h2 id="player-state">Player State</h2>
 
@@ -1940,6 +2016,12 @@ For example: State = Playing Game, Detailed State = Level 1</p>
 <p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state</code></p>
 
 <p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state_detailed</code></p>
+
+<h4 id="example-usage">Example Usage</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy&amp;state=Playing game</code></p>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state_detailed?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy&amp;state=Level 1</code></p>
 
 <h4 id="parameters">Parameters</h4>
 
@@ -2038,12 +2120,6 @@ For example: State = Playing Game, Detailed State = Level 1</p>
 </tr>
 </tbody></table>
 
-<h4 id="example-usage">Example Usage</h4>
-
-<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy&amp;state=Playing game</code></p>
-
-<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/update_state_detailed?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy&amp;state=Level 1</code></p>
-
 <h2 id="event-data">Event Data</h2>
 
 <p>Send event data to TeacherGaming Desk. The events and needed data for your game can be seen on the Events page on the TeacherGaming Desk website.</p>
@@ -2053,6 +2129,11 @@ For example: State = Playing Game, Detailed State = Level 1</p>
 <h4 id="url">URL</h4>
 
 <p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/track</code></p>
+
+<h4 id="example-usage">Example Usage</h4>
+
+<p>This is the LevelComplete event in Switch &amp; Glitch
+<code class="prettyprint">https://analyticsdata.teachergaming.com/api/track?apikey=K8SaQRDsSFdFt5zFthTy&amp;studentid=johndoe&amp;classid=democlass&amp;eventname=LevelComplete&amp;GameType=Network&amp;LevelId=Level1&amp;TileCount=20&amp;FailedTileCount=-1&amp;SuccessTileCount=3&amp;CommitCount=1&amp;Score=101&amp;duration=17389</code></p>
 
 <h4 id="parameters">Parameters</h4>
 
@@ -2171,11 +2252,6 @@ For example: State = Playing Game, Detailed State = Level 1</p>
 </tr>
 </tbody></table>
 
-<h4 id="example-usage">Example Usage</h4>
-
-<p>This is the LevelComplete event in Switch &amp; Glitch
-<code class="prettyprint">https://analyticsdata.teachergaming.com/api/track?apikey=K8SaQRDsSFdFt5zFthTy&amp;studentid=johndoe&amp;classid=democlass&amp;eventname=LevelComplete&amp;GameType=Network&amp;LevelId=Level1&amp;TileCount=20&amp;FailedTileCount=-1&amp;SuccessTileCount=3&amp;CommitCount=1&amp;Score=101&amp;duration=17389</code></p>
-
 <h2 id="cloud-save-upload">Cloud save upload</h2>
 
 <p>You can save arbitrary binary information from your game to TeacherGaming Desk on a per student basis. This is intended for use in implementing a cloud save functionality so that game progress would be the same for each TeacherGaming Desk student login regardless of which device they login on.</p>
@@ -2226,13 +2302,17 @@ Note! Despite all other requests in the API being GET requests this one is a POS
 
 <h2 id="student-logout">Student Logout</h2>
 
-<p>You can allow student to log out of TeacherGaming Desk only if your game is not subscription based. Logging out stops all student specific interactions with TeacehrGaming Desk.</p>
+<p>Log out a student from TeacherGaming Desk. Logging out stops all student specific interactions with TeacehrGaming Desk. Note that for subscription based games the student should not be allowed to play the game anymore after logging out.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
 <h4 id="url">URL</h4>
 
 <p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/logout_student</code></p>
+
+<h4 id="example-usage">Example Usage</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/logout_student?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
 
 <h4 id="parameters">Parameters</h4>
 
@@ -2312,10 +2392,6 @@ Note! Despite all other requests in the API being GET requests this one is a POS
 </tr>
 </tbody></table>
 
-<h4 id="example-usage">Example Usage</h4>
-
-<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/logout_student?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
-
 <h2 id="creatubbles">Creatubbles</h2>
 
 <p><em>Optional</em>
@@ -2326,6 +2402,10 @@ If your game has Creatubbles integration, this method can be used to get student
 <h4 id="url">URL</h4>
 
 <p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/get_student_creatubbles_token</code></p>
+
+<h4 id="example-usage">Example Usage</h4>
+
+<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/get_student_creatubbles_token?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
 
 <h4 id="parameters">Parameters</h4>
 
@@ -2405,10 +2485,6 @@ If your game has Creatubbles integration, this method can be used to get student
 <td><em>Deprecated</em> If gallery was just created for class</td>
 </tr>
 </tbody></table>
-
-<h4 id="example-usage">Example Usage</h4>
-
-<p><code class="prettyprint">https://analyticsdata.teachergaming.com/api/get_student_creatubbles_token?studentid=johndoe&amp;classid=democlass&amp;apikey=K8SaQRDsSFdFt5zFthTy</code></p>
 
           <h1 id="oauth">oAuth</h1>
 
