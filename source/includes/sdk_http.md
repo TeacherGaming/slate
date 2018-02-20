@@ -18,11 +18,14 @@ The document is divided into use cases. First we describe and give examples on h
 ## Student Login
 
 ### Manual Authentication / Login
-Login a student to our system. Class id is unique throughout the whole system and student id is unique throughout the class the user is in. Student id can be thought as an username and class id as a password.
+Login a student to the system using their class id and student id, and an API key to identify which game they are logging in with.
 
 ### HTTP Request
 #### URL
 `https://analyticsdata.teachergaming.com/api/validate`
+
+#### Example Usage
+`https://analyticsdata.teachergaming.com/api/validate?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
 
 #### Parameters
 
@@ -30,7 +33,7 @@ Parameter | Default | Description
 --------- | ------- | -----------
 classid |  | TeacherGaming Desk Class ID
 studentid |  | TeacherGaming Desk studentid
-apikey | | Your game's API key
+apikey | | The game's TeacherGaming Desk API key
 
 <aside class="info">
 Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
@@ -43,15 +46,10 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
   "message": "Student with this ID exists in this class.",
   "responseCreatedAt": "2017-06-13T07:08:47.763Z",
   "debug": {
-      "sent": "2017-03-15T12:05:35.722Z",
-      "container": "zo5jajsD99beDQyt7-pv0n"
+    "container": "undefined"
   },
   "login_message": "Logged into class <classid> with studentid <studentid>",
   "login_message_html": "Logged into class <b>classid</b> with studentid <b>studentid</b>",
-  "subscription": {
-      "subscription_expired": false,
-      "subscription_expired_message": "Your subscription has expired."
-  },
   "student": {
       "studentid": "<studentid>",
       "studentid_unique": "<HashedUniqueStudentID>",
@@ -61,7 +59,13 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
   "class": {
       "classid": "<classid>",
       "classid_unique": "<HashedUniqueClassID>",
+      "owner_teacher_unique": "<HashedUniqueTeacherID>",
       "allow_student_signup": true
+  },
+  "subscription": {
+    "subscription_exists": true,
+    "subscription_expired": false,
+    "subscription_expired_message": "Your subscription has expired."
   },
   "game_name": "<game’s name>",
   "gameSave": {
@@ -73,20 +77,39 @@ Your API key has been provided to you by TeacherGaming or hardcoded to your SDK.
 Key | Value
 --- | -----
 success | 1 for successful login, 0 for failed login
-message | Detailed information about the login result.
-debug | Debug information
+message | Detailed information about the login result. DEPRECATED, don't use in new integrations.
 responseCreatedAt | Datetime when reponse was created
-login_message | login message that can be displayed to user on successful login
-login_message_html | same as above but with html bold tags in id’s
-subscription_expired | true if TeacherGaming Desk subscription is expired otherwise false
-subscription_expired_message | Message that can be displayed to user if subscription has expired
-student | studentid of the logged in student, SHA256 hash of this id, boolean of whether account was created and boolean of whether teacher has linked creatubbles
-class | classid  of the logged in student, SHA256 hash of this id and boolean of whether student self signup is allowed
-game_name | name of the game student logged in
+debug | Debug information
+login_message | login message that can be displayed to user on successful login. DEPRECATED, don't use in new integrations.
+login_message_html | same as above but with html bold tags in id’s. DEPRECATED, don't use in new integrations.
+student | student information, see table below
+class | class information, see table below
+subscription | subscription information, see table below
+game_name | name of the game that was logged in to
 gameSave | cloud save data of the logged in student, see [7.7. CLOUD SAVE UPLOAD](#cloud-save-upload7.7.)
 
-#### Example usage
-`https://analyticsdata.teachergaming.com/api/validate?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
+##### student
+Key | Value
+--- | -----
+studentid | student id
+studentid_unique | hashed unique id for the student
+created_account | true if student was created on login, otherwise false. DEPRECATED, don't use in new integrations.
+teacher_creatubbles_linked | true if teacher has linked their account to creatubbles, otherwise false
+
+##### class
+Key | Value
+--- | -----
+classid | class id
+classid_unique | hashed unique id for the class
+owner_teacher_unique | hashed unique id for the teacher of the class
+allow_student_signup | true if student self-signup is allowed, otherwise false. DEPRECATED, don't use in new integrations.
+
+##### subscription
+Key | Value
+--- | -----
+subscription_exists | true if the teacher of the class has a TeacherGaming Desk subscription, otherwise false
+subscription_expired | true if the TeacherGaming Desk subscription has expired, otherwise false
+subscription_expired_message | Message that can be displayed to user if subscription has expired. English only. DEPRECATED, don't use in new integrations.
 
 ### Authentication / Login through TeacherGaming App
 To support automatic login you need to handle the login parameters being given to your game by the TeacherGaming App. On Android this is done by using Intent (when app is not already running) and Broadcast (when app is running) parameters. On iOS this is done using a URL scheme. We are planning to change both mobile platforms to use the URL scheme in the future. On desktop latforms the login parameters are passed as command line paramters when starting the game.
@@ -251,6 +274,9 @@ Can be used to check if a class with a given class id exists in the system.
 #### URL
 https://analyticsdata.teachergaming.com/api/check_class
 
+#### Example Usage
+`https://analyticsdata.teachergaming.com/api/check_class?classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
+
 #### Parameters
 Key | Value
 --- | -----
@@ -289,15 +315,15 @@ classid | The class id (same as the one given as parameter)
 class_exists | True if class exists, false if not
 classid_unique | Unique id of the class
 
-#### Example Usage
-`https://analyticsdata.teachergaming.com/api/check_class?classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
-
 ## Playing Game (keep alive)
-Inform TeacherGaming Desk that the user is currently logged in and playing. Send once every minute. If TeacherGaming Desk does not receive this request for 3 minutes it will deduce that the student has quit the game and log him out.
+Inform TeacherGaming Desk that the user is currently logged in and playing. Send once every minute. If TeacherGaming Desk does not receive this request for 3 minutes it will deduce that the student has quit the game and log him out. In the response to this request we also get the lessonActionId of the ongoing lesson (if any) that can be used to launch the lesson specific activity (f.e. level) in the game.
 
 ### HTTP Request
 #### URL
 https://analyticsdata.teachergaming.com/api/playing_game
+
+#### Example Usage
+`https://analyticsdata.teachergaming.com/api/playing_game?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
 
 #### Parameters
 Key | Value
@@ -324,7 +350,8 @@ apikey | Api key of your game
     "student": {
         "studentid": "<studentid>",
         "studentid_unique": "<HashedUniqueStudentID>"
-    }
+    },
+    "lessonActionId": "Level 5"
 }
 ```
 Key | Value
@@ -336,9 +363,8 @@ responseCreatedAt | Datetime when reponse was created
 game_name | Name of the game the student is logged in
 student | studentid of the logged in student and SHA256 hash of this id
 class | classid  of the logged in student and SHA256 hash of this id
+lessonActionId | game specific lesson action id of the currently ongoing lesson, not present if no ongoing lesson, empty if lesson has no action id. Used to for example launch the game directly to the relevant level for the ongoing lesson.
 
-#### Example Usage
-`https://analyticsdata.teachergaming.com/api/playing_game?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
 
 ## Player State
 Inform TeacherGaming Desk what the user is currently doing in game.
@@ -351,6 +377,11 @@ For example: State = Playing Game, Detailed State = Level 1
 `https://analyticsdata.teachergaming.com/api/update_state`
 
 `https://analyticsdata.teachergaming.com/api/update_state_detailed`
+
+#### Example Usage
+`https://analyticsdata.teachergaming.com/api/update_state?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy&state=Playing game`
+
+`https://analyticsdata.teachergaming.com/api/update_state_detailed?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy&state=Level 1`
 
 #### Parameters
 Key | Value
@@ -400,11 +431,6 @@ new_detailed_state | State that was sent to method in a more detailed form
 student | studentid of the logged in student and SHA256 hash of this id
 class | classid  of the logged in student and SHA256 hash of this id
 
-####Example Usage
-`https://analyticsdata.teachergaming.com/api/update_state?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy&state=Playing game`
-
-`https://analyticsdata.teachergaming.com/api/update_state_detailed?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy&state=Level 1`
-
 ## Event Data
 Send event data to TeacherGaming Desk. The events and needed data for your game can be seen on the Events page on the TeacherGaming Desk website.
 
@@ -412,6 +438,10 @@ Send event data to TeacherGaming Desk. The events and needed data for your game 
 
 #### URL
 `https://analyticsdata.teachergaming.com/api/track`
+
+#### Example Usage
+This is the LevelComplete event in Switch & Glitch
+`https://analyticsdata.teachergaming.com/api/track?apikey=K8SaQRDsSFdFt5zFthTy&studentid=johndoe&classid=democlass&eventname=LevelComplete&GameType=Network&LevelId=Level1&TileCount=20&FailedTileCount=-1&SuccessTileCount=3&CommitCount=1&Score=101&duration=17389`
 
 #### Parameters
 
@@ -466,10 +496,6 @@ class | classid  of the logged in student and SHA256 hash of this id
 data | All of the additional data fields sent to method
 duration | Duration of the event, sent to method  
 
-#### Example Usage
-This is the LevelComplete event in Switch & Glitch
-`https://analyticsdata.teachergaming.com/api/track?apikey=K8SaQRDsSFdFt5zFthTy&studentid=johndoe&classid=democlass&eventname=LevelComplete&GameType=Network&LevelId=Level1&TileCount=20&FailedTileCount=-1&SuccessTileCount=3&CommitCount=1&Score=101&duration=17389`
-
 ## Cloud save upload
 You can save arbitrary binary information from your game to TeacherGaming Desk on a per student basis. This is intended for use in implementing a cloud save functionality so that game progress would be the same for each TeacherGaming Desk student login regardless of which device they login on.
 
@@ -496,12 +522,15 @@ format | Freeform format string. Should not be empty. Can be used for example wh
 savedata | Game save data as a string (for example base64 encoded binary data).
 
 ## Student Logout
-You can allow student to log out of TeacherGaming Desk only if your game is not subscription based. Logging out stops all student specific interactions with TeacehrGaming Desk.
+Log out a student from TeacherGaming Desk. Logging out stops all student specific interactions with TeacehrGaming Desk. Note that for subscription based games the student should not be allowed to play the game anymore after logging out.
 
 ### HTTP Request
 
 #### URL
 `https://analyticsdata.teachergaming.com/api/logout_student`
+
+#### Example Usage
+`https://analyticsdata.teachergaming.com/api/logout_student?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
 
 #### Parameters
 Key | Value
@@ -541,9 +570,6 @@ game_name | Name of the game student logged out of
 student | studentid of the logged out student and SHA256 hash of this id
 class | classid of the logged out student and SHA256 hash of this id
 
-#### Example Usage
-`https://analyticsdata.teachergaming.com/api/logout_student?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
-
 ## Creatubbles
 *Optional*
 If your game has Creatubbles integration, this method can be used to get student's creatubbles token and gallery where to submit game screenshots into.
@@ -552,6 +578,9 @@ If your game has Creatubbles integration, this method can be used to get student
 
 #### URL
 `https://analyticsdata.teachergaming.com/api/get_student_creatubbles_token`
+
+#### Example Usage
+`https://analyticsdata.teachergaming.com/api/get_student_creatubbles_token?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
 
 #### Parameters
 Key | Value
@@ -586,5 +615,3 @@ creatubblesClassGalleryCreated | True if gallery for the class was just created 
 creatubbles_gallery_id | *Deprecated* Gallery where to submit creations into
 creatubblesGalleryCreated | *Deprecated* If gallery was just created for class
 
-#### Example Usage
-`https://analyticsdata.teachergaming.com/api/get_student_creatubbles_token?studentid=johndoe&classid=democlass&apikey=K8SaQRDsSFdFt5zFthTy`
