@@ -441,7 +441,7 @@ Send event data to TeacherGaming Desk. The events and needed data for your game 
 
 #### Example Usage
 This is the LevelComplete event in Switch & Glitch
-`https://analyticsdata.teachergaming.com/api/track?apikey=K8SaQRDsSFdFt5zFthTy&studentid=johndoe&classid=democlass&eventname=LevelComplete&GameType=Network&LevelId=Level1&TileCount=20&FailedTileCount=-1&SuccessTileCount=3&CommitCount=1&Score=101&duration=17389`
+`https://analyticsdata.teachergaming.com/api/track?apikey=K8SaQRDsSFdFt5zFthTy&studentid=johndoe&classid=democlass&eventname=LevelComplete&GameType=Network&LevelId=Level1&TileCount=20&FailedTileCount=-1&SuccessTileCount=3&CommitCount=1&Score=101&Duration=17389`
 
 #### Parameters
 
@@ -456,7 +456,7 @@ Key | Value
 --- | -----
 classid | TeacherGaming Desk class id
 studentid | TeacherGaming Desk id of the student in the class
-duration | How long it took to complete the event in milliseconds.
+Duration | How long it took to complete the event in milliseconds.
 Optional data | Optional event data for your event is passed in key=value pairs. This is the data that has been set by TeacherGaming for each Event that is tracked in your game Examples: levelID=JungleLevel3 Score=3
 
 #### Response
