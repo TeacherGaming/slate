@@ -612,26 +612,14 @@ A login dialog will be created that looks like this (without the blue background
 <pre class="highlight csharp tab-csharp"><code><span class="c1">// Custom login menu</span>
 <span class="c1">// Logging in from code</span>
 
-<span class="c1">// Create new Auth object and start authentication</span>
-<span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="n">TGAAuth</span> <span class="n">tgaAuth</span> <span class="p">=</span> <span class="k">new</span> <span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">TGAAuth</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="n">TGAAuth</span><span class="p">.</span><span class="nf">AuthUser</span><span class="p">(</span><span class="k">class</span><span class="nc">ID</span><span class="p">,</span> <span class="n">studentID</span><span class="p">));</span>
+<span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">Login</span><span class="p">(</span><span class="k">class</span><span class="nc">Id</span><span class="p">,</span> <span class="n">studentId</span><span class="p">);</span>
 
-<span class="c1">// Wait for auth result</span>
-<span class="k">yield</span> <span class="k">return</span> <span class="n">tgaAuth</span><span class="p">.</span><span class="n">authResult</span><span class="p">;</span>
-
-<span class="k">if</span> <span class="p">(</span><span class="n">tgaAuth</span><span class="p">.</span><span class="n">authResult</span><span class="p">.</span><span class="nf">Equals</span><span class="p">(</span><span class="s">"true"</span><span class="p">))</span>
-<span class="p">{</span>
-    <span class="c1">// Authentication succeeded (classid &amp; studentid we’re correct)</span>
-<span class="p">}</span>
-<span class="k">else</span>
-<span class="p">{</span>
-    <span class="c1">// Authentication failed (classid &amp; studentid we’re not correct)</span>
-<span class="p">}</span>
 </code></pre>
 <p>Note: If a student has logged in externally (using TeacherGaming App) your custom login menu should not allow changing the login nor logging out. You can check if the user has logged in externally using TGASDK.TGA.LoggedInExternally(). It is recommended you still have the UI to show the class and student ids. This can be the same UI you use to login inside the game just having the input fields and buttons in a disabled state disabled for example.</p>
 
-<p>If you choose to create your own login menu you need to pass the class id and student id to the auth process. From a Monobehaviour script you need to run a coroutine with the code on the right.</p>
+<p>If you choose to create your own login menu you need to pass the class id and student id to the auth process. You can start the login process by simply calling the TGASDK.TGA.Login function as shown on the right.</p>
 
-<p>You can also listen to the TGASDK.TGA.OnLoginStatusChanged event to get notified when the login status changes.</p>
+<p>You can listen to the TGASDK.TGA.OnLoginStatusChanged event to get notified when the login status changes.</p>
 
 <h2 id="sending-events">Sending events</h2>
 
