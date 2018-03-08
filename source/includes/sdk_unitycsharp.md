@@ -113,26 +113,14 @@ When TGA_SUBSCRIPTION_REQUIRED is defined you should show the login window when 
 // Custom login menu
 // Logging in from code
 
-// Create new Auth object and start authentication
-TGASDK.TGA.TGAAuth tgaAuth = new TGASDK.TGA.TGAAuth(this, TGASDK.TGA.TGAAuth.AuthUser(classID, studentID));
+TGASDK.TGA.Login(classId, studentId);
 
-// Wait for auth result
-yield return tgaAuth.authResult;
-
-if (tgaAuth.authResult.Equals("true"))
-{
-    // Authentication succeeded (classid & studentid we’re correct)
-}
-else
-{
-	// Authentication failed (classid & studentid we’re not correct)
-}
 ```
 Note: If a student has logged in externally (using TeacherGaming App) your custom login menu should not allow changing the login nor logging out. You can check if the user has logged in externally using TGASDK.TGA.LoggedInExternally(). It is recommended you still have the UI to show the class and student ids. This can be the same UI you use to login inside the game just having the input fields and buttons in a disabled state disabled for example.
 
-If you choose to create your own login menu you need to pass the class id and student id to the auth process. From a Monobehaviour script you need to run a coroutine with the code on the right.
+If you choose to create your own login menu you need to pass the class id and student id to the auth process. You can start the login process by simply calling the TGASDK.TGA.Login function as shown on the right.
 
-You can also listen to the TGASDK.TGA.OnLoginStatusChanged event to get notified when the login status changes.
+You can listen to the TGASDK.TGA.OnLoginStatusChanged event to get notified when the login status changes.
 
 ## Sending events
 The events that have been defined in TeacherGaming Desk website are generated to the SDK and can be used to send data from the game to Desk. All the events have their own inner class inside TGA&lt;yourgamename&gt;.Event with a property for each event parameter and functions to start and send the event.
