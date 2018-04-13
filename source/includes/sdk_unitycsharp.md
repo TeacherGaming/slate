@@ -211,9 +211,9 @@ byte[] saveData = Game.GetSaveData();
 string format = Game.GetSaveDataFormat();
 
 TGASDK.TGA.UploadCloudSave(format, saveData,
-	(success) => 
+	(failed) => 
 	{
-		if (success)
+		if (!failed)
 		{
 			Debug.Log("Save uploaded to TG Desk successfully.");
 		}
