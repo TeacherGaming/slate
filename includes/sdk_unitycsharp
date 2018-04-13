@@ -245,7 +245,7 @@ Freeform format string. Should not be empty. Can be used for example when game s
 Game save data serialized to a byte array.</p>
 
 <p><code class="prettyprint">Action&lt;bool&gt; afterUpload = null</code>
-Optional callback function. Called when the upload has completed. Callback parameter is true on successful upload, false otherwise.</p>
+Optional callback function. Called when the upload has completed. Callback parameter is false on successful upload, true otherwise.</p>
 
 <h3 id="getting-data">Getting data</h3>
 <pre class="highlight csharp tab-csharp"><code>
