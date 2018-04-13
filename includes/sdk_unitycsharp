@@ -220,9 +220,9 @@ To send the event, call TGASDK.Event.&lt;EventName&gt;.Send() without parameters
 <span class="kt">string</span> <span class="n">format</span> <span class="p">=</span> <span class="n">Game</span><span class="p">.</span><span class="nf">GetSaveDataFormat</span><span class="p">();</span>
 
 <span class="n">TGASDK</span><span class="p">.</span><span class="n">TGA</span><span class="p">.</span><span class="nf">UploadCloudSave</span><span class="p">(</span><span class="n">format</span><span class="p">,</span> <span class="n">saveData</span><span class="p">,</span>
-    <span class="p">(</span><span class="n">success</span><span class="p">)</span> <span class="p">=&gt;</span> 
+    <span class="p">(</span><span class="n">failed</span><span class="p">)</span> <span class="p">=&gt;</span> 
     <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">success</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">failed</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"Save uploaded to TG Desk successfully."</span><span class="p">);</span>
         <span class="p">}</span>
